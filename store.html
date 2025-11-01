@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en" class="dark-mode">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIYADUINO | Store</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="coupon-bar" data-translate="couponBar">
+        🎉 Get 45% OFF with code: <strong>3ala-rasi</strong>
+    </div>
+
+    <div class="background-animation" id="bg-animation"></div>
+    <div class="lines-background"></div>
+
+    <nav class="navbar" id="navbar">
+        <a href="index.html" class="nav-logo">RIYADUINO</a>
+        <div class="nav-links">
+            <a href="index.html" class="nav-link" data-translate="navHome">Home</a>
+            <a href="store.html" class="nav-link active" data-translate="navStore">Store</a>
+        </div>
+        <div class="nav-utils">
+             <button class="util-btn" id="customProjectBtn" data-translate="customProjectBtn"><span>Custom Project</span></button>
+             <button class="util-btn" id="translateBtn" aria-label="Toggle language">العربية</button>
+        </div>
+    </nav>
+
+    <main class="store-page">
+        <section id="store-hero" class="content-section" style="padding: 3rem 2rem;">
+            <h2 data-translate="storeTitle">Prebuilt Projects Store</h2>
+            <div class="search-bar">
+                <input id="searchInput" type="text" data-translate-placeholder="searchInputPlaceholder">
+            </div>
+        </section>
+
+        <section id="store-grid-container" style="padding: 0;">
+            <div class="store-grid" id="storeGrid">
+                </div>
+        </section>
+    </main>
+
+    <div class="cart-widget" id="cartWidget">
+        <h4 data-translate="cartTitle">Cart</h4>
+        <span class="cart-badge" id="cartBadge">0</span>
+    </div>
+
+    <div class="modal-overlay" id="productDetailModal" aria-hidden="true">
+        <div class="modal-content product-detail-content">
+            <button class="close-modal" id="closeDetailModalBtn" title="Close">×</button>
+            <img id="detailImg" src="" alt="Product Image">
+            <h3 id="detailTitle"></h3>
+            <p id="detailDescription"></p>
+            <h4 data-translate="componentsTitle">Key Components</h4>
+            <ul id="detailComponentsList"></ul>
+            <button id="detailAddToCartBtn" class="cta-button">
+                <span data-translate="addToCartBtn">Add to Cart</span>
+            </button>
+        </div>
+    </div>
+    
+    <div class="modal-overlay" id="cartViewModal" aria-hidden="true">
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="cartPopupTitle">
+            <button class="close-modal" id="closeCartModalBtn" title="Close">×</button>
+            <h3 id="cartPopupTitle" data-translate="yourCartTitle">Your Cart</h3>
+            
+            <div id="cart-items-container">
+                </div>
+    
+            <div id="cart-summary" style="display: none;">
+                <div class="cart-subtotal">
+                    <span data-translate="subtotal">Subtotal</span>
+                    <span id="cartSubtotal">0 SAR</span>
+                </div>
+                <button id="proceedToCheckoutBtn" class="cta-button">
+                    <span data-translate="checkoutBtn">Proceed to Checkout</span>
+                </button>
+            </div>
+    
+            <div id="empty-cart-view" style="display: none;">
+                <p data-translate="emptyCartMsg">Your cart is empty.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="authModal" aria-hidden="true">
+        <div class="modal-content auth-modal-content" role="dialog" aria-modal="true" aria-labelledby="authPopupTitle">
+            <button class="close-modal" id="closeAuthModalBtn" title="Close">×</button>
+            
+            <div class="auth-toggle">
+                <button id="authToggleSignIn" class="auth-toggle-btn active" data-translate="authSignInTab">Sign In</button>
+                <button id="authToggleSignUp" class="auth-toggle-btn" data-translate="authSignUpTab">Create Account</button>
+            </div>
+
+            <form id="authForm" style="margin-top: 1.5rem;">
+                <div id="authNameField" class="auth-field-wrapper" style="display: none;">
+                    <input type="text" id="authNameInput" data-translate-placeholder="authNamePlaceholder">
+                </div>
+                
+                <div class="auth-field-wrapper">
+                    <input type="email" id="authEmailInput" required data-translate-placeholder="authEmailPlaceholder">
+                </div>
+                
+                <div class="auth-field-wrapper">
+                    <input type="password" id="authPasswordInput" required data-translate-placeholder="authPasswordPlaceholder">
+                </div>
+
+                <button type="button" id="loginBtn" class="cta-button">
+                    <span class="btn-text" data-translate="authLoginBtn">Login</span>
+                    <span class="btn-spinner" style="display: none;"></span>
+                </button>
+            </form>
+            
+            <p id="authErrorMsg" class="auth-error-msg" style="display: none;"></p>
+
+            <div class="auth-divider" data-translate="authDivider">or</div>
+            
+            <button id="guestBtn" class="cta-button btn-secondary">
+                <span data-translate="authGuestBtn">Continue as Guest</span>
+            </button>
+        </div>
+    </div>
+
+
+    <div class="modal-overlay" id="orderModal" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="orderPopupTitle">
+        <button class="close-modal" id="closeOrderModalBtn" title="Close">×</button>
+        <div id="form-view">
+            <h3 id="orderPopupTitle" data-translate="orderPopupTitle">Complete Your Order</h3>
+            <form class="checkout-form" id="checkoutForm" action="https://formspree.io/f/mrbalery" method="POST">
+              <input type="text" name="name" id="nameInput" required data-translate-placeholder="nameInputPlaceholder">
+              <input type="email" name="email" id="emailInput" required data-translate-placeholder="emailInputPlaceholder">
+              <input type="tel" name="phone" id="phoneInput" required data-translate-placeholder="phoneInputPlaceholder">
+              <input type="text" name="coupon" id="couponInput" data-translate-placeholder="couponPlaceholder">
+              <textarea name="message" id="orderMessage" required data-translate-placeholder="orderMessagePlaceholder"></textarea>
+              <button type="submit" id="confirmBtn" class="cta-button">
+                  <span data-translate="confirmBtn">Confirm Order</span>
+              </button>
+            </form>
+        </div>
+        <div id="success-view" style="display: none;">
+            <h3 data-translate="successTitle">Thank You!</h3>
+            <p data-translate="successMessage">Your order is confirmed. Here's what happens next:</p>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-icon">1</div>
+                    <div class="timeline-content" data-translate="stepRead">Read your message</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">2</div>
+                    <div class="timeline-content" data-translate="stepAnalyze">Analyze your requirements</div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-icon">3</div>
+                    <div class="timeline-content" data-translate="stepContact">Contact you via WhatsApp & Email to confirm</div>
+                </div>
+                <div class="timeline-item final-step">
+                    <div class="timeline-icon">⚡️</div>
+                    <div class="timeline-content" data-translate="stepStart"><strong>Start Working!</strong></div>
+                </div>
+            </div>
+            <button id="closeSuccessBtn" class="cta-button" data-translate="closeBtn">Close</button>
+        </div>
+      </div>
+    </div>
+    
+    <footer class="site-footer">
+        <p>&copy; 2025 RIYADUINO. Empowering innovators in Saudi Arabia.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
