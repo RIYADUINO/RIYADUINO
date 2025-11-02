@@ -19,7 +19,7 @@
             --accent-glow: rgba(255, 195, 0, 0.4);
             --accent-glow-strong: rgba(255, 195, 0, 0.6);
             --border-color: rgba(255, 195, 0, 0.2);
-            --form-input-bg: #0A0A0A; /* Slightly deeper black for input fields */
+            --form-input-bg: #0A0A0A;
             --font-heading: 'Archivo', sans-serif;
             --font-body: 'Tajawal', sans-serif;
         }
@@ -43,6 +43,13 @@
         @keyframes slideInUp {
             from { opacity: 0; transform: translateY(30px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* NEW: Subtle 'Coming Soon' Pulse */
+        @keyframes comingSoonPulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
         }
 
         /* --- Base & Layout --- */
@@ -88,6 +95,19 @@
             color: var(--accent-yellow);
             animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
         }
+        
+        /* NEW: Coming Soon Style */
+        .coming-soon {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--accent-yellow);
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-shadow: 0 0 8px var(--accent-glow);
+            animation: comingSoonPulse 1.5s infinite alternate;
+        }
 
         p.subtitle {
             font-family: var(--font-body);
@@ -104,7 +124,7 @@
         .form-group {
             margin-bottom: 20px;
             padding: 15px;
-            background-color: rgba(17, 17, 17, 0.5); /* Semi-transparent surface */
+            background-color: rgba(17, 17, 17, 0.5);
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.05);
             opacity: 0;
@@ -152,7 +172,6 @@
             min-height: 100px;
         }
         
-        /* Dropdown options must be styled clearly */
         select option {
             background-color: var(--surface-color);
             color: var(--primary-text);
@@ -160,7 +179,7 @@
 
         /* --- Submit Button (CTA-Button Style) --- */
         .cta-button {
-            display: block; /* Make it full width */
+            display: block;
             width: 100%;
             font-family: var(--font-heading);
             font-weight: 700;
@@ -168,7 +187,7 @@
             text-decoration: none;
             color: var(--bg-color);
             background: var(--accent-yellow);
-            padding: 1rem 0; /* Full width padding */
+            padding: 1rem 0;
             border-radius: 50px;
             border: none;
             cursor: pointer;
@@ -181,7 +200,7 @@
 
         .cta-button:hover {
             transform: translateY(-3px) scale(1.01);
-            background-color: #ffe680; /* Slightly lighter yellow for hover */
+            background-color: #ffe680;
             box-shadow: 0 8px 30px var(--accent-glow-strong);
         }
     </style>
@@ -191,8 +210,13 @@
     <div class="container">
         
         <h1>RIYAD<span>UINO</span></h1>
+        
+        <p class="coming-soon">
+            MEMBERSHIP REGISTRATION COMING SOON
+        </p>
+
         <p class="subtitle">
-            **Fill this form and take 10% forever!** Share your interest below.
+            Secure your exclusive 10% lifetime discount by applying now. Share your interest below!
         </p>
 
         <form action="https://formspree.io/f/xzzkyzzp" method="POST">
