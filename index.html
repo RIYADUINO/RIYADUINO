@@ -21,7 +21,7 @@
             --font-heading: 'Archivo', sans-serif;
             --font-body: 'Tajawal', sans-serif;
             --font-secondary: 'Tajawal', sans-serif;
-            --form-input-bg: #0A0A0A; /* Added for new form style */
+            --form-input-bg: #0A0A0A;
         }
 
         /* --- Base & Reset --- */
@@ -108,22 +108,17 @@
         /* --- Main Navigation (Liquid Glass Header) --- */
         .glass-nav {
             position: fixed;
-            top: 1.5rem; /* Adjusted since store elements removed */
+            top: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
             padding: 1.1rem 2.2rem; 
             background-color: rgba(17, 17, 17, 0.6); 
-            
-            /* The "Liquid Glass" effect */
             backdrop-filter: blur(15px) saturate(180%);
             -webkit-backdrop-filter: blur(15px) saturate(180%);
-            
             border-radius: 70px; 
             border: 1px solid var(--border-color);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            
-            /* UPDATED DELAY to reflect store removal */
             animation: fadeInDown 0.8s ease-out forwards; 
             opacity: 0; 
         }
@@ -198,7 +193,7 @@
             text-align: center;
             padding: 0 2rem;
             position: relative;
-            padding-top: 9rem; /* Adjusted since store elements removed */
+            padding-top: 9rem;
         }
         
         .hero-content {
@@ -240,30 +235,7 @@
             opacity: 0;
         }
         
-        /* UPDATED: Hero Image Container (HC-SR04) - Made "smaaaaaal" */
-        .hero-image-container {
-            width: 100%;
-            max-width: 150px; /* Reduced to 150px (very small) */
-            margin: 3rem auto 0 auto; /* Center in hero */
-            opacity: 0;
-            transform: scale(0.8);
-            animation: zoomIn 1s ease-out 1s forwards;
-            padding: 0.7rem; 
-            background-color: var(--surface-color);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        .hero-image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 8px;
-        }
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        /* REMOVED: .hero-image-container */
 
         /* --- Content Sections --- */
         .content-wrapper {
@@ -295,33 +267,14 @@
             font-size: 1.05rem; 
         }
 
-        /* UPDATED: About Image (Breadboard) - Made "smaaaaaal" */
-        .about-image {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            padding: 0.8rem;
-            border-radius: 12px;
-            max-width: 200px; /* Reduced to 200px */
-            margin: 0 auto; /* Center it horizontally in its grid column */
-        }
-        
-        .about-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-        
-        .about-image.fade-in-section {
-            transition-delay: 0.2s;
-        }
+        /* REMOVED: .about-image */
         
         /* Values Section */
         .values-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem; /* Added margin for new image */
+            margin-bottom: 3rem;
         }
         
         .value-card {
@@ -364,24 +317,60 @@
             font-size: 1.05rem;
         }
 
-        /* NEW/UPDATED: Values Section Image (Misc. Components) - Made "smaaaaaal" */
-        .values-extra-image {
+        /* REMOVED: .values-extra-image */
+
+        /* --- NEW: Consolidated Image Gallery Section (All 4 images here) --- */
+        .image-gallery {
+            padding: 3rem 5%;
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .image-gallery-container {
+            display: flex;
+            justify-content: center; /* Center the whole group */
+            align-items: center;
+            gap: 1.5rem; /* Space between the images */
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            margin-top: 2rem;
+        }
+
+        .image-gallery-item {
             background-color: var(--surface-color);
             border: 1px solid var(--border-color);
-            padding: 1rem;
-            border-radius: 12px;
-            max-width: 300px; /* Reduced to 300px */
-            margin: 3rem auto 0 auto;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-        .values-extra-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            display: block;
+            padding: 0.5rem; /* Very small padding */
+            border-radius: 10px;
+            max-width: 120px; /* NEW: Very small size for each image */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transform: translateY(20px);
+            /* Staggered animation handled by JS/CSS below */
         }
         
-        /* --- NEW: Contact/Discount Form Section Styles --- */
+        .image-gallery-item.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        /* Staggered animation delays */
+        .image-gallery-container .image-gallery-item:nth-child(1) { transition-delay: 0.0s; }
+        .image-gallery-container .image-gallery-item:nth-child(2) { transition-delay: 0.2s; }
+        .image-gallery-container .image-gallery-item:nth-child(3) { transition-delay: 0.4s; }
+        .image-gallery-container .image-gallery-item:nth-child(4) { transition-delay: 0.6s; }
+
+
+        .image-gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 6px;
+        }
+        /* --- END: Consolidated Image Gallery Section --- */
+        
+        
+        /* --- Contact/Discount Form Section Styles --- */
         
         /* New H1 and Subtitle for the form */
         .contact-h1 {
@@ -489,29 +478,7 @@
             color: var(--primary-text);
         }
         
-        /* UPDATED: Detail Image container (Arduino board) - Made "smaaaaaal" */
-        .form-detail-image {
-            max-width: 100px; /* Reduced to 100px (smallest) */
-            margin: 0 auto 3rem auto; 
-            padding: 0.5rem;
-            background-color: var(--surface-color);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .form-detail-image.is-visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .form-detail-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
+        /* REMOVED: .form-detail-image */
 
 
         /* --- Footer --- */
@@ -529,8 +496,6 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
             display: inline-block;
-            
-            /* Copied from .nav-logo style */
             font-family: var(--font-heading);
             font-weight: 900;
             color: var(--primary-text);
@@ -543,8 +508,7 @@
         }
 
 
-        /* --- Animations --- */
-
+        /* --- Animations & Responsive --- */
         @keyframes subtle-yellow-pulse {
             0% {
                 color: var(--accent-yellow);
@@ -560,13 +524,12 @@
             }
         }
 
-        /* Applied to relevant yellow text elements, removed .nav-cta-link */
         .hero h1 .highlight,
         .section-title span,
         .about-text h3 span,
         .value-icon,
         .footer .nav-logo span,
-        .contact-h1 span { /* Added contact-h1 span */
+        .contact-h1 span {
             animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
         }
 
@@ -594,7 +557,7 @@
         .fade-in-section {
             opacity: 0;
             transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out, transition-delay 0.8s ease-out;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
         }
         
         .fade-in-section.is-visible {
@@ -611,44 +574,19 @@
             font-weight: 700;
         }
         
-        html[dir="rtl"] .contact-subtitle-form { /* New style for form subtitle */
-            text-align: center;
-        }
-        html[dir="rtl"] .form-group label {
-            text-align: right;
-        }
-
-        /* New RTL support for grid images/text */
         html[dir="rtl"] .about-section {
             direction: rtl;
             text-align: right;
         }
-        html[dir="rtl"] .about-section > div {
-            direction: rtl;
-        }
-        html[dir="rtl"] .about-text {
-            order: 2; /* Move text to the left/right */
-        }
-        html[dir="rtl"] .about-image {
-            order: 1; /* Move image to the right/left */
-        }
-
+        
         @media (max-width: 900px) {
-            .about-section { grid-template-columns: 1fr; }
-            
-            html[dir="rtl"] .about-text {
-                order: 1; /* Reset order on mobile for better flow */
-            }
-            html[dir="rtl"] .about-image {
-                order: 2;
+            .about-section { 
+                grid-template-columns: 1fr;
+                gap: 2rem; /* Reduced gap on mobile */
             }
         }
 
-        /*
-           --- MOBILE NAV FIX & Image Sizing ---
-        */
         @media (max-width: 768px) {
-            /* NAV STYLES */
             .glass-nav {
                 top: 1rem;
                 width: 95%;
@@ -664,38 +602,17 @@
                 font-size: 0.9rem; 
                 padding: 0.5rem 0.6rem; 
             }
-            .lang-switcher {
-                padding-left: 1rem; 
-                margin-left: 0.25rem;
-            }
-            .hero {
-                padding-top: 9rem;
-            }
 
-            /* Image Sizing Overrides for Mobile */
-            .hero-image-container { max-width: 120px; } /* Even smaller on tiny screens */
-            .about-image { max-width: 150px; }
-            .values-extra-image { max-width: 250px; }
-            .form-detail-image { max-width: 80px; }
-            
-            /* Form mobile styling */
-            .contact-form .cta-button {
-                padding: 1rem 0; 
-                font-size: 1.05rem;
+            .image-gallery-container {
+                gap: 1rem; /* Smaller gap on mobile */
             }
-
-            .contact-form {
-                padding: 2rem;
-            }
-
-            html[dir="rtl"] .section-title {
-                 text-align: center !important;
+            .image-gallery-item {
+                max-width: 90px; /* Make the small images even smaller on mobile */
+                padding: 0.4rem;
             }
         }
         
-        /* Compatibility for "fold/flip" phones */
         @media (max-width: 420px) {
-            /* Make buttons smaller on tiny screens */
             .cta-button {
                 padding: 0.8rem 1.2rem;
                 font-size: 0.9rem;
@@ -730,9 +647,6 @@
             </h1>
             <p data-translate="heroSubtitle">Go from idea to invention. We are Saudi Arabia's launchpad for creators, hobbyists, and pioneers, offering pre-built electronics DIY projects that let you build, code, and innovate—faster.</p>
         </div>
-        <div class="hero-image-container">
-            <img src="image3.jpg" alt="A close-up of the HC-SR04 ultrasonic sensor module, ready for use.">
-        </div>
     </header>
 
     <main>
@@ -743,10 +657,7 @@
                     <p data-translate="aboutPara1">RIYADUINO ignited from a single spark: electronics in Saudi Arabia should be accessible, exciting, and empowering for all. Born in Riyadh from a team of passionate engineers and educators, we saw the gap between brilliant ideas and the complex, frustrating path to bringing them to life.</p>
                     <p data-translate="aboutPara2">Our mission: to bridge that gap. We meticulously design, build, and rigorously test every DIY project, so you can bypass the troubleshooting and dive straight into what matters: learning, coding, and creating.</p>
                 </div>
-                <div class="about-image fade-in-section">
-                    <img src="image1.jpg" alt="A breadboard setup showing an HC-SR04 sensor and RTC module wired, representing a DIY project.">
                 </div>
-            </div>
         </section>
 
         <section id="values" class="content-wrapper">
@@ -768,11 +679,25 @@
                     <p data-translate="value3Desc">Our goal is to spark curiosity and accelerate learning. Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike.</p>
                 </div>
             </div>
-            <div class="values-extra-image fade-in-section">
-                <img src="image0.jpg" alt="A messy but exciting pile of electronics components including LCD, motor, relay, and wires.">
+        </section>
+        
+        <section class="image-gallery">
+            <h2 class="section-title" data-translate="galleryTitle" style="margin-bottom: 2rem;">Product <span>Showcase</span></h2>
+            <div class="image-gallery-container">
+                <div class="image-gallery-item">
+                    <img src="image3.jpg" alt="HC-SR04 Ultrasonic Sensor">
+                </div>
+                <div class="image-gallery-item">
+                    <img src="image1.jpg" alt="Breadboard with Sensor and Wires">
+                </div>
+                <div class="image-gallery-item">
+                    <img src="image0.jpg" alt="Pile of Mixed Electronic Components">
+                </div>
+                <div class="image-gallery-item">
+                    <img src="image4.jpg" alt="Microcontroller Close-up on Circuit Board">
+                </div>
             </div>
         </section>
-
         <section id="contact" class="content-wrapper">
             <h2 class="contact-h1" data-translate="discountTitle">
                 MEMBERSHIP <span>DISCOUNT</span>
@@ -781,10 +706,6 @@
                 Fill this form and take 20% forever! Share your interest below.
             </p>
             
-            <div class="form-detail-image fade-in-section">
-                <img src="image4.jpg" alt="Close-up of the ATMEGA microcontroller and crystal oscillator on the main circuit board.">
-            </div>
-
             <form class="contact-form fade-in-section" action="https://formspree.io/f/xzzkyzzp" method="POST">
                 
                 <div class="form-group">
@@ -859,13 +780,16 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
+                    // We keep observing the image items to handle the staggered animation
+                    if (!entry.target.classList.contains('image-gallery-item')) {
+                         observer.unobserve(entry.target);
+                    }
                 }
             });
         }, observerOptions);
 
-        // Include all image containers and content sections for scroll animation
-        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .values-extra-image, .hero-image-container, .form-detail-image');
+        // Include all content sections and the new image gallery items for scroll animation
+        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .image-gallery-item');
         sections.forEach(section => {
             observer.observe(section);
         });
@@ -890,7 +814,8 @@
                 value3Title: "Education First",
                 value3Desc: "Our goal is to spark curiosity and accelerate learning. Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike.",
                 
-                // Contact/Discount Form Translations
+                galleryTitle: "Product <span>Showcase</span>", /* NEW TRANSLATION */
+                
                 discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
                 discountSubtitle: "Fill this form and take 20% forever! Share your interest below.",
                 formName: "Full Name",
@@ -937,7 +862,8 @@
                 value3Title: "التعليم أولاً",
                 value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
                 
-                // Contact/Discount Form Translations
+                galleryTitle: "عرض <span>المنتجات</span>", /* NEW TRANSLATION */
+
                 discountTitle: "خصم <span>العضوية</span>",
                 discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.",
                 formName: "الاسم الكامل",
@@ -974,11 +900,9 @@
 
         let currentLang = 'en';
         
-        // Helper function to update text content (including for select options)
         const updateElementTranslation = (el, key) => {
             const translation = translations[currentLang][key];
             if (translation) {
-                // Special handling for select options (if they have data-translate)
                 if (el.tagName === 'OPTION' || el.tagName === 'BUTTON') {
                     el.textContent = translation;
                 } else {
@@ -993,7 +917,6 @@
                 updateElementTranslation(el, key);
             });
             
-            // Handle select options which might not be picked up by general selector
             document.querySelectorAll('select option').forEach(option => {
                 if(option.dataset.translate) {
                     updateElementTranslation(option, option.dataset.translate);
@@ -1003,14 +926,12 @@
         
         const toggleLanguage = () => {
             if (currentLang === 'en') {
-                // Switch to ARABIC
                 currentLang = 'ar';
                 document.documentElement.lang = 'ar';
                 document.documentElement.dir = 'rtl';
                 if(translateBtnEn) translateBtnEn.style.display = 'none'; 
                 if(translateBtnAr) translateBtnAr.style.display = 'block'; 
             } else {
-                // Switch to ENGLISH
                 currentLang = 'en';
                 document.documentElement.lang = 'en';
                 document.documentElement.dir = 'ltr';
@@ -1023,7 +944,6 @@
         if(translateBtnEn) translateBtnEn.addEventListener('click', toggleLanguage);
         if(translateBtnAr) translateBtnAr.addEventListener('click', toggleLanguage);
         
-        // Set initial language text
         updateTranslations();
     });
     </script>
