@@ -45,7 +45,7 @@
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
         }
-
+        
         /* --- Enhanced Background Effect --- */
         .background-visuals {
             position: fixed;
@@ -240,15 +240,15 @@
             opacity: 0;
         }
         
-        /* NEW: Hero Image Container (for HC-SR04) */
+        /* UPDATED: Hero Image Container (HC-SR04) - Made "smaaaaaal" */
         .hero-image-container {
             width: 100%;
-            max-width: 400px;
-            margin-top: 3rem;
+            max-width: 150px; /* Reduced to 150px (very small) */
+            margin: 3rem auto 0 auto; /* Center in hero */
             opacity: 0;
             transform: scale(0.8);
             animation: zoomIn 1s ease-out 1s forwards;
-            padding: 1rem;
+            padding: 0.7rem; 
             background-color: var(--surface-color);
             border-radius: 12px;
             border: 1px solid var(--border-color);
@@ -264,7 +264,6 @@
             from { opacity: 0; transform: scale(0.8); }
             to { opacity: 1; transform: scale(1); }
         }
-
 
         /* --- Content Sections --- */
         .content-wrapper {
@@ -296,11 +295,14 @@
             font-size: 1.05rem; 
         }
 
+        /* UPDATED: About Image (Breadboard) - Made "smaaaaaal" */
         .about-image {
             background-color: var(--surface-color);
             border: 1px solid var(--border-color);
-            padding: 1rem;
+            padding: 0.8rem;
             border-radius: 12px;
+            max-width: 200px; /* Reduced to 200px */
+            margin: 0 auto; /* Center it horizontally in its grid column */
         }
         
         .about-image img {
@@ -362,13 +364,13 @@
             font-size: 1.05rem;
         }
 
-        /* NEW: Values Section Image */
+        /* NEW/UPDATED: Values Section Image (Misc. Components) - Made "smaaaaaal" */
         .values-extra-image {
             background-color: var(--surface-color);
             border: 1px solid var(--border-color);
-            padding: 1.5rem;
+            padding: 1rem;
             border-radius: 12px;
-            max-width: 800px;
+            max-width: 300px; /* Reduced to 300px */
             margin: 3rem auto 0 auto;
             box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
         }
@@ -487,11 +489,11 @@
             color: var(--primary-text);
         }
         
-        /* NEW: Detail Image container above the form */
+        /* UPDATED: Detail Image container (Arduino board) - Made "smaaaaaal" */
         .form-detail-image {
-            max-width: 250px; 
+            max-width: 100px; /* Reduced to 100px (smallest) */
             margin: 0 auto 3rem auto; 
-            padding: 1rem;
+            padding: 0.5rem;
             background-color: var(--surface-color);
             border-radius: 12px;
             border: 1px solid var(--border-color);
@@ -615,7 +617,7 @@
         html[dir="rtl"] .form-group label {
             text-align: right;
         }
-        
+
         /* New RTL support for grid images/text */
         html[dir="rtl"] .about-section {
             direction: rtl;
@@ -625,28 +627,30 @@
             direction: rtl;
         }
         html[dir="rtl"] .about-text {
-            order: 2; /* Move image to the right */
+            order: 2; /* Move text to the left/right */
         }
         html[dir="rtl"] .about-image {
-            order: 1;
+            order: 1; /* Move image to the right/left */
         }
-
 
         @media (max-width: 900px) {
             .about-section { grid-template-columns: 1fr; }
-            html[dir="rtl"] .about-section {
-                direction: rtl;
-                text-align: right;
+            
+            html[dir="rtl"] .about-text {
+                order: 1; /* Reset order on mobile for better flow */
+            }
+            html[dir="rtl"] .about-image {
+                order: 2;
             }
         }
 
         /*
-           --- MOBILE NAV FIX ---
+           --- MOBILE NAV FIX & Image Sizing ---
         */
         @media (max-width: 768px) {
-            /* NEW NAV STYLES */
+            /* NAV STYLES */
             .glass-nav {
-                top: 1rem; /* Adjusted since store elements removed */
+                top: 1rem;
                 width: 95%;
                 padding: 0.8rem; 
             }
@@ -660,22 +664,21 @@
                 font-size: 0.9rem; 
                 padding: 0.5rem 0.6rem; 
             }
-            /* REMOVED: nav-cta-link mobile styles */
             .lang-switcher {
                 padding-left: 1rem; 
                 margin-left: 0.25rem;
             }
             .hero {
-                padding-top: 9rem; /* Adjusted since store elements removed */
+                padding-top: 9rem;
             }
 
-            /* Sizing for mobile buttons */
-            .cta-button {
-                padding: 1.1rem 2rem;
-                font-size: 1rem;
-            }
+            /* Image Sizing Overrides for Mobile */
+            .hero-image-container { max-width: 120px; } /* Even smaller on tiny screens */
+            .about-image { max-width: 150px; }
+            .values-extra-image { max-width: 250px; }
+            .form-detail-image { max-width: 80px; }
             
-            /* NEW: Form button mobile styling */
+            /* Form mobile styling */
             .contact-form .cta-button {
                 padding: 1rem 0; 
                 font-size: 1.05rem;
@@ -684,23 +687,9 @@
             .contact-form {
                 padding: 2rem;
             }
-            
-            .hero-image-container {
-                max-width: 300px;
-            }
-            .form-detail-image {
-                max-width: 200px;
-            }
 
             html[dir="rtl"] .section-title {
                  text-align: center !important;
-            }
-            
-            html[dir="rtl"] .about-text {
-                order: 1; /* Reset order on mobile for better flow */
-            }
-            html[dir="rtl"] .about-image {
-                order: 2;
             }
         }
         
@@ -875,8 +864,8 @@
             });
         }, observerOptions);
 
-        // Include .contact-form and .form-detail-image for scroll animation
-        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .values-extra-image, .form-detail-image');
+        // Include all image containers and content sections for scroll animation
+        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .values-extra-image, .hero-image-container, .form-detail-image');
         sections.forEach(section => {
             observer.observe(section);
         });
@@ -885,10 +874,9 @@
         
         const translations = {
             en: {
-                // REMOVED: couponBar, navEnterStore, heroCTA, finalCta
                 navAbout: "About Us",
                 navValues: "Our Values",
-                navContact: "Share Your Interest", // UPDATED
+                navContact: "Share Your Interest",
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">BUILD. LEARN. <span class=\"highlight\">INNOVATE.</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">THE FUTURE, FORGED IN KSA.</span></span>",
                 heroSubtitle: "Go from idea to invention. We are Saudi Arabia's launchpad for creators, hobbyists, and pioneers, offering pre-built electronics DIY projects that let you build, code, and innovate—faster.",
                 aboutTitle: "From Riyadh, <br><span>For Everyone.</span>",
@@ -902,25 +890,25 @@
                 value3Title: "Education First",
                 value3Desc: "Our goal is to spark curiosity and accelerate learning. Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike.",
                 
-                // NEW/UPDATED Contact/Discount Form Translations
+                // Contact/Discount Form Translations
                 discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
-                discountSubtitle: "Fill this form and take 20% forever! Share your interest below.", // UPDATED %
+                discountSubtitle: "Fill this form and take 20% forever! Share your interest below.",
                 formName: "Full Name",
                 formEmail: "Primary Contact Email",
-                formCityKSA: "City in KSA", // NEW
-                formSelectCityDefault: "-- Select your city in KSA --", // NEW
-                cityRiyadh: "Riyadh", // NEW
-                cityJeddah: "Jeddah", // NEW
-                cityMecca: "Mecca (Makkah)", // NEW
-                cityMedina: "Medina (Madinah)", // NEW
-                cityDammam: "Dammam", // NEW
-                cityKhobar: "Khobar", // NEW
-                cityDhahran: "Dhahran", // NEW
-                cityTaif: "Taif", // NEW
-                cityAbha: "Abha", // NEW
-                cityJubail: "Jubail", // NEW
-                cityYanbu: "Yanbu", // NEW
-                cityOther: "Other KSA City", // NEW
+                formCityKSA: "City in KSA",
+                formSelectCityDefault: "-- Select your city in KSA --",
+                cityRiyadh: "Riyadh",
+                cityJeddah: "Jeddah",
+                cityMecca: "Mecca (Makkah)",
+                cityMedina: "Medina (Madinah)",
+                cityDammam: "Dammam",
+                cityKhobar: "Khobar",
+                cityDhahran: "Dhahran",
+                cityTaif: "Taif",
+                cityAbha: "Abha",
+                cityJubail: "Jubail",
+                cityYanbu: "Yanbu",
+                cityOther: "Other KSA City",
                 formExpertise: "Expertise Level",
                 formSelectDefault: "-- Select your expertise level --",
                 formExpertiseNovice: "Novice (Exploring fundamentals)",
@@ -928,15 +916,14 @@
                 formExpertiseAdvanced: "Advanced (Developing complex systems)",
                 formExpertiseExpert: "Expert (Consulting/Teaching)",
                 formGoals: "Key Objectives with RIYADUINO Technology",
-                formSubmit: "SUBMIT & SECURE MY 20% DISCOUNT", // UPDATED %
+                formSubmit: "SUBMIT & SECURE MY 20% DISCOUNT",
                 
                 footerText: "© 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia."
             },
             ar: {
-                // REMOVED: couponBar, navEnterStore, heroCTA, finalCta
                 navAbout: "من نحن",
                 navValues: "قيمنا",
-                navContact: "شارك اهتمامك", // UPDATED
+                navContact: "شارك اهتمامك",
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">ابنِ. تعلّم. <span class=\"highlight\">ابتكِر.</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">المستقبل، يُصاغ في المملكة.</span></span>",
                 heroSubtitle: "انطلق من الفكرة إلى الابتكار. نحن منصة المملكة العربية السعودية لإطلاق المبدعين، الهواة، والرواد، حيث نقدم مشاريع إلكترونية جاهزة تتيح لك البناء، والبرمجة، والابتكار—بسرعة أكبر.",
                 aboutTitle: "من الرياض، <br><span>للجميع.</span>",
@@ -950,25 +937,25 @@
                 value3Title: "التعليم أولاً",
                 value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
                 
-                // NEW/UPDATED Contact/Discount Form Translations
+                // Contact/Discount Form Translations
                 discountTitle: "خصم <span>العضوية</span>",
-                discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.", // UPDATED %
+                discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.",
                 formName: "الاسم الكامل",
                 formEmail: "البريد الإلكتروني الأساسي",
-                formCityKSA: "المدينة في المملكة العربية السعودية", // NEW
-                formSelectCityDefault: "-- اختر مدينتك في المملكة --", // NEW
-                cityRiyadh: "الرياض", // NEW
-                cityJeddah: "جدة", // NEW
-                cityMecca: "مكة المكرمة", // NEW
-                cityMedina: "المدينة المنورة", // NEW
-                cityDammam: "الدمام", // NEW
-                cityKhobar: "الخبر", // NEW
-                cityDhahran: "الظهران", // NEW
-                cityTaif: "الطائف", // NEW
-                cityAbha: "أبها", // NEW
-                cityJubail: "الجبيل", // NEW
-                cityYanbu: "ينبع", // NEW
-                cityOther: "مدينة سعودية أخرى", // NEW
+                formCityKSA: "المدينة في المملكة العربية السعودية",
+                formSelectCityDefault: "-- اختر مدينتك في المملكة --",
+                cityRiyadh: "الرياض",
+                cityJeddah: "جدة",
+                cityMecca: "مكة المكرمة",
+                cityMedina: "المدينة المنورة",
+                cityDammam: "الدمام",
+                cityKhobar: "الخبر",
+                cityDhahran: "الظهران",
+                cityTaif: "الطائف",
+                cityAbha: "أبها",
+                cityJubail: "الجبيل",
+                cityYanbu: "ينبع",
+                cityOther: "مدينة سعودية أخرى",
                 formExpertise: "مستوى الخبرة",
                 formSelectDefault: "-- اختر مستوى خبرتك --",
                 formExpertiseNovice: "مبتدئ (استكشاف الأساسيات)",
@@ -976,1051 +963,7 @@
                 formExpertiseAdvanced: "متقدم (تطوير أنظمة معقدة)",
                 formExpertiseExpert: "خبير (استشارات/تدريس)",
                 formGoals: "الأهداف الرئيسية من استخدام تقنية رياضوينو",
-                formSubmit: "إرسال وتأمين خصم 20% الخاص بي", // UPDATED %
-                
-                footerText: "© 2025 رياضوينو. جميع الحقوق محفوظة. الرياض، المملكة العربية السعودية."
-            }
-        };
-
-        const translateBtnEn = document.getElementById('translateBtnEn'); 
-        const translateBtnAr = document.getElementById('translateBtnAr');
-
-        let currentLang = 'en';
-        
-        // Helper function to update text content (including for select options)
-        const updateElementTranslation = (el, key) => {
-            const translation = translations[currentLang][key];
-            if (translation) {
-                // Special handling for select options (if they have data-translate)
-                if (el.tagName === 'OPTION' || el.tagName === 'BUTTON') {
-                    el.textContent = translation;
-                } else {
-                    el.innerHTML = translation;
-                }
-            }
-        };
-
-        const updateTranslations = () => {
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.dataset.translate;
-                updateElementTranslation(el, key);
-            });
-            
-            // Handle select options which might not be picked up by general selector
-            document.querySelectorAll('select option').forEach(option => {
-                if(option.dataset.translate) {
-                    updateElementTranslation(option, option.dataset.translate);
-                }
-            });
-        };
-        
-        const toggleLanguage = () => {
-            if (currentLang === 'en') {
-                // Switch to ARABIC
-                currentLang = 'ar';
-                document.documentElement.lang = 'ar';
-                document.documentElement.dir = 'rtl';
-                if(translateBtnEn) translateBtnEn.style.display = 'none'; 
-                if(translateBtnAr) translateBtnAr.style.display = 'block'; 
-            } else {
-                // Switch to ENGLISH
-                currentLang = 'en';
-                document.documentElement.lang = 'en';
-                document.documentElement.dir = 'ltr';
-                if(translateBtnEn) translateBtnEn.style.display = 'block'; 
-                if(translateBtnAr) translateBtnAr.style.display = 'none'; 
-            }
-            updateTranslations();
-        };
-
-        if(translateBtnEn) translateBtnEn.addEventListener('click', toggleLanguage);
-        if(translateBtnAr) translateBtnAr.addEventListener('click', toggleLanguage);
-        
-        // Set initial language text
-        updateTranslations();
-    });
-    </script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RIYADUINO | Forging Innovation</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-    
-    <style>
-        :root {
-            --bg-color: #000000;
-            --surface-color: #111111;
-            --primary-text: #FFFFFF;
-            --secondary-text: #a0a0a0;
-            --accent-yellow: #FFC300;
-            --accent-glow: rgba(255, 195, 0, 0.4);
-            --accent-glow-strong: rgba(255, 195, 0, 0.6);
-            --border-color: rgba(255, 195, 0, 0.2);
-            --font-heading: 'Archivo', sans-serif;
-            --font-body: 'Tajawal', sans-serif;
-            --font-secondary: 'Tajawal', sans-serif;
-            --form-input-bg: #0A0A0A; /* Added for new form style */
-        }
-
-        /* --- Base & Reset --- */
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            scroll-behavior: smooth;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--primary-text);
-            font-family: var(--font-body);
-            line-height: 1.7;
-            overflow-x: hidden;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-        }
-
-        /* --- Enhanced Background Effect --- */
-        .background-visuals {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -2;
-            overflow: hidden;
-        }
-        
-        .background-visuals::before { /* Dot grid */
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(var(--surface-color) 1px, transparent 1px);
-            background-size: 10px 10px;
-            opacity: 0.5;
-        }
-
-        .background-visuals::after { /* Animated Aurora */
-            content: '';
-            position: absolute;
-            width: 900px;
-            height: 900px;
-            left: 50%;
-            top: 50%;
-            background: radial-gradient(circle, rgba(255, 195, 0, 0.08), transparent 60%);
-            border-radius: 50%;
-            filter: blur(120px);
-            will-change: transform;
-            animation: move-aurora-centered 20s infinite alternate ease-in-out;
-        }
-
-        @keyframes move-aurora-centered {
-            from { transform: translate(-45%, -55%) rotate(0deg); }
-            to { transform: translate(-55%, -45%) rotate(360deg); }
-        }
-
-        /* --- Typography --- */
-        h1, h2, h3 {
-            font-family: var(--font-heading);
-            font-weight: 900;
-            letter-spacing: -1.5px;
-            color: var(--primary-text);
-        }
-
-        h2.section-title {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            text-align: center;
-            margin-bottom: 4rem;
-        }
-        
-        h2.section-title span {
-            color: var(--accent-yellow);
-            text-shadow: 0 0 10px var(--accent-glow);
-        }
-
-        /* --- Main Navigation (Liquid Glass Header) --- */
-        .glass-nav {
-            position: fixed;
-            top: 1.5rem; /* Adjusted since store elements removed */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            padding: 1.1rem 2.2rem; 
-            background-color: rgba(17, 17, 17, 0.6); 
-            
-            /* The "Liquid Glass" effect */
-            backdrop-filter: blur(15px) saturate(180%);
-            -webkit-backdrop-filter: blur(15px) saturate(180%);
-            
-            border-radius: 70px; 
-            border: 1px solid var(--border-color);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            
-            /* UPDATED DELAY to reflect store removal */
-            animation: fadeInDown 0.8s ease-out forwards; 
-            opacity: 0; 
-        }
-
-        .nav-content {
-            display: flex;
-            align-items: center;
-            gap: 2.2rem; 
-        }
-
-        .nav-content a,
-        .lang-btn {
-            font-family: var(--font-body);
-            font-weight: 700;
-            font-size: 1.15rem; 
-            text-decoration: none;
-            color: var(--secondary-text);
-            transition: color 0.3s ease;
-            white-space: nowrap;
-        }
-
-        .nav-content a:hover,
-        .lang-btn:hover {
-            color: var(--primary-text);
-        }
-
-        .lang-switcher {
-            display: flex;
-            border-left: 1px solid var(--border-color);
-            padding-left: 2rem; 
-            margin-left: 0.5rem; 
-        }
-
-        .lang-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 0;
-            line-height: 1; 
-        }
-
-
-        /* --- CTA Button (General Style for forms/hero) --- */
-        .cta-button {
-            display: inline-block;
-            font-family: var(--font-heading);
-            font-weight: 700;
-            font-size: 1.1rem;
-            text-decoration: none;
-            color: var(--bg-color);
-            background: var(--accent-yellow);
-            padding: 1.15rem 3rem;
-            border-radius: 50px;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
-            box-shadow: 0 5px 20px rgba(255, 195, 0, 0.2);
-        }
-
-        .cta-button:hover {
-            transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 10px 40px var(--accent-glow);
-        }
-        
-        /* --- Hero Section --- */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 2rem;
-            position: relative;
-            padding-top: 9rem; /* Adjusted since store elements removed */
-        }
-        
-        .hero-content {
-            z-index: 1;
-        }
-        
-        .hero h1 {
-            font-size: clamp(3rem, 8vw, 6rem);
-            line-height: 1.1;
-            margin-bottom: 1.5rem;
-        }
-        
-        .hero h1 .line-wrap {
-            display: block;
-            overflow: hidden;
-        }
-        .hero h1 .line {
-            display: block;
-            transform: translateY(110%);
-            animation: reveal-line 1s ease-out forwards;
-        }
-        .hero h1 .line-2 { animation-delay: 0.2s; }
-
-        @keyframes reveal-line {
-            from { transform: translateY(110%); }
-            to { transform: translateY(0); }
-        }
-
-        .hero h1 .highlight {
-            color: var(--accent-yellow);
-        }
-        
-        .hero p {
-            font-size: clamp(1rem, 2vw, 1.25rem);
-            color: var(--secondary-text);
-            max-width: 650px;
-            margin: 0 auto 2.5rem auto;
-            animation: fadeInUp 1s ease-out 0.8s forwards;
-            opacity: 0;
-        }
-        
-        /* NEW: Hero Image Container (for HC-SR04) */
-        .hero-image-container {
-            width: 100%;
-            max-width: 400px;
-            margin-top: 3rem;
-            opacity: 0;
-            transform: scale(0.8);
-            animation: zoomIn 1s ease-out 1s forwards;
-            padding: 1rem;
-            background-color: var(--surface-color);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
-        .hero-image-container img {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 8px;
-        }
-        @keyframes zoomIn {
-            from { opacity: 0; transform: scale(0.8); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-
-        /* --- Content Sections --- */
-        .content-wrapper {
-            padding: 6rem 5%;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* About Us Section */
-        .about-section {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-        }
-
-        .about-text h3 {
-            font-size: 2rem;
-            margin-bottom: 1rem;
-        }
-        
-        .about-text h3 span {
-            color: var(--accent-yellow);
-        }
-
-        .about-text p {
-            color: var(--secondary-text);
-            margin-bottom: 1.5rem;
-            font-size: 1.05rem; 
-        }
-
-        .about-image {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            padding: 1rem;
-            border-radius: 12px;
-        }
-        
-        .about-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-        
-        .about-image.fade-in-section {
-            transition-delay: 0.2s;
-        }
-        
-        /* Values Section */
-        .values-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem; /* Added margin for new image */
-        }
-        
-        .value-card {
-            background-color: var(--surface-color);
-            padding: 2.5rem 2rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            opacity: 0;
-            animation: staggerFadeInUp 0.8s ease-out forwards;
-        }
-        
-        .value-card:nth-child(2) { animation-delay: 0.2s; }
-        .value-card:nth-child(3) { animation-delay: 0.4s; }
-
-        .value-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--accent-yellow);
-            box-shadow: 0 10px 40px -5px var(--accent-glow);
-        }
-        
-        .value-icon {
-            font-size: 2.5rem;
-            color: var(--accent-yellow);
-            margin-bottom: 1.5rem;
-            transition: transform 0.3s ease-out;
-        }
-        
-        .value-card:hover .value-icon {
-            transform: scale(1.1) rotate(-5deg);
-        }
-        
-        .value-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .value-card p {
-            color: var(--secondary-text);
-            font-size: 1.05rem;
-        }
-
-        /* NEW: Values Section Image */
-        .values-extra-image {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            padding: 1.5rem;
-            border-radius: 12px;
-            max-width: 800px;
-            margin: 3rem auto 0 auto;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
-        .values-extra-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-        
-        /* --- NEW: Contact/Discount Form Section Styles --- */
-        
-        /* New H1 and Subtitle for the form */
-        .contact-h1 {
-            font-family: var(--font-heading);
-            text-align: center;
-            color: var(--primary-text);
-            font-size: 2.5rem;
-            margin-bottom: 5px;
-            font-weight: 900;
-            letter-spacing: 5px;
-            text-transform: uppercase;
-        }
-        
-        .contact-h1 span {
-            color: var(--accent-yellow);
-            animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
-        }
-        
-        .contact-subtitle-form {
-            font-family: var(--font-body);
-            text-align: center;
-            font-size: 1.1rem;
-            margin: 0 auto 30px auto;
-            font-weight: 400;
-            color: var(--secondary-text);
-            padding-bottom: 15px;
-            border-bottom: 1px solid var(--border-color);
-            max-width: 500px;
-        }
-
-        .contact-form {
-            max-width: 800px;
-            margin: 0 auto;
-            background-color: var(--surface-color);
-            padding: 3rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-        }
-        
-        /* Updated CTA button style for contact form */
-        .contact-form .cta-button {
-            display: block; /* Make it full width */
-            width: 100%;
-            padding: 1rem 0; /* Full width padding */
-            font-size: 1.15rem;
-            margin-top: 30px;
-        }
-
-        .contact-form .cta-button:hover {
-            transform: translateY(-3px) scale(1.01);
-            background-color: #ffe6cc; /* Lighter yellow for hover */
-            box-shadow: 0 8px 30px var(--accent-glow-strong);
-        }
-        
-        /* NEW FORM GROUP STYLES */
-        .form-group {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: rgba(17, 17, 17, 0.5); 
-            border-radius: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        
-        .form-group label {
-            display: block;
-            font-family: var(--font-body);
-            font-weight: 700;
-            font-size: 0.95rem;
-            color: var(--secondary-text);
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .form-group input,
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            color: var(--primary-text);
-            background-color: var(--form-input-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--accent-yellow);
-            box-shadow: 0 0 15px var(--accent-glow);
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-        
-        /* Dropdown options must be styled clearly */
-        .form-group select option {
-            background-color: var(--surface-color);
-            color: var(--primary-text);
-        }
-        
-        /* NEW: Detail Image container above the form */
-        .form-detail-image {
-            max-width: 250px; 
-            margin: 0 auto 3rem auto; 
-            padding: 1rem;
-            background-color: var(--surface-color);
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transform: scale(0.95);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-        }
-        .form-detail-image.is-visible {
-            opacity: 1;
-            transform: scale(1);
-        }
-        .form-detail-image img {
-            width: 100%;
-            height: auto;
-            border-radius: 8px;
-            display: block;
-        }
-
-
-        /* --- Footer --- */
-        .footer {
-            text-align: center;
-            padding: 3rem 2rem;
-            border-top: 1px solid var(--border-color);
-        }
-        
-        .footer p {
-            color: var(--secondary-text);
-        }
-        
-        .footer .nav-logo {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-            
-            /* Copied from .nav-logo style */
-            font-family: var(--font-heading);
-            font-weight: 900;
-            color: var(--primary-text);
-            text-decoration: none;
-            transition: font-size 0.3s ease;
-        }
-        
-        .footer .nav-logo span {
-            color: var(--accent-yellow);
-        }
-
-
-        /* --- Animations --- */
-
-        @keyframes subtle-yellow-pulse {
-            0% {
-                color: var(--accent-yellow);
-                text-shadow: 0 0 8px var(--accent-glow);
-            }
-            50% {
-                color: #fff2cc; 
-                text-shadow: 0 0 16px var(--accent-glow-strong);
-            }
-            100% {
-                color: var(--accent-yellow);
-                text-shadow: 0 0 8px var(--accent-glow);
-            }
-        }
-
-        /* Applied to relevant yellow text elements, removed .nav-cta-link */
-        .hero h1 .highlight,
-        .section-title span,
-        .about-text h3 span,
-        .value-icon,
-        .footer .nav-logo span,
-        .contact-h1 span { /* Added contact-h1 span */
-            animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
-        }
-
-        @keyframes fadeInDown {
-            from { opacity: 0; transform: translate(-50%, -100%); }
-            to { opacity: 1; transform: translate(-50%, 0); }
-        }
-        
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        @keyframes staggerFadeInUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(40px) scale(0.98); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) scale(1); 
-            }
-        }
-        
-        .fade-in-section {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out, transition-delay 0.8s ease-out;
-        }
-        
-        .fade-in-section.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* --- RTL & Responsive --- */
-        
-        html[dir="rtl"] {
-            --font-heading: 'Tajawal', sans-serif;
-        }
-        html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 {
-            font-weight: 700;
-        }
-        
-        html[dir="rtl"] .contact-subtitle-form { /* New style for form subtitle */
-            text-align: center;
-        }
-        html[dir="rtl"] .form-group label {
-            text-align: right;
-        }
-        
-        /* New RTL support for grid images/text */
-        html[dir="rtl"] .about-section {
-            direction: rtl;
-            text-align: right;
-        }
-        html[dir="rtl"] .about-section > div {
-            direction: rtl;
-        }
-        html[dir="rtl"] .about-text {
-            order: 2; /* Move image to the right */
-        }
-        html[dir="rtl"] .about-image {
-            order: 1;
-        }
-
-
-        @media (max-width: 900px) {
-            .about-section { grid-template-columns: 1fr; }
-            html[dir="rtl"] .about-section {
-                direction: rtl;
-                text-align: right;
-            }
-        }
-
-        /*
-           --- MOBILE NAV FIX ---
-        */
-        @media (max-width: 768px) {
-            /* NEW NAV STYLES */
-            .glass-nav {
-                top: 1rem; /* Adjusted since store elements removed */
-                width: 95%;
-                padding: 0.8rem; 
-            }
-            .nav-content {
-                gap: 0.25rem;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            .nav-content a,
-            .lang-btn {
-                font-size: 0.9rem; 
-                padding: 0.5rem 0.6rem; 
-            }
-            /* REMOVED: nav-cta-link mobile styles */
-            .lang-switcher {
-                padding-left: 1rem; 
-                margin-left: 0.25rem;
-            }
-            .hero {
-                padding-top: 9rem; /* Adjusted since store elements removed */
-            }
-
-            /* Sizing for mobile buttons */
-            .cta-button {
-                padding: 1.1rem 2rem;
-                font-size: 1rem;
-            }
-            
-            /* NEW: Form button mobile styling */
-            .contact-form .cta-button {
-                padding: 1rem 0; 
-                font-size: 1.05rem;
-            }
-
-            .contact-form {
-                padding: 2rem;
-            }
-            
-            .hero-image-container {
-                max-width: 300px;
-            }
-            .form-detail-image {
-                max-width: 200px;
-            }
-
-            html[dir="rtl"] .section-title {
-                 text-align: center !important;
-            }
-            
-            html[dir="rtl"] .about-text {
-                order: 1; /* Reset order on mobile for better flow */
-            }
-            html[dir="rtl"] .about-image {
-                order: 2;
-            }
-        }
-        
-        /* Compatibility for "fold/flip" phones */
-        @media (max-width: 420px) {
-            /* Make buttons smaller on tiny screens */
-            .cta-button {
-                padding: 0.8rem 1.2rem;
-                font-size: 0.9rem;
-            }
-            .contact-form {
-                padding: 1.5rem;
-            }
-        }
-
-    </style>
-</head>
-<body>
-
-    <nav class="glass-nav">
-        <div class="nav-content">
-            <a href="#about" data-translate="navAbout">About Us</a>
-            <a href="#values" data-translate="navValues">Our Values</a>
-            <a href="#contact" data-translate="navContact">Share Your Interest</a>
-            <div class="lang-switcher">
-                 <button id="translateBtnEn" class="lang-btn">العربية</button>
-                 <button id="translateBtnAr" class="lang-btn" style="display: none;">English</button>
-            </div>
-        </div>
-    </nav>
-    <div class="background-visuals"></div>
-
-    <header class="hero">
-        <div class="hero-content">
-            <h1 data-translate="heroTitle">
-                <span class="line-wrap"><span class="line line-1">BUILD. LEARN. <span class="highlight">INNOVATE.</span></span></span>
-                <span class="line-wrap"><span class="line line-2">THE FUTURE, FORGED IN KSA.</span></span>
-            </h1>
-            <p data-translate="heroSubtitle">Go from idea to invention. We are Saudi Arabia's launchpad for creators, hobbyists, and pioneers, offering pre-built electronics DIY projects that let you build, code, and innovate—faster.</p>
-        </div>
-        <div class="hero-image-container">
-            <img src="image3.jpg" alt="A close-up of the HC-SR04 ultrasonic sensor module, ready for use.">
-        </div>
-    </header>
-
-    <main>
-        <section id="about" class="content-wrapper">
-            <div class="about-section">
-                <div class="about-text fade-in-section">
-                    <h2 class="section-title" style="text-align: left; margin: 0 0 2rem 0;" data-translate="aboutTitle">From Riyadh, <br><span>For Everyone.</span></h2>
-                    <p data-translate="aboutPara1">RIYADUINO ignited from a single spark: electronics in Saudi Arabia should be accessible, exciting, and empowering for all. Born in Riyadh from a team of passionate engineers and educators, we saw the gap between brilliant ideas and the complex, frustrating path to bringing them to life.</p>
-                    <p data-translate="aboutPara2">Our mission: to bridge that gap. We meticulously design, build, and rigorously test every DIY project, so you can bypass the troubleshooting and dive straight into what matters: learning, coding, and creating.</p>
-                </div>
-                <div class="about-image fade-in-section">
-                    <img src="image1.jpg" alt="A breadboard setup showing an HC-SR04 sensor and RTC module wired, representing a DIY project.">
-                </div>
-            </div>
-        </section>
-
-        <section id="values" class="content-wrapper">
-            <h2 class="section-title" data-translate="valuesTitle">Our Core <span>Values</span></h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon">⚡️</div>
-                    <h3 data-translate="value1Title">Local Empowerment</h3>
-                    <p data-translate="value1Desc">We are a proud Saudi-based initiative. By providing fast, local delivery and dedicated support, we empower our community to build the future, right here at home.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">✔️</div>
-                    <h3 data-translate="value2Title">Uncompromising Quality</h3>
-                    <p data-translate="value2Desc">Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">🎓</div>
-                    <h3 data-translate="value3Title">Education First</h3>
-                    <p data-translate="value3Desc">Our goal is to spark curiosity and accelerate learning. Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike.</p>
-                </div>
-            </div>
-            <div class="values-extra-image fade-in-section">
-                <img src="image0.jpg" alt="A messy but exciting pile of electronics components including LCD, motor, relay, and wires.">
-            </div>
-        </section>
-
-        <section id="contact" class="content-wrapper">
-            <h2 class="contact-h1" data-translate="discountTitle">
-                MEMBERSHIP <span>DISCOUNT</span>
-            </h2>
-            <p class="contact-subtitle-form" data-translate="discountSubtitle">
-                Fill this form and take 20% forever! Share your interest below.
-            </p>
-            
-            <div class="form-detail-image fade-in-section">
-                <img src="image4.jpg" alt="Close-up of the ATMEGA microcontroller and crystal oscillator on the main circuit board.">
-            </div>
-
-            <form class="contact-form fade-in-section" action="https://formspree.io/f/xzzkyzzp" method="POST">
-                
-                <div class="form-group">
-                    <label for="name" data-translate="formName">Full Name</label>
-                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
-                </div>
-                
-                <div class="form-group">
-                    <label for="email" data-translate="formEmail">Primary Contact Email</label>
-                    <input type="email" id="email" name="email" required placeholder="your.professional.email@example.com">
-                </div>
-                
-                <div class="form-group">
-                    <label for="city_ksa" data-translate="formCityKSA">City in KSA</label>
-                    <select id="city_ksa" name="city_ksa" required>
-                        <option value="" data-translate="formSelectCityDefault">-- Select your city in KSA --</option>
-                        <option value="Riyadh" data-translate="cityRiyadh">Riyadh</option>
-                        <option value="Jeddah" data-translate="cityJeddah">Jeddah</option>
-                        <option value="Mecca" data-translate="cityMecca">Mecca (Makkah)</option>
-                        <option value="Medina" data-translate="cityMedina">Medina (Madinah)</option>
-                        <option value="Dammam" data-translate="cityDammam">Dammam</option>
-                        <option value="Khobar" data-translate="cityKhobar">Khobar</option>
-                        <option value="Dhahran" data-translate="cityDhahran">Dhahran</option>
-                        <option value="Taif" data-translate="cityTaif">Taif</option>
-                        <option value="Abha" data-translate="cityAbha">Abha</option>
-                        <option value="Jubail" data-translate="cityJubail">Jubail</option>
-                        <option value="Yanbu" data-translate="cityYanbu">Yanbu</option>
-                        <option value="other" data-translate="cityOther">Other KSA City</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="interest_level" data-translate="formExpertise">Expertise Level</label>
-                    <select id="interest_level" name="interest_level" required>
-                        <option value="" data-translate="formSelectDefault">-- Select your expertise level --</option>
-                        <option value="novice" data-translate="formExpertiseNovice">Novice (Exploring fundamentals)</option>
-                        <option value="intermediate" data-translate="formExpertiseIntermediate">Intermediate (Building small projects)</option>
-                        <option value="advanced" data-translate="formExpertiseAdvanced">Advanced (Developing complex systems)</option>
-                        <option value="expert" data-translate="formExpertiseExpert">Expert (Consulting/Teaching)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="goals" data-translate="formGoals">Key Objectives with RIYADUINO Technology</label>
-                    <textarea id="goals" name="goals" required placeholder="Briefly describe what you aim to achieve..."></textarea>
-                </div>
-                
-                <div style="text-align: center;">
-                    <button type="submit" class="cta-button" data-translate="formSubmit">
-                        SUBMIT & SECURE MY 20% DISCOUNT
-                    </button>
-                </div>
-            </form>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <a href="#" class="nav-logo">RIYAD<span>UINO</span></a>
-        <p data-translate="footerText">&copy; 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia.</p>
-    </footer>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        // --- SCROLL ANIMATIONS ---
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        // Include .contact-form and .form-detail-image for scroll animation
-        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .values-extra-image, .form-detail-image');
-        sections.forEach(section => {
-            observer.observe(section);
-        });
-
-        // --- TRANSLATION LOGIC ---
-        
-        const translations = {
-            en: {
-                // REMOVED: couponBar, navEnterStore, heroCTA, finalCta
-                navAbout: "About Us",
-                navValues: "Our Values",
-                navContact: "Share Your Interest", // UPDATED
-                heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">BUILD. LEARN. <span class=\"highlight\">INNOVATE.</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">THE FUTURE, FORGED IN KSA.</span></span>",
-                heroSubtitle: "Go from idea to invention. We are Saudi Arabia's launchpad for creators, hobbyists, and pioneers, offering pre-built electronics DIY projects that let you build, code, and innovate—faster.",
-                aboutTitle: "From Riyadh, <br><span>For Everyone.</span>",
-                aboutPara1: "RIYADUINO ignited from a single spark: electronics in Saudi Arabia should be accessible, exciting, and empowering for all. Born in Riyadh from a team of passionate engineers and educators, we saw the gap between brilliant ideas and the complex, frustrating path to bringing them to life.",
-                aboutPara2: "Our mission: to bridge that gap. We meticulously design, build, and rigorously test every DIY project, so you can bypass the troubleshooting and dive straight into what matters: learning, coding, and creating.",
-                valuesTitle: "Our Core <span>Values</span>",
-                value1Title: "Local Empowerment",
-                value1Desc: "We are a proud Saudi-based initiative. By providing fast, local delivery and dedicated support, we empower our community to build the future, right here at home.",
-                value2Title: "Uncompromising Quality",
-                value2Desc: "Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.",
-                value3Title: "Education First",
-                value3Desc: "Our goal is to spark curiosity and accelerate learning. Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike.",
-                
-                // NEW/UPDATED Contact/Discount Form Translations
-                discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
-                discountSubtitle: "Fill this form and take 20% forever! Share your interest below.", // UPDATED %
-                formName: "Full Name",
-                formEmail: "Primary Contact Email",
-                formCityKSA: "City in KSA", // NEW
-                formSelectCityDefault: "-- Select your city in KSA --", // NEW
-                cityRiyadh: "Riyadh", // NEW
-                cityJeddah: "Jeddah", // NEW
-                cityMecca: "Mecca (Makkah)", // NEW
-                cityMedina: "Medina (Madinah)", // NEW
-                cityDammam: "Dammam", // NEW
-                cityKhobar: "Khobar", // NEW
-                cityDhahran: "Dhahran", // NEW
-                cityTaif: "Taif", // NEW
-                cityAbha: "Abha", // NEW
-                cityJubail: "Jubail", // NEW
-                cityYanbu: "Yanbu", // NEW
-                cityOther: "Other KSA City", // NEW
-                formExpertise: "Expertise Level",
-                formSelectDefault: "-- Select your expertise level --",
-                formExpertiseNovice: "Novice (Exploring fundamentals)",
-                formExpertiseIntermediate: "Intermediate (Building small projects)",
-                formExpertiseAdvanced: "Advanced (Developing complex systems)",
-                formExpertiseExpert: "Expert (Consulting/Teaching)",
-                formGoals: "Key Objectives with RIYADUINO Technology",
-                formSubmit: "SUBMIT & SECURE MY 20% DISCOUNT", // UPDATED %
-                
-                footerText: "© 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia."
-            },
-            ar: {
-                // REMOVED: couponBar, navEnterStore, heroCTA, finalCta
-                navAbout: "من نحن",
-                navValues: "قيمنا",
-                navContact: "شارك اهتمامك", // UPDATED
-                heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">ابنِ. تعلّم. <span class=\"highlight\">ابتكِر.</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">المستقبل، يُصاغ في المملكة.</span></span>",
-                heroSubtitle: "انطلق من الفكرة إلى الابتكار. نحن منصة المملكة العربية السعودية لإطلاق المبدعين، الهواة، والرواد، حيث نقدم مشاريع إلكترونية جاهزة تتيح لك البناء، والبرمجة، والابتكار—بسرعة أكبر.",
-                aboutTitle: "من الرياض، <br><span>للجميع.</span>",
-                aboutPara1: "انطلقت \"رياضوينو\" من شرارة واحدة: يجب أن تكون الإلكترونية في المملكة العربية السعودية متاحة، ومثيرة، ومُمكّنة للجميع. وُلدنا في الرياض على يد فريق من المهندسين والمعلمين الشغوفين، ورأينا الفجوة بين الأفكار اللامعة والطريق المعقد والمحبط لتحويلها إلى واقع.",
-                aboutPara2: "مهمتنا: سد هذه الفجوة. نحن نصمم، ونبني، ونختبر بدقة كل مشروع، حتى تتمكن من تجاوز مرحلة استكشاف الأخطاء والانطلاق مباشرة إلى ما يهم: التعلم، والبرمجة، والإبداع.",
-                valuesTitle: "قيمنا <span>الأساسية</span>",
-                value1Title: "تمكين محلي",
-                value1Desc: "نحن فخورون بكوننا مبادرة سعودية. من خلال توفير التوصيل المحلي السريع والدعم المخصص، نمكّن مجتمعنا من بناء المستقبل، هنا في وطننا.",
-                value2Title: "جودة لا تقبل المساومة",
-                value2Desc: "الكمال هو خط البداية لدينا. يتم تجميع كل مشروع بخبرة واختبارها بدقة من قبل مهندسينا. نجاحك هو مقياسنا.",
-                value3Title: "التعليم أولاً",
-                value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
-                
-                // NEW/UPDATED Contact/Discount Form Translations
-                discountTitle: "خصم <span>العضوية</span>",
-                discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.", // UPDATED %
-                formName: "الاسم الكامل",
-                formEmail: "البريد الإلكتروني الأساسي",
-                formCityKSA: "المدينة في المملكة العربية السعودية", // NEW
-                formSelectCityDefault: "-- اختر مدينتك في المملكة --", // NEW
-                cityRiyadh: "الرياض", // NEW
-                cityJeddah: "جدة", // NEW
-                cityMecca: "مكة المكرمة", // NEW
-                cityMedina: "المدينة المنورة", // NEW
-                cityDammam: "الدمام", // NEW
-                cityKhobar: "الخبر", // NEW
-                cityDhahran: "الظهران", // NEW
-                cityTaif: "الطائف", // NEW
-                cityAbha: "أبها", // NEW
-                cityJubail: "الجبيل", // NEW
-                cityYanbu: "ينبع", // NEW
-                cityOther: "مدينة سعودية أخرى", // NEW
-                formExpertise: "مستوى الخبرة",
-                formSelectDefault: "-- اختر مستوى خبرتك --",
-                formExpertiseNovice: "مبتدئ (استكشاف الأساسيات)",
-                formExpertiseIntermediate: "متوسط (بناء مشاريع صغيرة)",
-                formExpertiseAdvanced: "متقدم (تطوير أنظمة معقدة)",
-                formExpertiseExpert: "خبير (استشارات/تدريس)",
-                formGoals: "الأهداف الرئيسية من استخدام تقنية رياضوينو",
-                formSubmit: "إرسال وتأمين خصم 20% الخاص بي", // UPDATED %
+                formSubmit: "إرسال وتأمين خصم 20% الخاص بي",
                 
                 footerText: "© 2025 رياضوينو. جميع الحقوق محفوظة. الرياض، المملكة العربية السعودية."
             }
