@@ -21,7 +21,7 @@
             --font-heading: 'Archivo', sans-serif;
             --font-body: 'Tajawal', sans-serif;
             --font-secondary: 'Tajawal', sans-serif;
-            --form-input-bg: #0A0A0A;
+            --form-input-bg: #0A0A0A; /* Added for new form style */
         }
 
         /* --- Base & Reset --- */
@@ -45,7 +45,7 @@
             -moz-osx-font-smoothing: grayscale;
             text-rendering: optimizeLegibility;
         }
-        
+
         /* --- Enhanced Background Effect --- */
         .background-visuals {
             position: fixed;
@@ -108,17 +108,22 @@
         /* --- Main Navigation (Liquid Glass Header) --- */
         .glass-nav {
             position: fixed;
-            top: 1.5rem;
+            top: 1.5rem; /* Adjusted since store elements removed */
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
             padding: 1.1rem 2.2rem; 
             background-color: rgba(17, 17, 17, 0.6); 
+            
+            /* The "Liquid Glass" effect */
             backdrop-filter: blur(15px) saturate(180%);
             -webkit-backdrop-filter: blur(15px) saturate(180%);
+            
             border-radius: 70px; 
             border: 1px solid var(--border-color);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            
+            /* UPDATED DELAY to reflect store removal */
             animation: fadeInDown 0.8s ease-out forwards; 
             opacity: 0; 
         }
@@ -193,7 +198,7 @@
             text-align: center;
             padding: 0 2rem;
             position: relative;
-            padding-top: 9rem;
+            padding-top: 9rem; /* Adjusted since store elements removed */
         }
         
         .hero-content {
@@ -235,8 +240,6 @@
             opacity: 0;
         }
         
-        /* REMOVED: .hero-image-container */
-
         /* --- Content Sections --- */
         .content-wrapper {
             padding: 6rem 5%;
@@ -267,14 +270,29 @@
             font-size: 1.05rem; 
         }
 
-        /* REMOVED: .about-image */
+        .about-image {
+            background-color: var(--surface-color);
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            border-radius: 12px;
+        }
+        
+        .about-image img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            display: block;
+        }
+        
+        .about-image.fade-in-section {
+            transition-delay: 0.2s;
+        }
         
         /* Values Section */
         .values-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
-            margin-bottom: 3rem;
         }
         
         .value-card {
@@ -316,59 +334,122 @@
             color: var(--secondary-text);
             font-size: 1.05rem;
         }
-
-        /* REMOVED: .values-extra-image */
-
-        /* --- NEW: Consolidated Image Gallery Section (All 4 images here) --- */
-        .image-gallery {
-            padding: 3rem 5%;
-            max-width: 1000px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .image-gallery-container {
-            display: flex;
-            justify-content: center; /* Center the whole group */
-            align-items: center;
-            gap: 1.5rem; /* Space between the images */
-            flex-wrap: wrap; /* Allow wrapping on small screens */
+        
+        /* --- NEW: Image Gallery Styles --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
             margin-top: 2rem;
         }
 
-        .image-gallery-item {
-            background-color: var(--surface-color);
-            border: 1px solid var(--border-color);
-            padding: 0.5rem; /* Very small padding */
-            border-radius: 10px;
-            max-width: 120px; /* NEW: Very small size for each image */
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transform: translateY(20px);
-            /* Staggered animation handled by JS/CSS below */
-        }
-        
-        .image-gallery-item.is-visible {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        .gallery-item {
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        /* Staggered animation delays */
-        .image-gallery-container .image-gallery-item:nth-child(1) { transition-delay: 0.0s; }
-        .image-gallery-container .image-gallery-item:nth-child(2) { transition-delay: 0.2s; }
-        .image-gallery-container .image-gallery-item:nth-child(3) { transition-delay: 0.4s; }
-        .image-gallery-container .image-gallery-item:nth-child(4) { transition-delay: 0.6s; }
+        .gallery-item:hover {
+            transform: scale(1.02);
+            box-shadow: 0 5px 20px rgba(255, 195, 0, 0.3);
+        }
 
-
-        .image-gallery-item img {
+        .gallery-item img {
             width: 100%;
-            height: auto;
+            height: 250px; /* Fixed height for visual consistency */
+            object-fit: cover;
             display: block;
-            border-radius: 6px;
+            transition: opacity 0.3s ease;
         }
-        /* --- END: Consolidated Image Gallery Section --- */
-        
+
+        /* --- NEW: Lightbox/Modal Styles (Click-to-enlarge) --- */
+        .lightbox-modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.95); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .lightbox-content {
+            position: relative;
+            margin: auto;
+            display: block;
+            width: 90%;
+            max-width: 1200px;
+            height: auto;
+            max-height: 90vh;
+        }
+
+        .lightbox-content img {
+            width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            display: block;
+            animation: zoomIn 0.3s ease-out;
+        }
+
+        @keyframes zoomIn {
+            from { transform: scale(0.8); opacity: 0.8; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            z-index: 2001;
+            padding: 10px;
+            line-height: 1;
+        }
+
+        .close-btn:hover,
+        .close-btn:focus {
+            color: var(--accent-yellow);
+            text-decoration: none;
+        }
+
+        /* Navigation Arrows */
+        .prev-btn, .next-btn {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+            -webkit-user-select: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            line-height: 1;
+        }
+
+        .next-btn {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev-btn:hover, .next-btn:hover {
+            background-color: rgba(255, 195, 0, 0.5);
+            color: var(--bg-color);
+        }
         
         /* --- Contact/Discount Form Section Styles --- */
         
@@ -478,9 +559,6 @@
             color: var(--primary-text);
         }
         
-        /* REMOVED: .form-detail-image */
-
-
         /* --- Footer --- */
         .footer {
             text-align: center;
@@ -496,6 +574,8 @@
             font-size: 1.5rem;
             margin-bottom: 1rem;
             display: inline-block;
+            
+            /* Copied from .nav-logo style */
             font-family: var(--font-heading);
             font-weight: 900;
             color: var(--primary-text);
@@ -508,7 +588,8 @@
         }
 
 
-        /* --- Animations & Responsive --- */
+        /* --- Animations --- */
+
         @keyframes subtle-yellow-pulse {
             0% {
                 color: var(--accent-yellow);
@@ -524,12 +605,13 @@
             }
         }
 
+        /* Applied to relevant yellow text elements, removed .nav-cta-link */
         .hero h1 .highlight,
         .section-title span,
         .about-text h3 span,
         .value-icon,
         .footer .nav-logo span,
-        .contact-h1 span {
+        .contact-h1 span { /* Added contact-h1 span */
             animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
         }
 
@@ -557,7 +639,7 @@
         .fade-in-section {
             opacity: 0;
             transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out, transition-delay 0.8s ease-out;
         }
         
         .fade-in-section.is-visible {
@@ -574,21 +656,41 @@
             font-weight: 700;
         }
         
-        html[dir="rtl"] .about-section {
-            direction: rtl;
+        html[dir="rtl"] .contact-subtitle-form { /* New style for form subtitle */
+            text-align: center;
+        }
+        html[dir="rtl"] .form-group label {
             text-align: right;
         }
-        
+
+        html[dir="rtl"] .prev-btn { /* Swap prev/next positions in RTL */
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+        html[dir="rtl"] .next-btn {
+            left: 0;
+            border-radius: 0 3px 3px 0;
+        }
+
+
         @media (max-width: 900px) {
-            .about-section { 
-                grid-template-columns: 1fr;
-                gap: 2rem; /* Reduced gap on mobile */
+            .about-section { grid-template-columns: 1fr; }
+            html[dir="rtl"] .about-section {
+                direction: rtl;
+                text-align: right;
+            }
+            .lightbox-content {
+                width: 95%;
             }
         }
 
+        /*
+           --- MOBILE NAV FIX ---
+        */
         @media (max-width: 768px) {
+            /* NEW NAV STYLES */
             .glass-nav {
-                top: 1rem;
+                top: 1rem; /* Adjusted since store elements removed */
                 width: 95%;
                 padding: 0.8rem; 
             }
@@ -602,17 +704,39 @@
                 font-size: 0.9rem; 
                 padding: 0.5rem 0.6rem; 
             }
-
-            .image-gallery-container {
-                gap: 1rem; /* Smaller gap on mobile */
+            /* REMOVED: nav-cta-link mobile styles */
+            .lang-switcher {
+                padding-left: 1rem; 
+                margin-left: 0.25rem;
             }
-            .image-gallery-item {
-                max-width: 90px; /* Make the small images even smaller on mobile */
-                padding: 0.4rem;
+            .hero {
+                padding-top: 9rem; /* Adjusted since store elements removed */
+            }
+
+            /* Sizing for mobile buttons */
+            .cta-button {
+                padding: 1.1rem 2rem;
+                font-size: 1rem;
+            }
+            
+            /* NEW: Form button mobile styling */
+            .contact-form .cta-button {
+                padding: 1rem 0; 
+                font-size: 1.05rem;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+
+            html[dir="rtl"] .section-title {
+                 text-align: center !important;
             }
         }
         
+        /* Compatibility for "fold/flip" phones */
         @media (max-width: 420px) {
+            /* Make buttons smaller on tiny screens */
             .cta-button {
                 padding: 0.8rem 1.2rem;
                 font-size: 0.9rem;
@@ -630,7 +754,7 @@
         <div class="nav-content">
             <a href="#about" data-translate="navAbout">About Us</a>
             <a href="#values" data-translate="navValues">Our Values</a>
-            <a href="#contact" data-translate="navContact">Share Your Interest</a>
+            <a href="#gallery" data-translate="navGallery">Gallery</a> <a href="#contact" data-translate="navContact">Share Your Interest</a>
             <div class="lang-switcher">
                  <button id="translateBtnEn" class="lang-btn">العربية</button>
                  <button id="translateBtnAr" class="lang-btn" style="display: none;">English</button>
@@ -646,7 +770,7 @@
                 <span class="line-wrap"><span class="line line-2">THE FUTURE, FORGED IN KSA.</span></span>
             </h1>
             <p data-translate="heroSubtitle">Go from idea to invention. We are Saudi Arabia's launchpad for creators, hobbyists, and pioneers, offering pre-built electronics DIY projects that let you build, code, and innovate—faster.</p>
-        </div>
+            </div>
     </header>
 
     <main>
@@ -657,7 +781,10 @@
                     <p data-translate="aboutPara1">RIYADUINO ignited from a single spark: electronics in Saudi Arabia should be accessible, exciting, and empowering for all. Born in Riyadh from a team of passionate engineers and educators, we saw the gap between brilliant ideas and the complex, frustrating path to bringing them to life.</p>
                     <p data-translate="aboutPara2">Our mission: to bridge that gap. We meticulously design, build, and rigorously test every DIY project, so you can bypass the troubleshooting and dive straight into what matters: learning, coding, and creating.</p>
                 </div>
+                <div class="about-image fade-in-section">
+                    <img src="vishnu-mohanan-LC_SOISs-74-unsplash.jpg" alt="A detailed close-up of an Arduino UNO circuit board on a dark background.">
                 </div>
+            </div>
         </section>
 
         <section id="values" class="content-wrapper">
@@ -681,22 +808,22 @@
             </div>
         </section>
         
-        <section class="image-gallery">
-            <h2 class="section-title" data-translate="galleryTitle" style="margin-bottom: 2rem;">Product <span>Showcase</span></h2>
-            <div class="image-gallery-container">
-                <div class="image-gallery-item">
-                    <img src="image3.jpg" alt="HC-SR04 Ultrasonic Sensor">
-                </div>
-                <div class="image-gallery-item">
-                    <img src="image1.jpg" alt="Breadboard with Sensor and Wires">
-                </div>
-                <div class="image-gallery-item">
-                    <img src="image0.jpg" alt="Pile of Mixed Electronic Components">
-                </div>
-                <div class="image-gallery-item">
-                    <img src="image4.jpg" alt="Microcontroller Close-up on Circuit Board">
-                </div>
-            </div>
+        <section id="gallery" class="content-wrapper">
+             <h2 class="section-title" data-translate="galleryTitle">Project <span>Gallery</span></h2>
+             <div class="gallery-grid fade-in-section">
+                 <div class="gallery-item" onclick="openLightbox(0)">
+                     <img src="robin-glauser-zP7X_B86xOg-unsplash.jpg" alt="A variety of electronic components laid out, including an Arduino, breadboards, and sensors.">
+                 </div>
+                 <div class="gallery-item" onclick="openLightbox(1)">
+                     <img src="vishnu-mohanan-LC_SOISs-74-unsplash.jpg" alt="A detailed close-up of an Arduino UNO circuit board on a dark background.">
+                 </div>
+                 <div class="gallery-item" onclick="openLightbox(2)">
+                     <img src="spencer-lbqLxgvLt0U-unsplash.jpg" alt="A beginner's electronics project on a breadboard, next to an open book and an Arduino.">
+                 </div>
+                 <div class="gallery-item" onclick="openLightbox(3)">
+                     <img src="sahand-babali-gavODTHG36Y-unsplash.jpg" alt="An Arduino UNO board surrounded by small electronic components like LEDs and potentiometers on a blue background.">
+                 </div>
+             </div>
         </section>
         <section id="contact" class="content-wrapper">
             <h2 class="contact-h1" data-translate="discountTitle">
@@ -766,6 +893,14 @@
         <p data-translate="footerText">&copy; 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia.</p>
     </footer>
 
+    <div id="lightboxModal" class="lightbox-modal" onclick="closeLightbox()">
+        <span class="close-btn" data-translate="closeBtn">&times;</span>
+        <div class="lightbox-content">
+            <img id="lightboxImage" src="" alt="Enlarged project image">
+            <a class="prev-btn" onclick="plusSlides(-1, event)">&#10094;</a>
+            <a class="next-btn" onclick="plusSlides(1, event)">&#10095;</a>
+        </div>
+    </div>
     <script>
     document.addEventListener("DOMContentLoaded", function() {
 
@@ -780,19 +915,67 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
-                    // We keep observing the image items to handle the staggered animation
-                    if (!entry.target.classList.contains('image-gallery-item')) {
-                         observer.unobserve(entry.target);
-                    }
+                    observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Include all content sections and the new image gallery items for scroll animation
-        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .image-gallery-item');
+        // Include .contact-form and .gallery-grid for scroll animation
+        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .gallery-grid');
         sections.forEach(section => {
             observer.observe(section);
         });
+
+        // --- LIGHTBOX GALLERY LOGIC ---
+        
+        const galleryImages = Array.from(document.querySelectorAll('.gallery-grid img'));
+        const lightboxModal = document.getElementById('lightboxModal');
+        const lightboxImage = document.getElementById('lightboxImage');
+        let currentImageIndex = 0;
+
+        window.openLightbox = function(index) {
+            currentImageIndex = index;
+            lightboxImage.src = galleryImages[currentImageIndex].src;
+            lightboxModal.style.display = "flex";
+            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+        }
+
+        window.closeLightbox = function() {
+            lightboxModal.style.display = "none";
+            document.body.style.overflow = ''; // Re-enable scrolling
+        }
+        
+        window.plusSlides = function(n, event) {
+            event.stopPropagation(); // Stop the click from triggering the closeLightbox on the backdrop
+            showSlides(currentImageIndex + n);
+        }
+
+        function showSlides(n) {
+            if (n >= galleryImages.length) {
+                currentImageIndex = 0; // Loop back to the first image
+            } else if (n < 0) {
+                currentImageIndex = galleryImages.length - 1; // Loop back to the last image
+            } else {
+                currentImageIndex = n;
+            }
+            lightboxImage.src = galleryImages[currentImageIndex].src;
+        }
+
+        // Close modal when pressing the Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === "Escape" && lightboxModal.style.display === "flex") {
+                closeLightbox();
+            }
+            // Add arrow key navigation
+            if (lightboxModal.style.display === "flex") {
+                if (e.key === "ArrowRight") {
+                    plusSlides(1, e);
+                } else if (e.key === "ArrowLeft") {
+                    plusSlides(-1, e);
+                }
+            }
+        });
+
 
         // --- TRANSLATION LOGIC ---
         
@@ -800,6 +983,7 @@
             en: {
                 navAbout: "About Us",
                 navValues: "Our Values",
+                navGallery: "Gallery", // NEW
                 navContact: "Share Your Interest",
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">BUILD. LEARN. <span class=\"highlight\">INNOVATE.</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">THE FUTURE, FORGED IN KSA.</span></span>",
                 heroSubtitle: "Go from idea to invention. We are Saudi Arabia's launchpad for creators, hobbyists, and pioneers, offering pre-built electronics DIY projects that let you build, code, and innovate—faster.",
@@ -813,9 +997,9 @@
                 value2Desc: "Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.",
                 value3Title: "Education First",
                 value3Desc: "Our goal is to spark curiosity and accelerate learning. Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike.",
+                galleryTitle: "Project <span>Gallery</span>", // NEW
                 
-                galleryTitle: "Product <span>Showcase</span>", /* NEW TRANSLATION */
-                
+                // Contact/Discount Form Translations
                 discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
                 discountSubtitle: "Fill this form and take 20% forever! Share your interest below.",
                 formName: "Full Name",
@@ -842,12 +1026,14 @@
                 formExpertiseExpert: "Expert (Consulting/Teaching)",
                 formGoals: "Key Objectives with RIYADUINO Technology",
                 formSubmit: "SUBMIT & SECURE MY 20% DISCOUNT",
+                closeBtn: "\u00d7", // NEW: 'x' symbol for close button
                 
                 footerText: "© 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia."
             },
             ar: {
                 navAbout: "من نحن",
                 navValues: "قيمنا",
+                navGallery: "المعرض", // NEW
                 navContact: "شارك اهتمامك",
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">ابنِ. تعلّم. <span class=\"highlight\">ابتكِر.</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">المستقبل، يُصاغ في المملكة.</span></span>",
                 heroSubtitle: "انطلق من الفكرة إلى الابتكار. نحن منصة المملكة العربية السعودية لإطلاق المبدعين، الهواة، والرواد، حيث نقدم مشاريع إلكترونية جاهزة تتيح لك البناء، والبرمجة، والابتكار—بسرعة أكبر.",
@@ -861,9 +1047,9 @@
                 value2Desc: "الكمال هو خط البداية لدينا. يتم تجميع كل مشروع بخبرة واختبارها بدقة من قبل مهندسينا. نجاحك هو مقياسنا.",
                 value3Title: "التعليم أولاً",
                 value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
+                galleryTitle: "معرض <span>المشاريع</span>", // NEW
                 
-                galleryTitle: "عرض <span>المنتجات</span>", /* NEW TRANSLATION */
-
+                // Contact/Discount Form Translations
                 discountTitle: "خصم <span>العضوية</span>",
                 discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.",
                 formName: "الاسم الكامل",
@@ -890,6 +1076,7 @@
                 formExpertiseExpert: "خبير (استشارات/تدريس)",
                 formGoals: "الأهداف الرئيسية من استخدام تقنية رياضوينو",
                 formSubmit: "إرسال وتأمين خصم 20% الخاص بي",
+                closeBtn: "\u00d7", // NEW: 'x' symbol for close button
                 
                 footerText: "© 2025 رياضوينو. جميع الحقوق محفوظة. الرياض، المملكة العربية السعودية."
             }
@@ -900,10 +1087,12 @@
 
         let currentLang = 'en';
         
+        // Helper function to update text content (including for select options)
         const updateElementTranslation = (el, key) => {
             const translation = translations[currentLang][key];
             if (translation) {
-                if (el.tagName === 'OPTION' || el.tagName === 'BUTTON') {
+                // Special handling for select options (if they have data-translate)
+                if (el.tagName === 'OPTION' || el.tagName === 'BUTTON' || el.classList.contains('close-btn')) {
                     el.textContent = translation;
                 } else {
                     el.innerHTML = translation;
@@ -917,6 +1106,7 @@
                 updateElementTranslation(el, key);
             });
             
+            // Handle select options which might not be picked up by general selector
             document.querySelectorAll('select option').forEach(option => {
                 if(option.dataset.translate) {
                     updateElementTranslation(option, option.dataset.translate);
@@ -926,12 +1116,14 @@
         
         const toggleLanguage = () => {
             if (currentLang === 'en') {
+                // Switch to ARABIC
                 currentLang = 'ar';
                 document.documentElement.lang = 'ar';
                 document.documentElement.dir = 'rtl';
                 if(translateBtnEn) translateBtnEn.style.display = 'none'; 
                 if(translateBtnAr) translateBtnAr.style.display = 'block'; 
             } else {
+                // Switch to ENGLISH
                 currentLang = 'en';
                 document.documentElement.lang = 'en';
                 document.documentElement.dir = 'ltr';
@@ -944,6 +1136,7 @@
         if(translateBtnEn) translateBtnEn.addEventListener('click', toggleLanguage);
         if(translateBtnAr) translateBtnAr.addEventListener('click', toggleLanguage);
         
+        // Set initial language text
         updateTranslations();
     });
     </script>
