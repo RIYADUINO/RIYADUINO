@@ -365,7 +365,7 @@
 
         /* --- NEW: Lightbox/Modal Styles (Click-to-enlarge) --- */
         .lightbox-modal {
-            display: none; /* Hidden by default */
+            display: none; /* Hidden by default - JS overrides this to 'flex' */
             position: fixed;
             z-index: 2000;
             left: 0;
@@ -402,10 +402,11 @@
             to { transform: scale(1); opacity: 1; }
         }
 
+        /* --- FIX: Close Button Positioning --- */
         .close-btn {
             position: absolute;
             top: 20px;
-            right: 35px;
+            right: 35px; /* Default LTR position (top-right) */
             color: #fff;
             font-size: 40px;
             font-weight: bold;
@@ -422,28 +423,35 @@
             text-decoration: none;
         }
 
-        /* Navigation Arrows */
+        /* --- FIX: Navigation Arrows Positioning --- */
         .prev-btn, .next-btn {
             cursor: pointer;
             position: absolute;
             top: 50%;
+            transform: translateY(-50%); /* Center vertically */
             width: auto;
             padding: 16px;
-            margin-top: -50px;
             color: white;
             font-weight: bold;
             font-size: 20px;
             transition: 0.6s ease;
-            border-radius: 0 3px 3px 0;
             user-select: none;
             -webkit-user-select: none;
             background-color: rgba(0, 0, 0, 0.5);
             line-height: 1;
+            z-index: 2002;
         }
 
         .next-btn {
             right: 0;
-            border-radius: 3px 0 0 3px;
+            left: auto;
+            border-radius: 3px 0 0 3px; /* rounded on the left side */
+        }
+        
+        .prev-btn {
+            left: 0;
+            right: auto;
+            border-radius: 0 3px 3px 0; /* rounded on the right side */
         }
 
         .prev-btn:hover, .next-btn:hover {
@@ -647,7 +655,7 @@
             transform: translateY(0);
         }
         
-        /* --- RTL & Responsive --- */
+        /* --- RTL & Responsive FIXES --- */
         
         html[dir="rtl"] {
             --font-heading: 'Tajawal', sans-serif;
@@ -656,19 +664,27 @@
             font-weight: 700;
         }
         
-        html[dir="rtl"] .contact-subtitle-form { /* New style for form subtitle */
+        html[dir="rtl"] .contact-subtitle-form { 
             text-align: center;
         }
         html[dir="rtl"] .form-group label {
             text-align: right;
         }
 
-        html[dir="rtl"] .prev-btn { /* Swap prev/next positions in RTL */
-            right: 0;
+        /* LIGHTBOX RTL FIXES */
+        html[dir="rtl"] .close-btn {
+            left: 35px; /* Move close button to top-left in RTL */
+            right: auto;
+        }
+
+        html[dir="rtl"] .prev-btn { 
+            right: 0; /* Prev button (left arrow) moves to the right edge */
+            left: auto;
             border-radius: 3px 0 0 3px;
         }
         html[dir="rtl"] .next-btn {
-            left: 0;
+            left: 0; /* Next button (right arrow) moves to the left edge */
+            right: auto;
             border-radius: 0 3px 3px 0;
         }
 
@@ -969,9 +985,23 @@
             // Add arrow key navigation
             if (lightboxModal.style.display === "flex") {
                 if (e.key === "ArrowRight") {
-                    plusSlides(1, e);
+                    // Check direction for arrow key logic
+                    if (document.documentElement.dir === 'rtl') {
+                        // Right key = Previous image in RTL
+                        plusSlides(-1, e);
+                    } else {
+                        // Right key = Next image in LTR
+                        plusSlides(1, e);
+                    }
                 } else if (e.key === "ArrowLeft") {
-                    plusSlides(-1, e);
+                    // Check direction for arrow key logic
+                    if (document.documentElement.dir === 'rtl') {
+                        // Left key = Next image in RTL
+                        plusSlides(1, e);
+                    } else {
+                        // Left key = Previous image in LTR
+                        plusSlides(-1, e);
+                    }
                 }
             }
         });
