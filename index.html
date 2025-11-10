@@ -179,8 +179,7 @@
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            /* --- PERFORMANCE FIX: Removed padding and font-size from transition --- */
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
             box-shadow: 0 5px 20px rgba(255, 195, 0, 0.2);
         }
 
@@ -230,7 +229,6 @@
 
         .hero h1 .highlight {
             color: var(--accent-yellow);
-            text-shadow: 0 0 10px var(--accent-glow); /* Static shadow for performance */
         }
         
         .hero p {
@@ -264,7 +262,6 @@
         
         .about-text h3 span {
             color: var(--accent-yellow);
-            text-shadow: 0 0 10px var(--accent-glow); /* Static shadow for performance */
         }
 
         .about-text p {
@@ -364,63 +361,6 @@
             object-fit: cover;
             display: block;
             transition: opacity 0.3s ease;
-        }
-        
-        /* --- NEW: Featured Projects Section --- */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .product-card {
-            background-color: var(--surface-color);
-            padding: 1.5rem;
-            border-radius: 12px;
-            border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            display: flex; /* Use flex for layout */
-            flex-direction: column;
-            justify-content: space-between; /* Push button to bottom */
-        }
-        
-        .product-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            border-color: var(--accent-yellow);
-            box-shadow: 0 10px 40px -5px var(--accent-glow);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 220px; /* Fixed height for consistency */
-            overflow: hidden;
-            border-radius: 8px;
-            margin-bottom: 1.5rem;
-            background-color: var(--bg-color); /* Fallback for images */
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .product-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .product-card p {
-            color: var(--secondary-text);
-            font-size: 1.05rem;
-            margin-bottom: 1.5rem;
-            flex-grow: 1; /* Make description take up available space */
-        }
-
-        .product-card .cta-button {
-            width: 100%;
-            font-size: 1rem;
-            padding: 1rem 0;
         }
 
         /* --- NEW: Lightbox/Modal Styles (Click-to-enlarge) --- */
@@ -535,7 +475,7 @@
         
         .contact-h1 span {
             color: var(--accent-yellow);
-            text-shadow: 0 0 10px var(--accent-glow); /* Static shadow for performance */
+            animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
         }
         
         .contact-subtitle-form {
@@ -658,16 +598,18 @@
 
         /* --- Animations --- */
 
-        /* --- PERFORMANCE FIX: Removed text-shadow from animation. Now just pulses color. --- */
         @keyframes subtle-yellow-pulse {
             0% {
                 color: var(--accent-yellow);
+                text-shadow: 0 0 8px var(--accent-glow);
             }
             50% {
                 color: #fff2cc; 
+                text-shadow: 0 0 16px var(--accent-glow-strong);
             }
             100% {
                 color: var(--accent-yellow);
+                text-shadow: 0 0 8px var(--accent-glow);
             }
         }
 
@@ -798,12 +740,6 @@
                 padding: 1rem 0; 
                 font-size: 1.05rem;
             }
-            
-            /* NEW: Product card button mobile */
-            .product-card .cta-button {
-                padding: 1rem 0;
-                font-size: 1rem;
-            }
 
             .contact-form {
                 padding: 2rem;
@@ -834,9 +770,9 @@
         <div class="nav-content">
             <a href="#about" data-translate="navAbout">About Us</a>
             <a href="#values" data-translate="navValues">Our Values</a>
-            <a href="#gallery" data-translate="navGallery">Gallery</a>
-            <a href="#featured" data-translate="navFeatured">Projects</a>
+            <a href="#gallery" data-translate="navGallery">Gallery</a> 
             <a href="#contact" data-translate="navContact">Share Your Interest</a>
+            <a href="store.html" data-translate="navStore">Store</a>
             <div class="lang-switcher">
                  <button id="translateBtnEn" class="lang-btn">العربية</button>
                  <button id="translateBtnAr" class="lang-btn" style="display: none;">English</button>
@@ -905,49 +841,6 @@
                  <div class="gallery-item" onclick="openLightbox(3)">
                      <img src="sahand-babali-gavODTHG36Y-unsplash.jpg" alt="An Arduino UNO board surrounded by small electronic components like LEDs and potentiometers on a blue background.">
                  </div>
-             </div>
-        </section>
-        
-        <section id="featured" class="content-wrapper">
-             <h2 class="section-title" data-translate="featuredTitle">Featured <span>Projects</span></h2>
-             <div class="product-grid fade-in-section">
-                 
-                 <div class="product-card">
-                     <div class="product-image">
-                         <img src="robin-glauser-zP7X_B86xOg-unsplash.jpg" alt="Arduino Smart Home Kit components">
-                     </div>
-                     <h3 data-translate="product1Title">Arduino Smart Home Kit</h3>
-                     <p data-translate="product1Desc">Control lights, fans, and more with this WiFi-enabled smart home starter project.</p>
-                     <a href="#contact" class="cta-button" data-translate="productBtn">SHOW YOUR INTEREST</a>
-                 </div>
-                 
-                 <div class="product-card">
-                     <div class="product-image">
-                         <img src="spencer-lbqLxgvLt0U-unsplash.jpg" alt="Obstacle Avoiding Robot project">
-                     </div>
-                     <h3 data-translate="product2Title">Obstacle Avoiding Robot</h3>
-                     <p data-translate="product2Desc">Build and code a smart robot that uses ultrasonic sensors to navigate any room.</p>
-                     <a href="#contact" class="cta-button" data-translate="productBtn">SHOW YOUR INTEREST</a>
-                 </div>
-                 
-                 <div class="product-card">
-                     <div class="product-image">
-                         <img src="sahand-babali-gavODTHG36Y-unsplash.jpg" alt="Personal Weather Station components">
-                     </div>
-                     <h3 data-translate="product3Title">Personal Weather Station</h3>
-                     <p data-translate="product3Desc">Assemble a station that measures temperature, humidity, and pressure, and displays it.</p>
-                     <a href="#contact" class="cta-button" data-translate="productBtn">SHOW YOUR INTEREST</a>
-                 </div>
-                 
-                 <div class="product-card">
-                     <div class="product-image">
-                         <img src="vishnu-mohanan-LC_SOISs-74-unsplash.jpg" alt="RFID Access Control project">
-                     </div>
-                     <h3 data-translate="product4Title">RFID Access Control</h3>
-                     <p data-translate="product4Desc">Create a secure entry system using an RFID reader, a servo motor, and Arduino.</p>
-                     <a href="#contact" class="cta-button" data-translate="productBtn">SHOW YOUR INTEREST</a>
-                 </div>
-                 
              </div>
         </section>
         <section id="contact" class="content-wrapper">
@@ -1046,8 +939,7 @@
         }, observerOptions);
 
         // Include .contact-form and .gallery-grid for scroll animation
-        // --- UPDATED: Added .product-grid to the observer ---
-        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .gallery-grid, .product-grid');
+        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .gallery-grid');
         sections.forEach(section => {
             observer.observe(section);
         });
@@ -1125,9 +1017,9 @@
             en: {
                 navAbout: "About Us",
                 navValues: "Our Values",
-                navGallery: "Gallery",
-                navFeatured: "Projects", // NEW
+                navGallery: "Gallery", // NEW
                 navContact: "Share Your Interest",
+                navStore: "Store", // ADDED
                 // SEO CHANGE 4: Updated English Hero Title (H1) and Subtitle for keyword integration
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">EMPOWERING <span class=\"highlight\">KSA STUDENTS</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">WITH ARDUINO & DIY PROJECTS.</span></span>",
                 heroSubtitle: "The easiest way for students and hobbyists in KSA to master electronics. Get pre-built Arduino Projects KSA, DIY kits, local support, and fast delivery to start coding and building your future, today.",
@@ -1141,19 +1033,7 @@
                 value2Desc: "Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.",
                 value3Title: "Education First",
                 value3Desc: "Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike. Our goal is to spark curiosity and accelerate learning.",
-                galleryTitle: "Project <span>Gallery</span>",
-                
-                // NEW: Featured Projects Translations
-                featuredTitle: "Featured <span>Projects</span>",
-                productBtn: "SHOW YOUR INTEREST",
-                product1Title: "Arduino Smart Home Kit",
-                product1Desc: "Control lights, fans, and more with this WiFi-enabled smart home starter project.",
-                product2Title: "Obstacle Avoiding Robot",
-                product2Desc: "Build and code a smart robot that uses ultrasonic sensors to navigate any room.",
-                product3Title: "Personal Weather Station",
-                product3Desc: "Assemble a station that measures temperature, humidity, and pressure, and displays it.",
-                product4Title: "RFID Access Control",
-                product4Desc: "Create a secure entry system using an RFID reader, a servo motor, and Arduino.",
+                galleryTitle: "Project <span>Gallery</span>", // NEW
                 
                 // Contact/Discount Form Translations
                 discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
@@ -1189,9 +1069,9 @@
             ar: {
                 navAbout: "من نحن",
                 navValues: "قيمنا",
-                navGallery: "المعرض",
-                navFeatured: "المشاريع", // NEW
+                navGallery: "المعرض", // NEW
                 navContact: "شارك اهتمامك",
+                navStore: "المتجر", // ADDED
                 // SEO CHANGE 4: Updated Arabic Hero Title (H1) and Subtitle for keyword integration
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\"><span class=\"highlight\">مشاريع أردوينو</span> للسعودية</span></span><span class=\"line-wrap\"><span class=\"line line-2\">وإلكترونيات DIY في الرياض.</span></span>",
                 heroSubtitle: "الطريقة الأسهل للطلاب والهواة في المملكة العربية السعودية لإتقان الإلكترونيات. احصل على مشاريع إلكترونية الرياض و DIY، دعم محلي، وتوصيل سريع لبدء البرمجة وبناء مستقبلك، اليوم.",
@@ -1205,19 +1085,7 @@
                 value2Desc: "الكمال هو خط البداية لدينا. يتم تجميع كل مشروع بخبرة واختبارها بدقة من قبل مهندسينا. نجاحك هو مقياسنا.",
                 value3Title: "التعليم أولاً",
                 value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
-                galleryTitle: "معرض <span>المشاريع</span>",
-                
-                // NEW: Featured Projects Translations
-                featuredTitle: "مشاريع <span>مميزة</span>",
-                productBtn: "أظهر اهتمامك",
-                product1Title: "عدة المنزل الذكي بالأردوينو",
-                product1Desc: "تحكم بالإضاءة والمراوح والمزيد مع مشروع المنزل الذكي هذا المبتدئ والمزود بـ WiFi.",
-                product2Title: "روبوت تجنب العوائق",
-                product2Desc: "قم ببناء وبرمجة روبوت ذكي يستخدم حساسات الموجات فوق الصوتية للتنقل في أي غرفة.",
-                product3Title: "محطة طقس شخصية",
-                product3Desc: "قم بتجميع محطة تقيس درجة الحرارة والرطوبة والضغط وتعرضها.",
-                product4Title: "نظام تحكم بالدخول RFID",
-                product4Desc: "أنشئ نظام دخول آمن باستخدام قارئ RFID ومحرك سيرفو وأردوينو.",
+                galleryTitle: "معرض <span>المشاريع</span>", // NEW
                 
                 // Contact/Discount Form Translations
                 discountTitle: "خصم <span>العضوية</span>",
@@ -1262,7 +1130,7 @@
             const translation = translations[currentLang][key];
             if (translation) {
                 // Special handling for select options (if they have data-translate)
-                if (el.tagName === 'OPTION' || el.tagName === 'BUTTON' || el.classList.contains('close-btn') || el.classList.contains('cta-button')) {
+                if (el.tagName === 'OPTION' || el.tagName === 'BUTTON' || el.classList.contains('close-btn')) {
                     el.textContent = translation;
                 } else {
                     el.innerHTML = translation;
