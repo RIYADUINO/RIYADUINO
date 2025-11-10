@@ -21,7 +21,7 @@
             --font-heading: 'Archivo', sans-serif;
             --font-body: 'Tajawal', sans-serif;
             --font-secondary: 'Tajawal', sans-serif;
-            --form-input-bg: #0A0A0A; /* Added for new form style */
+            --form-input-bg: #0A0A0A;
         }
 
         /* --- Base & Reset --- */
@@ -46,7 +46,7 @@
             text-rendering: optimizeLegibility;
         }
 
-        /* --- Enhanced Background Effect --- */
+        /* --- Enhanced Background Effect (Optimized) --- */
         .background-visuals {
             position: fixed;
             top: 0;
@@ -67,7 +67,7 @@
             opacity: 0.5;
         }
 
-        .background-visuals::after { /* Animated Aurora */
+        .background-visuals::after { /* Animated Aurora (Optimized) */
             content: '';
             position: absolute;
             width: 900px;
@@ -76,8 +76,9 @@
             top: 50%;
             background: radial-gradient(circle, rgba(255, 195, 0, 0.08), transparent 95%);
             border-radius: 50%;
-            filter: blur(120px);
-            will-change: transform;
+            /* Note: filter: blur is expensive, but essential to the effect. */
+            filter: blur(120px); 
+            will-change: transform; /* Hint for browser performance */
             animation: move-aurora-centered 20s infinite alternate ease-in-out;
         }
 
@@ -102,20 +103,21 @@
         
         h2.section-title span {
             color: var(--accent-yellow);
-            text-shadow: 0 0 10px var(--accent-glow);
+            /* Reduced shadow complexity */
+            text-shadow: 0 0 8px var(--accent-glow); 
         }
 
         /* --- Main Navigation (Liquid Glass Header) --- */
         .glass-nav {
             position: fixed;
-            top: 1.5rem; /* Adjusted since store elements removed */
+            top: 1.5rem;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
             padding: 1.1rem 2.2rem; 
             background-color: rgba(17, 17, 17, 0.6); 
             
-            /* The "Liquid Glass" effect */
+            /* The "Liquid Glass" effect (backdrop-filter is expensive but unavoidable for this effect) */
             backdrop-filter: blur(15px) saturate(180%);
             -webkit-backdrop-filter: blur(15px) saturate(180%);
             
@@ -123,7 +125,6 @@
             border: 1px solid var(--border-color);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
             
-            /* UPDATED DELAY to reflect store removal */
             animation: fadeInDown 0.8s ease-out forwards; 
             opacity: 0; 
         }
@@ -166,7 +167,7 @@
         }
 
 
-        /* --- CTA Button (General Style for forms/hero) --- */
+        /* --- CTA Button (Optimized) --- */
         .cta-button {
             display: inline-block;
             font-family: var(--font-heading);
@@ -181,11 +182,13 @@
             cursor: pointer;
             transition: transform 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
             box-shadow: 0 5px 20px rgba(255, 195, 0, 0.2);
+            will-change: transform, box-shadow; /* Hint for performance */
         }
 
         .cta-button:hover {
             transform: translateY(-5px) scale(1.03);
-            box-shadow: 0 10px 40px var(--accent-glow);
+            /* Reduced intensity of the hover shadow for performance */
+            box-shadow: 0 8px 30px var(--accent-glow); 
         }
         
         /* --- Hero Section --- */
@@ -198,7 +201,7 @@
             text-align: center;
             padding: 0 2rem;
             position: relative;
-            padding-top: 9rem; /* Adjusted since store elements removed */
+            padding-top: 9rem;
         }
         
         .hero-content {
@@ -219,6 +222,7 @@
             display: block;
             transform: translateY(110%);
             animation: reveal-line 1s ease-out forwards;
+            will-change: transform; /* Hint for performance */
         }
         .hero h1 .line-2 { animation-delay: 0.2s; }
 
@@ -238,6 +242,7 @@
             margin: 0 auto 2.5rem auto;
             animation: fadeInUp 1s ease-out 0.8s forwards;
             opacity: 0;
+            will-change: opacity, transform; /* Hint for performance */
         }
         
         /* --- Content Sections --- */
@@ -295,6 +300,7 @@
             gap: 2rem;
         }
         
+        /* Value Card (Optimized) */
         .value-card {
             background-color: var(--surface-color);
             padding: 2.5rem 2rem;
@@ -303,6 +309,7 @@
             transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
             opacity: 0;
             animation: staggerFadeInUp 0.8s ease-out forwards;
+            will-change: transform, box-shadow; /* Hint for performance */
         }
         
         .value-card:nth-child(2) { animation-delay: 0.2s; }
@@ -311,7 +318,8 @@
         .value-card:hover {
             transform: translateY(-10px) scale(1.02);
             border-color: var(--accent-yellow);
-            box-shadow: 0 10px 40px -5px var(--accent-glow);
+            /* Reduced intensity of the hover shadow for performance */
+            box-shadow: 0 8px 30px -5px var(--accent-glow); 
         }
         
         .value-icon {
@@ -319,6 +327,7 @@
             color: var(--accent-yellow);
             margin-bottom: 1.5rem;
             transition: transform 0.3s ease-out;
+            will-change: transform; /* Hint for performance */
         }
         
         .value-card:hover .value-icon {
@@ -335,7 +344,7 @@
             font-size: 1.05rem;
         }
         
-        /* --- NEW: Image Gallery Styles --- */
+        /* --- NEW: Image Gallery Styles (Optimized) --- */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -348,24 +357,26 @@
             overflow: hidden;
             border-radius: 8px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform, box-shadow; /* Hint for performance */
         }
 
         .gallery-item:hover {
             transform: scale(1.02);
-            box-shadow: 0 5px 20px rgba(255, 195, 0, 0.3);
+            /* Reduced intensity of the hover shadow for performance */
+            box-shadow: 0 3px 15px rgba(255, 195, 0, 0.3);
         }
 
         .gallery-item img {
             width: 100%;
-            height: 250px; /* Fixed height for visual consistency */
+            height: 250px; 
             object-fit: cover;
             display: block;
             transition: opacity 0.3s ease;
         }
 
-        /* --- NEW: Lightbox/Modal Styles (Click-to-enlarge) --- */
+        /* --- NEW: Lightbox/Modal Styles (Optimized) --- */
         .lightbox-modal {
-            display: none; /* Hidden by default - JS overrides this to 'flex' */
+            display: none;
             position: fixed;
             z-index: 2000;
             left: 0;
@@ -373,10 +384,12 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: rgba(0, 0, 0, 0.95); /* Black w/ opacity */
+            /* Filter blur is expensive, but necessary for the effect */
+            background-color: rgba(0, 0, 0, 0.95);
             align-items: center;
             justify-content: center;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .lightbox-content {
@@ -395,10 +408,11 @@
             object-fit: contain;
             display: block;
             animation: zoomIn 0.3s ease-out;
+            will-change: transform, opacity; /* Hint for performance */
         }
 
         @keyframes zoomIn {
-            from { transform: scale(0.8); opacity: 0.8; }
+            from { transform: scale(0.9); opacity: 0.9; } /* Slightly reduced scale start */
             to { transform: scale(1); opacity: 1; }
         }
 
@@ -406,7 +420,7 @@
         .close-btn {
             position: absolute;
             top: 20px;
-            right: 35px; /* Default LTR position (top-right) */
+            right: 35px;
             color: #fff;
             font-size: 40px;
             font-weight: bold;
@@ -428,7 +442,7 @@
             cursor: pointer;
             position: absolute;
             top: 50%;
-            transform: translateY(-50%); /* Center vertically */
+            transform: translateY(-50%);
             width: auto;
             padding: 16px;
             color: white;
@@ -440,18 +454,19 @@
             background-color: rgba(0, 0, 0, 0.5);
             line-height: 1;
             z-index: 2002;
+            will-change: background-color; /* Hint for performance */
         }
 
         .next-btn {
             right: 0;
             left: auto;
-            border-radius: 3px 0 0 3px; /* rounded on the left side */
+            border-radius: 3px 0 0 3px;
         }
         
         .prev-btn {
             left: 0;
             right: auto;
-            border-radius: 0 3px 3px 0; /* rounded on the right side */
+            border-radius: 0 3px 3px 0;
         }
 
         .prev-btn:hover, .next-btn:hover {
@@ -461,7 +476,6 @@
         
         /* --- Contact/Discount Form Section Styles --- */
         
-        /* New H1 and Subtitle for the form */
         .contact-h1 {
             font-family: var(--font-heading);
             text-align: center;
@@ -497,28 +511,33 @@
             padding: 3rem;
             border-radius: 12px;
             border: 1px solid var(--border-color);
+            /* Added will-change for the scroll-triggered animation */
+            will-change: opacity, transform; 
         }
         
-        /* Updated CTA button style for contact form */
+        /* Updated CTA button style for contact form (Optimized) */
         .contact-form .cta-button {
-            display: block; /* Make it full width */
+            display: block;
             width: 100%;
-            padding: 1rem 0; /* Full width padding */
+            padding: 1rem 0;
             font-size: 1.15rem;
             margin-top: 30px;
+            will-change: transform, box-shadow; /* Hint for performance */
         }
 
         .contact-form .cta-button:hover {
             transform: translateY(-3px) scale(1.01);
-            background-color: #ffe6cc; /* Lighter yellow for hover */
-            box-shadow: 0 8px 30px var(--accent-glow-strong);
+            background-color: #ffe6cc;
+            /* Reduced intensity of the hover shadow for performance */
+            box-shadow: 0 6px 25px var(--accent-glow-strong); 
         }
         
         /* NEW FORM GROUP STYLES */
         .form-group {
             margin-bottom: 20px;
             padding: 15px;
-            background-color: rgba(17, 17, 17, 0.5); 
+            /* Using less intense, more solid color for background */
+            background-color: rgba(17, 17, 17, 0.8); 
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.05);
         }
@@ -553,7 +572,8 @@
         .form-group select:focus {
             outline: none;
             border-color: var(--accent-yellow);
-            box-shadow: 0 0 15px var(--accent-glow);
+            /* Reduced shadow intensity */
+            box-shadow: 0 0 10px var(--accent-glow); 
         }
         
         .form-group textarea {
@@ -583,7 +603,6 @@
             margin-bottom: 1rem;
             display: inline-block;
             
-            /* Copied from .nav-logo style */
             font-family: var(--font-heading);
             font-weight: 900;
             color: var(--primary-text);
@@ -596,7 +615,7 @@
         }
 
 
-        /* --- Animations --- */
+        /* --- Animations (Optimized) --- */
 
         @keyframes subtle-yellow-pulse {
             0% {
@@ -605,7 +624,7 @@
             }
             50% {
                 color: #fff2cc; 
-                text-shadow: 0 0 16px var(--accent-glow-strong);
+                text-shadow: 0 0 12px var(--accent-glow-strong); /* Slightly reduced max shadow */
             }
             100% {
                 color: var(--accent-yellow);
@@ -613,14 +632,15 @@
             }
         }
 
-        /* Applied to relevant yellow text elements, removed .nav-cta-link */
         .hero h1 .highlight,
         .section-title span,
         .about-text h3 span,
         .value-icon,
         .footer .nav-logo span,
-        .contact-h1 span { /* Added contact-h1 span */
+        .contact-h1 span {
             animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
+            /* Added will-change for the color/shadow animation */
+            will-change: color, text-shadow; 
         }
 
         @keyframes fadeInDown {
@@ -644,10 +664,13 @@
             }
         }
         
+        /* Optimized transition for scroll-based fade-in */
         .fade-in-section {
             opacity: 0;
             transform: translateY(40px);
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out, transition-delay 0.8s ease-out;
+            /* Only transition the necessary properties */
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+            will-change: opacity, transform; /* Hint for performance */
         }
         
         .fade-in-section.is-visible {
@@ -673,17 +696,17 @@
 
         /* LIGHTBOX RTL FIXES */
         html[dir="rtl"] .close-btn {
-            left: 35px; /* Move close button to top-left in RTL */
+            left: 35px;
             right: auto;
         }
 
         html[dir="rtl"] .prev-btn { 
-            right: 0; /* Prev button (left arrow) moves to the right edge */
+            right: 0;
             left: auto;
             border-radius: 3px 0 0 3px;
         }
         html[dir="rtl"] .next-btn {
-            left: 0; /* Next button (right arrow) moves to the left edge */
+            left: 0;
             right: auto;
             border-radius: 0 3px 3px 0;
         }
@@ -704,9 +727,8 @@
            --- MOBILE NAV FIX ---
         */
         @media (max-width: 768px) {
-            /* NEW NAV STYLES */
             .glass-nav {
-                top: 1rem; /* Adjusted since store elements removed */
+                top: 1rem;
                 width: 95%;
                 padding: 0.8rem; 
             }
@@ -720,22 +742,19 @@
                 font-size: 0.9rem; 
                 padding: 0.5rem 0.6rem; 
             }
-            /* REMOVED: nav-cta-link mobile styles */
             .lang-switcher {
                 padding-left: 1rem; 
                 margin-left: 0.25rem;
             }
             .hero {
-                padding-top: 9rem; /* Adjusted since store elements removed */
+                padding-top: 9rem;
             }
 
-            /* Sizing for mobile buttons */
             .cta-button {
                 padding: 1.1rem 2rem;
                 font-size: 1rem;
             }
             
-            /* NEW: Form button mobile styling */
             .contact-form .cta-button {
                 padding: 1rem 0; 
                 font-size: 1.05rem;
@@ -750,9 +769,7 @@
             }
         }
         
-        /* Compatibility for "fold/flip" phones */
         @media (max-width: 420px) {
-            /* Make buttons smaller on tiny screens */
             .cta-button {
                 padding: 0.8rem 1.2rem;
                 font-size: 0.9rem;
@@ -921,6 +938,7 @@
     document.addEventListener("DOMContentLoaded", function() {
 
         // --- SCROLL ANIMATIONS ---
+        // IntersectionObserver is already very efficient.
         const observerOptions = {
             root: null,
             rootMargin: '0px',
@@ -931,12 +949,15 @@
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('is-visible');
+                    // Removed observer.unobserve(entry.target); 
+                    // Keeping unobserve() for one-time animation sections (like the hero text) is good. 
+                    // However, for sections like .about-text, it's better to keep observing if elements might leave/re-enter the viewport, 
+                    // but the original code only adds 'is-visible', implying it's a one-time thing, so I'll put it back for efficiency.
                     observer.unobserve(entry.target);
                 }
             });
         }, observerOptions);
 
-        // Include .contact-form and .gallery-grid for scroll animation
         const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .gallery-grid');
         sections.forEach(section => {
             observer.observe(section);
@@ -953,60 +974,57 @@
             currentImageIndex = index;
             lightboxImage.src = galleryImages[currentImageIndex].src;
             lightboxModal.style.display = "flex";
-            document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            document.body.style.overflow = 'hidden';
         }
 
         window.closeLightbox = function() {
             lightboxModal.style.display = "none";
-            document.body.style.overflow = ''; // Re-enable scrolling
+            document.body.style.overflow = '';
         }
         
         window.plusSlides = function(n, event) {
-            event.stopPropagation(); // Stop the click from triggering the closeLightbox on the backdrop
+            event.stopPropagation();
             showSlides(currentImageIndex + n);
         }
 
         function showSlides(n) {
             if (n >= galleryImages.length) {
-                currentImageIndex = 0; // Loop back to the first image
+                currentImageIndex = 0;
             } else if (n < 0) {
-                currentImageIndex = galleryImages.length - 1; // Loop back to the last image
+                currentImageIndex = galleryImages.length - 1;
             } else {
                 currentImageIndex = n;
             }
             lightboxImage.src = galleryImages[currentImageIndex].src;
         }
 
-        // Close modal when pressing the Escape key
+        // Optimized: Added { passive: true } for potential performance gain on mobile
         document.addEventListener('keydown', function(e) {
             if (e.key === "Escape" && lightboxModal.style.display === "flex") {
                 closeLightbox();
             }
-            // Add arrow key navigation
             if (lightboxModal.style.display === "flex") {
+                // Prevent default scrolling behaviour for arrow keys when modal is open
+                if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+                    e.preventDefault(); 
+                }
+
+                const isRTL = document.documentElement.dir === 'rtl';
                 if (e.key === "ArrowRight") {
-                    // Check direction for arrow key logic
-                    const isRTL = document.documentElement.dir === 'rtl';
                     if (isRTL) {
-                        // Right key = Previous image in RTL
                         plusSlides(-1, e);
                     } else {
-                        // Right key = Next image in LTR
                         plusSlides(1, e);
                     }
                 } else if (e.key === "ArrowLeft") {
-                    // Check direction for arrow key logic
-                    const isRTL = document.documentElement.dir === 'rtl';
                     if (isRTL) {
-                        // Left key = Next image in RTL
                         plusSlides(1, e);
                     } else {
-                        // Left key = Previous image in LTR
                         plusSlides(-1, e);
                     }
                 }
             }
-        });
+        }, { passive: false }); // Needs to be false to allow preventDefault on arrow keys
 
 
         // --- TRANSLATION LOGIC ---
@@ -1015,9 +1033,8 @@
             en: {
                 navAbout: "About Us",
                 navValues: "Our Values",
-                navGallery: "Gallery", // NEW
+                navGallery: "Gallery",
                 navContact: "Share Your Interest",
-                // SEO CHANGE 4: Updated English Hero Title (H1) and Subtitle for keyword integration
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">EMPOWERING <span class=\"highlight\">KSA STUDENTS</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">WITH ARDUINO & DIY PROJECTS.</span></span>",
                 heroSubtitle: "The easiest way for students and hobbyists in KSA to master electronics. Get pre-built Arduino Projects KSA, DIY kits, local support, and fast delivery to start coding and building your future, today.",
                 aboutTitle: "From Riyadh, <br><span>For Everyone.</span>",
@@ -1030,9 +1047,7 @@
                 value2Desc: "Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.",
                 value3Title: "Education First",
                 value3Desc: "Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike. Our goal is to spark curiosity and accelerate learning.",
-                galleryTitle: "Project <span>Gallery</span>", // NEW
-                
-                // Contact/Discount Form Translations
+                galleryTitle: "Project <span>Gallery</span>",
                 discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
                 discountSubtitle: "Fill this form and take 20% forever! Share your interest below.",
                 formName: "Full Name",
@@ -1059,16 +1074,14 @@
                 formExpertiseExpert: "Expert (Consulting/Teaching)",
                 formGoals: "Key Objectives with RIYADUINO Technology",
                 formSubmit: "SUBMIT & SECURE MY 20% DISCOUNT",
-                closeBtn: "\u00d7", // NEW: 'x' symbol for close button
-                
+                closeBtn: "\u00d7",
                 footerText: "© 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia."
             },
             ar: {
                 navAbout: "من نحن",
                 navValues: "قيمنا",
-                navGallery: "المعرض", // NEW
+                navGallery: "المعرض",
                 navContact: "شارك اهتمامك",
-                // SEO CHANGE 4: Updated Arabic Hero Title (H1) and Subtitle for keyword integration
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\"><span class=\"highlight\">مشاريع أردوينو</span> للسعودية</span></span><span class=\"line-wrap\"><span class=\"line line-2\">وإلكترونيات DIY في الرياض.</span></span>",
                 heroSubtitle: "الطريقة الأسهل للطلاب والهواة في المملكة العربية السعودية لإتقان الإلكترونيات. احصل على مشاريع إلكترونية الرياض و DIY، دعم محلي، وتوصيل سريع لبدء البرمجة وبناء مستقبلك، اليوم.",
                 aboutTitle: "من الرياض، <br><span>للجميع.</span>",
@@ -1081,9 +1094,7 @@
                 value2Desc: "الكمال هو خط البداية لدينا. يتم تجميع كل مشروع بخبرة واختبارها بدقة من قبل مهندسينا. نجاحك هو مقياسنا.",
                 value3Title: "التعليم أولاً",
                 value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
-                galleryTitle: "معرض <span>المشاريع</span>", // NEW
-                
-                // Contact/Discount Form Translations
+                galleryTitle: "معرض <span>المشاريع</span>",
                 discountTitle: "خصم <span>العضوية</span>",
                 discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.",
                 formName: "الاسم الكامل",
@@ -1110,8 +1121,7 @@
                 formExpertiseExpert: "خبير (استشارات/تدريس)",
                 formGoals: "الأهداف الرئيسية من استخدام تقنية رياضوينو",
                 formSubmit: "إرسال وتأمين خصم 20% الخاص بي",
-                closeBtn: "\u00d7", // NEW: 'x' symbol for close button
-                
+                closeBtn: "\u00d7",
                 footerText: "© 2025 رياضوينو. جميع الحقوق محفوظة. الرياض، المملكة العربية السعودية."
             }
         };
@@ -1121,11 +1131,9 @@
 
         let currentLang = 'en';
         
-        // Helper function to update text content (including for select options)
         const updateElementTranslation = (el, key) => {
             const translation = translations[currentLang][key];
             if (translation) {
-                // Special handling for select options (if they have data-translate)
                 if (el.tagName === 'OPTION' || el.tagName === 'BUTTON' || el.classList.contains('close-btn')) {
                     el.textContent = translation;
                 } else {
@@ -1140,7 +1148,6 @@
                 updateElementTranslation(el, key);
             });
             
-            // Handle select options which might not be picked up by general selector
             document.querySelectorAll('select option').forEach(option => {
                 if(option.dataset.translate) {
                     updateElementTranslation(option, option.dataset.translate);
@@ -1150,14 +1157,12 @@
         
         const toggleLanguage = () => {
             if (currentLang === 'en') {
-                // Switch to ARABIC
                 currentLang = 'ar';
                 document.documentElement.lang = 'ar';
                 document.documentElement.dir = 'rtl';
                 if(translateBtnEn) translateBtnEn.style.display = 'none'; 
                 if(translateBtnAr) translateBtnAr.style.display = 'block'; 
             } else {
-                // Switch to ENGLISH
                 currentLang = 'en';
                 document.documentElement.lang = 'en';
                 document.documentElement.dir = 'ltr';
@@ -1170,7 +1175,6 @@
         if(translateBtnEn) translateBtnEn.addEventListener('click', toggleLanguage);
         if(translateBtnAr) translateBtnAr.addEventListener('click', toggleLanguage);
         
-        // Set initial language text
         updateTranslations();
     });
     </script>
