@@ -288,7 +288,7 @@
             transition-delay: 0.2s;
         }
         
-        /* Values Section & Projects Grid (Reusing Style) */
+        /* Values Section */
         .values-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -305,11 +305,8 @@
             animation: staggerFadeInUp 0.8s ease-out forwards;
         }
         
-        /* Staggered delay for cards in the grid */
-        .values-grid .value-card:nth-child(2) { animation-delay: 0.2s; }
-        .values-grid .value-card:nth-child(3) { animation-delay: 0.4s; }
-        .values-grid .value-card:nth-child(4) { animation-delay: 0.6s; } /* Added for the new projects section */
-
+        .value-card:nth-child(2) { animation-delay: 0.2s; }
+        .value-card:nth-child(3) { animation-delay: 0.4s; }
 
         .value-card:hover {
             transform: translateY(-10px) scale(1.02);
@@ -773,7 +770,7 @@
         <div class="nav-content">
             <a href="#about" data-translate="navAbout">About Us</a>
             <a href="#values" data-translate="navValues">Our Values</a>
-            <a href="#projects" data-translate="navProjects">Our Projects</a> <a href="#gallery" data-translate="navGallery">Gallery</a> <a href="#contact" data-translate="navContact">Share Your Interest</a>
+            <a href="#gallery" data-translate="navGallery">Gallery</a> <a href="#contact" data-translate="navContact">Share Your Interest</a>
             <div class="lang-switcher">
                  <button id="translateBtnEn" class="lang-btn">العربية</button>
                  <button id="translateBtnAr" class="lang-btn" style="display: none;">English</button>
@@ -823,32 +820,6 @@
                     <div class="value-icon">🎓</div>
                     <h3 data-translate="value3Title">Education First</h3>
                     <p data-translate="value3Desc">Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike. Our goal is to spark curiosity and accelerate learning.</p>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" class="content-wrapper fade-in-section">
-            <h2 class="section-title" data-translate="projectsTitle">BRIEF ABOUT <span>OUR PROJECTS</span></h2>
-            <div class="values-grid">
-                <div class="value-card">
-                    <div class="value-icon">☀️</div>
-                    <h3 data-translate="project1Title">Desktop Weather Station</h3>
-                    <p data-translate="project1Desc">A fully functional Arduino-based station providing real-time local temperature, humidity, and atmospheric pressure readings.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">📐</div>
-                    <h3 data-translate="project2Title">Digital Ruler Panel</h3>
-                    <p data-translate="project2Desc">Utilizing ultrasonic sensors to provide highly accurate, digital distance measurements displayed on an LCD screen.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">💧</div>
-                    <h3 data-translate="project3Title">The "Smart" Humidity Fan</h3>
-                    <p data-translate="project3Desc">An automatic fan system that activates only when humidity levels rise above a specified threshold, maintaining air quality.</p>
-                </div>
-                <div class="value-card">
-                    <div class="value-icon">👏</div>
-                    <h3 data-translate="project4Title">"Clap On" Desk Fan</h3>
-                    <p data-translate="project4Desc">A sound-activated desk fan that can be turned on or off with a simple clap, demonstrating basic sound sensor integration.</p>
                 </div>
             </div>
         </section>
@@ -1044,8 +1015,7 @@
             en: {
                 navAbout: "About Us",
                 navValues: "Our Values",
-                navProjects: "Our Projects", // ADDED
-                navGallery: "Gallery", 
+                navGallery: "Gallery", // NEW
                 navContact: "Share Your Interest",
                 // SEO CHANGE 4: Updated English Hero Title (H1) and Subtitle for keyword integration
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">EMPOWERING <span class=\"highlight\">KSA STUDENTS</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">WITH ARDUINO & DIY PROJECTS.</span></span>",
@@ -1060,18 +1030,7 @@
                 value2Desc: "Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.",
                 value3Title: "Education First",
                 value3Desc: "Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike. Our goal is to spark curiosity and accelerate learning.",
-                galleryTitle: "Project <span>Gallery</span>", 
-                
-                // New Project Titles and Descriptions
-                projectsTitle: "BRIEF ABOUT <span>OUR PROJECTS</span>", // ADDED
-                project1Title: "Desktop Weather Station", // ADDED
-                project1Desc: "A fully functional Arduino-based station providing real-time local temperature, humidity, and atmospheric pressure readings.", // ADDED
-                project2Title: "Digital Ruler Panel", // ADDED
-                project2Desc: "Utilizing ultrasonic sensors to provide highly accurate, digital distance measurements displayed on an LCD screen.", // ADDED
-                project3Title: "The \"Smart\" Humidity Fan", // ADDED
-                project3Desc: "An automatic fan system that activates only when humidity levels rise above a specified threshold, maintaining air quality.", // ADDED
-                project4Title: "\"Clap On\" Desk Fan", // ADDED
-                project4Desc: "A sound-activated desk fan that can be turned on or off with a simple clap, demonstrating basic sound sensor integration.", // ADDED
+                galleryTitle: "Project <span>Gallery</span>", // NEW
                 
                 // Contact/Discount Form Translations
                 discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
@@ -1107,8 +1066,7 @@
             ar: {
                 navAbout: "من نحن",
                 navValues: "قيمنا",
-                navProjects: "مشاريعنا", // ADDED
-                navGallery: "المعرض", 
+                navGallery: "المعرض", // NEW
                 navContact: "شارك اهتمامك",
                 // SEO CHANGE 4: Updated Arabic Hero Title (H1) and Subtitle for keyword integration
                 heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\"><span class=\"highlight\">مشاريع أردوينو</span> للسعودية</span></span><span class=\"line-wrap\"><span class=\"line line-2\">وإلكترونيات DIY في الرياض.</span></span>",
@@ -1123,19 +1081,8 @@
                 value2Desc: "الكمال هو خط البداية لدينا. يتم تجميع كل مشروع بخبرة واختبارها بدقة من قبل مهندسينا. نجاحك هو مقياسنا.",
                 value3Title: "التعليم أولاً",
                 value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
-                galleryTitle: "معرض <span>المشاريع</span>", 
+                galleryTitle: "معرض <span>المشاريع</span>", // NEW
                 
-                // New Project Titles and Descriptions
-                projectsTitle: "لمحة موجزة عن <span>مشاريعنا</span>", // ADDED
-                project1Title: "محطة أرصاد جوية سطح مكتب", // ADDED
-                project1Desc: "محطة كاملة تعتمد على الأردوينو وتوفر قراءات فورية لدرجة الحرارة والرطوبة والضغط الجوي المحلي.", // ADDED
-                project2Title: "لوحة مسطرة رقمية", // ADDED
-                project2Desc: "تستخدم مستشعرات فوق صوتية لتوفير قياسات دقيقة للغاية للمسافة تُعرض على شاشة LCD.", // ADDED
-                project3Title: "مروحة الرطوبة \"الذكية\"", // ADDED
-                project3Desc: "نظام مروحة أوتوماتيكي يعمل فقط عندما ترتفع مستويات الرطوبة عن حد معين، للحفاظ على جودة الهواء.", // ADDED
-                project4Title: "مروحة مكتب تعمل بـ \"التصفيق\"", // ADDED
-                project4Desc: "مروحة مكتب يتم تشغيلها وإيقافها بواسطة الصوت (التصفيق)، لعرض أساسيات تكامل مستشعر الصوت.", // ADDED
-
                 // Contact/Discount Form Translations
                 discountTitle: "خصم <span>العضوية</span>",
                 discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.",
