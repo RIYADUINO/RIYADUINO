@@ -22,11 +22,12 @@
             --font-body: 'Tajawal', sans-serif;
             --font-secondary: 'Tajawal', sans-serif;
             --form-input-bg: #0A0A0A;
+            --white-glow: rgba(253, 253, 253, 0.7); /* From store.css */
         }
 
         /* --- Base & Reset --- */
         *, *::before, *::after {
-            box-sizing: border-box;
+            box-sizing: border-box; /* CORRECTED: Fixed CSS typo 'border-border-box' */
             margin: 0;
             padding: 0;
         }
@@ -76,15 +77,14 @@
             top: 50%;
             background: radial-gradient(circle, rgba(255, 195, 0, 0.08), transparent 95%);
             border-radius: 50%;
-            /* Note: filter: blur is expensive, but essential to the effect. */
             filter: blur(120px); 
             will-change: transform; /* Hint for browser performance */
             animation: move-aurora-centered 20s infinite alternate ease-in-out;
         }
 
         @keyframes move-aurora-centered {
-            from { transform: translate(-45%, -55%) rotate(0deg); }
-            to { transform: translate(-55%, -45%) rotate(360deg); }
+            from { transform: translate(-45%, -55%); }
+            to { transform: translate(-55%, -45%); }
         }
 
         /* --- Typography --- */
@@ -103,7 +103,6 @@
         
         h2.section-title span {
             color: var(--accent-yellow);
-            /* Reduced shadow complexity */
             text-shadow: 0 0 8px var(--accent-glow); 
         }
 
@@ -116,15 +115,11 @@
             z-index: 1000;
             padding: 1.1rem 2.2rem; 
             background-color: rgba(17, 17, 17, 0.6); 
-            
-            /* The "Liquid Glass" effect (backdrop-filter is expensive but unavoidable for this effect) */
             backdrop-filter: blur(15px) saturate(180%);
             -webkit-backdrop-filter: blur(15px) saturate(180%);
-            
             border-radius: 70px; 
             border: 1px solid var(--border-color);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            
             animation: fadeInDown 0.8s ease-out forwards; 
             opacity: 0; 
         }
@@ -133,6 +128,11 @@
             display: flex;
             align-items: center;
             gap: 2.2rem; 
+        }
+
+        /* Logo text removed, but keeping class for animation/pulse */
+        .nav-logo-main span {
+             color: var(--accent-yellow);
         }
 
         .nav-content a,
@@ -180,15 +180,13 @@
             border-radius: 50px;
             border: none;
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
+            transition: transform 0.3s ease, padding 0.3s ease, font-size 0.3s ease;
             box-shadow: 0 5px 20px rgba(255, 195, 0, 0.2);
-            will-change: transform, box-shadow; /* Hint for performance */
+            will-change: transform; /* Hint for performance */
         }
 
         .cta-button:hover {
             transform: translateY(-5px) scale(1.03);
-            /* Reduced intensity of the hover shadow for performance */
-            box-shadow: 0 8px 30px var(--accent-glow); 
         }
         
         /* --- Hero Section --- */
@@ -300,16 +298,15 @@
             gap: 2rem;
         }
         
-        /* Value Card (Optimized) */
         .value-card {
             background-color: var(--surface-color);
             padding: 2.5rem 2rem;
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.3s ease;
             opacity: 0;
             animation: staggerFadeInUp 0.8s ease-out forwards;
-            will-change: transform, box-shadow; /* Hint for performance */
+            will-change: transform; /* Hint for performance */
         }
         
         .value-card:nth-child(2) { animation-delay: 0.2s; }
@@ -317,9 +314,6 @@
 
         .value-card:hover {
             transform: translateY(-10px) scale(1.02);
-            border-color: var(--accent-yellow);
-            /* Reduced intensity of the hover shadow for performance */
-            box-shadow: 0 8px 30px -5px var(--accent-glow); 
         }
         
         .value-icon {
@@ -343,8 +337,108 @@
             color: var(--secondary-text);
             font-size: 1.05rem;
         }
+
+        /* --- SCOPED STYLES FOR FEATURED PROJECTS --- */
+        /* These rules override index.html styles to match store.css */
         
-        /* --- NEW: Image Gallery Styles (Optimized) --- */
+        /* This grid is a copy of the .values-grid */
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        #projects {
+            /* Define store's color variables from styles.css */
+            --store-black: #fdfdfd; /* This is white text */
+            --store-white: #0a0a0a; /* This is black backgrounds */
+            --store-yellow: #F0B90B;
+            --store-yellow-glow: #FFD700;
+            --store-yellow-intense: #FFEA60;
+            --store-border-color: #403B22;
+            --store-shadow-color: rgba(240, 185, 11, 0.08);
+            --store-section-bg: #101010;
+        }
+
+        /* Copied directly from styles.css .product-card */
+        #projects .product-card {
+            background: var(--store-section-bg);
+            border-radius: 18px;
+            padding: 1.6rem;
+            text-align: center;
+            border: 1px solid var(--store-border-color);
+            box-shadow: 0 4px 15px var(--store-shadow-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.5s ease-out, opacity 0.4s ease-out;
+            will-change: transform, border-color, box-shadow;
+            transform-style: preserve-3d;
+            animation: staggerFadeInUp 0.8s ease-out forwards;
+        }
+        
+        #projects .product-card:nth-child(2) { animation-delay: 0.2s; }
+        #projects .product-card:nth-child(3) { animation-delay: 0.4s; }
+
+        /* Copied directly from styles.css .product-card:hover */
+        #projects .product-card:hover {
+            box-shadow: 0 12px 28px var(--store-shadow-color), 0 0 30px var(--store-yellow-glow), 0 0 40px var(--store-yellow-intense);
+            border-color: var(--store-yellow);
+            transform: translateY(-10px) scale(1.02); /* Kept this from index.html */
+        }
+
+        /* Copied directly from styles.css .product-card h3 */
+        #projects .product-card h3 {
+            margin-bottom: 1.5rem;
+            font-size: 1.2rem;
+            transform: translateZ(20px);
+            color: var(--store-black); /* Uses store's white */
+            font-family: var(--font-heading); /* Ensure font */
+            font-weight: 900;
+            text-transform: uppercase;
+            flex-grow: 1; /* Aligns buttons */
+        }
+
+        /* Custom .price class for this section */
+        #projects .product-card .price {
+            font-size: 1.2rem;
+            font-weight: 900;
+            margin-bottom: 1rem;
+            color: var(--store-yellow); /* Use store's yellow */
+            transform: translateZ(20px);
+            font-family: var(--font-heading);
+        }
+
+        /* This is .btn-secondary from styles.css, renamed */
+        #projects .btn-store-style {
+            padding: 12px 28px;
+            font-size: 0.9rem;
+            background: transparent;
+            color: var(--store-black); /* store's white text */
+            border: 1px solid var(--store-border-color);
+            transition: all 0.3s;
+            transform: translateZ(40px);
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 700;
+            font-family: var(--font-heading);
+            border-radius: 50px;
+        }
+
+        /* Copied from styles.css .btn-secondary:hover */
+        #projects .btn-store-style:hover {
+            background: var(--store-black); /* store's white */
+            color: var(--store-white); /* store's black */
+            border-color: var(--store-black);
+            box-shadow: 0 0 25px var(--white-glow);
+            transform: scale(1.05) translateZ(40px);
+        }
+        /* --- END: SCOPED STYLES FOR FEATURED PROJECTS --- */
+        
+        
+        /* --- Image Gallery Styles (Optimized) --- */
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -356,14 +450,12 @@
             cursor: pointer;
             overflow: hidden;
             border-radius: 8px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            will-change: transform, box-shadow; /* Hint for performance */
+            transition: transform 0.3s ease;
+            will-change: transform; /* Hint for performance */
         }
 
         .gallery-item:hover {
             transform: scale(1.02);
-            /* Reduced intensity of the hover shadow for performance */
-            box-shadow: 0 3px 15px rgba(255, 195, 0, 0.3);
         }
 
         .gallery-item img {
@@ -374,7 +466,7 @@
             transition: opacity 0.3s ease;
         }
 
-        /* --- NEW: Lightbox/Modal Styles (Optimized) --- */
+        /* --- Lightbox/Modal Styles (Optimized) --- */
         .lightbox-modal {
             display: none;
             position: fixed;
@@ -384,7 +476,6 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            /* Filter blur is expensive, but necessary for the effect */
             background-color: rgba(0, 0, 0, 0.95);
             align-items: center;
             justify-content: center;
@@ -412,7 +503,7 @@
         }
 
         @keyframes zoomIn {
-            from { transform: scale(0.9); opacity: 0.9; } /* Slightly reduced scale start */
+            from { transform: scale(0.9); opacity: 0.9; } 
             to { transform: scale(1); opacity: 1; }
         }
 
@@ -511,32 +602,26 @@
             padding: 3rem;
             border-radius: 12px;
             border: 1px solid var(--border-color);
-            /* Added will-change for the scroll-triggered animation */
             will-change: opacity, transform; 
         }
         
-        /* Updated CTA button style for contact form (Optimized) */
         .contact-form .cta-button {
             display: block;
             width: 100%;
             padding: 1rem 0;
             font-size: 1.15rem;
-            margin-top: 30px;
-            will-change: transform, box-shadow; /* Hint for performance */
+            margin-top: 10px; /* Reduced margin-top to fit beta note */
+            will-change: transform; /* Hint for performance */
         }
 
         .contact-form .cta-button:hover {
             transform: translateY(-3px) scale(1.01);
             background-color: #ffe6cc;
-            /* Reduced intensity of the hover shadow for performance */
-            box-shadow: 0 6px 25px var(--accent-glow-strong); 
         }
         
-        /* NEW FORM GROUP STYLES */
         .form-group {
             margin-bottom: 20px;
             padding: 15px;
-            /* Using less intense, more solid color for background */
             background-color: rgba(17, 17, 17, 0.8); 
             border-radius: 8px;
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -557,119 +642,117 @@
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 12px;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            color: var(--primary-text);
             background-color: var(--form-input-bg);
             border: 1px solid var(--border-color);
+            color: var(--primary-text);
+            padding: 1rem 1.5rem;
             border-radius: 6px;
+            font-size: 1rem;
+            margin-top: 0.5rem;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-        
+
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
-            outline: none;
             border-color: var(--accent-yellow);
-            /* Reduced shadow intensity */
-            box-shadow: 0 0 10px var(--accent-glow); 
+            outline: none;
+            box-shadow: 0 0 10px var(--accent-glow);
         }
         
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
         }
-        
-        /* Dropdown options must be styled clearly */
+
+        .form-group select {
+            cursor: pointer;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+
+        .form-group select::-ms-expand {
+            display: none;
+        }
+
         .form-group select option {
-            background-color: var(--surface-color);
+            background-color: var(--form-input-bg); 
             color: var(--primary-text);
+            padding: 10px;
         }
         
-        /* --- Footer --- */
+        .beta-note {
+            font-size: 0.9rem;
+            text-align: center;
+            color: var(--secondary-text);
+            margin-bottom: 20px;
+        }
+        
+        .beta-note strong {
+            color: var(--accent-yellow);
+        }
+
+        /* --- Footer Styles (Optimized) --- */
         .footer {
             text-align: center;
-            padding: 3rem 2rem;
+            padding: 3rem 5%;
             border-top: 1px solid var(--border-color);
-        }
-        
-        .footer p {
-            color: var(--secondary-text);
+            background-color: var(--surface-color);
         }
         
         .footer .nav-logo {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-            
             font-family: var(--font-heading);
             font-weight: 900;
-            color: var(--primary-text);
+            font-size: 1.5rem;
             text-decoration: none;
-            transition: font-size 0.3s ease;
+            color: var(--primary-text);
+            display: inline-block;
+            margin-bottom: 1rem;
         }
         
         .footer .nav-logo span {
             color: var(--accent-yellow);
         }
-
-
-        /* --- Animations (Optimized) --- */
-
-        @keyframes subtle-yellow-pulse {
-            0% {
-                color: var(--accent-yellow);
-                text-shadow: 0 0 8px var(--accent-glow);
-            }
-            50% {
-                color: #fff2cc; 
-                text-shadow: 0 0 12px var(--accent-glow-strong); /* Slightly reduced max shadow */
-            }
-            100% {
-                color: var(--accent-yellow);
-                text-shadow: 0 0 8px var(--accent-glow);
-            }
+        
+        .footer p {
+            font-size: 0.9rem;
+            color: var(--secondary-text);
         }
 
-        .hero h1 .highlight,
-        .section-title span,
-        .about-text h3 span,
-        .value-icon,
-        .footer .nav-logo span,
-        .contact-h1 span {
+
+        /* --- Animations --- */
+        @keyframes subtle-yellow-pulse {
+            0% { color: var(--accent-yellow); text-shadow: 0 0 5px var(--accent-glow); }
+            100% { color: #ffe680; text-shadow: 0 0 10px var(--accent-glow-strong); }
+        }
+
+        /* Elements that pulse */
+        .footer .nav-logo span, .contact-h1 span /* Removed .nav-logo-main span since logo is gone */
+        {
             animation: subtle-yellow-pulse 3s infinite alternate ease-in-out;
-            /* Added will-change for the color/shadow animation */
-            will-change: color, text-shadow; 
+            will-change: color, text-shadow;
         }
 
         @keyframes fadeInDown {
             from { opacity: 0; transform: translate(-50%, -100%); }
             to { opacity: 1; transform: translate(-50%, 0); }
         }
-        
+
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
         
         @keyframes staggerFadeInUp {
-            from { 
-                opacity: 0; 
-                transform: translateY(40px) scale(0.98); 
-            }
-            to { 
-                opacity: 1; 
-                transform: translateY(0) scale(1); 
-            }
+            from { opacity: 0; transform: translateY(40px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        
-        /* Optimized transition for scroll-based fade-in */
+
         .fade-in-section {
             opacity: 0;
             transform: translateY(40px);
-            /* Only transition the necessary properties */
-            transition: opacity 0.8s ease-out, transform 0.8s ease-out; 
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
             will-change: opacity, transform; /* Hint for performance */
         }
         
@@ -679,138 +762,139 @@
         }
         
         /* --- RTL & Responsive FIXES --- */
-        
         html[dir="rtl"] {
             --font-heading: 'Tajawal', sans-serif;
         }
+
         html[dir="rtl"] h1, html[dir="rtl"] h2, html[dir="rtl"] h3 {
             font-weight: 700;
         }
-        
-        html[dir="rtl"] .contact-subtitle-form { 
+
+        html[dir="rtl"] .contact-subtitle-form {
             text-align: center;
         }
+
         html[dir="rtl"] .form-group label {
             text-align: right;
         }
-
+        
         /* LIGHTBOX RTL FIXES */
-        html[dir="rtl"] .close-btn {
-            left: 35px;
-            right: auto;
+        html[dir="rtl"] .close-btn { 
+            left: 35px; 
+            right: auto; 
         }
 
-        html[dir="rtl"] .prev-btn { 
+        html[dir="rtl"] .prev-btn {
             right: 0;
             left: auto;
             border-radius: 3px 0 0 3px;
         }
+        
         html[dir="rtl"] .next-btn {
             left: 0;
             right: auto;
             border-radius: 0 3px 3px 0;
         }
 
-
-        @media (max-width: 900px) {
-            .about-section { grid-template-columns: 1fr; }
-            html[dir="rtl"] .about-section {
-                direction: rtl;
-                text-align: right;
-            }
-            .lightbox-content {
-                width: 95%;
-            }
+        /* NEW: Project Card RTL */
+        html[dir="rtl"] #projects .product-card {
+            text-align: right;
         }
-
-        /*
-           --- MOBILE NAV FIX ---
-        */
-        @media (max-width: 768px) {
-            .glass-nav {
-                top: 1rem;
-                width: 95%;
-                padding: 0.8rem; 
-            }
-            .nav-content {
-                gap: 0.25rem;
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-            .nav-content a,
-            .lang-btn {
-                font-size: 0.9rem; 
-                padding: 0.5rem 0.6rem; 
-            }
-            .lang-switcher {
-                padding-left: 1rem; 
-                margin-left: 0.25rem;
-            }
-            .hero {
-                padding-top: 9rem;
-            }
-
-            .cta-button {
-                padding: 1.1rem 2rem;
-                font-size: 1rem;
+        
+        @media (max-width: 900px) {
+            .about-section {
+                grid-template-columns: 1fr;
+                gap: 3rem;
             }
             
-            .contact-form .cta-button {
-                padding: 1rem 0; 
-                font-size: 1.05rem;
+            .about-text h2 {
+                text-align: center !important;
             }
-
+            
             .contact-form {
                 padding: 2rem;
             }
-
-            html[dir="rtl"] .section-title {
-                 text-align: center !important;
-            }
-        }
-        
-        @media (max-width: 420px) {
-            .cta-button {
-                padding: 0.8rem 1.2rem;
-                font-size: 0.9rem;
-            }
-            .contact-form {
-                padding: 1.5rem;
-            }
         }
 
+        @media (max-width: 600px) {
+            .glass-nav {
+                top: 0;
+                left: 0;
+                transform: none;
+                width: 100%;
+                border-radius: 0;
+                padding: 1rem 1.5rem;
+                border-left: none;
+                border-right: none;
+            }
+            
+            .nav-content {
+                gap: 1.5rem;
+                justify-content: space-between;
+                width: 100%;
+            }
+            
+            .nav-content a {
+                font-size: 1rem;
+            }
+
+            .lang-switcher {
+                padding-left: 1rem;
+                margin-left: 0.5rem;
+            }
+            
+            .hero {
+                padding-top: 6rem;
+            }
+            
+            .hero h1 {
+                font-size: 10vw;
+            }
+            
+            h2.section-title {
+                font-size: 8vw;
+                margin-bottom: 2rem;
+            }
+            
+            .content-wrapper {
+                padding: 4rem 5%;
+            }
+        }
     </style>
+
 </head>
 <body>
-
+    
     <nav class="glass-nav">
         <div class="nav-content">
+            <a href="#" class="nav-logo-main">RIYAD<span>UINO</span></a>
             <a href="#about" data-translate="navAbout">About Us</a>
             <a href="#values" data-translate="navValues">Our Values</a>
-            <a href="#gallery" data-translate="navGallery">Gallery</a> <a href="#contact" data-translate="navContact">Share Your Interest</a>
+            <a href="#projects" data-translate="navProjects">Projects</a>
+            <a href="#gallery" data-translate="navGallery">Gallery</a>
+            <a href="#contact" data-translate="navContact">Share Your Interest</a>
             <div class="lang-switcher">
-                 <button id="translateBtnEn" class="lang-btn">العربية</button>
-                 <button id="translateBtnAr" class="lang-btn" style="display: none;">English</button>
+                <button id="translateBtnEn" class="lang-btn">العربية</button>
+                <button id="translateBtnAr" class="lang-btn" style="display: none;">English</button>
             </div>
         </div>
     </nav>
+
     <div class="background-visuals"></div>
 
     <header class="hero">
         <div class="hero-content">
-            <h1 data-translate="heroTitle">
-                <span class="line-wrap"><span class="line line-1">EMPOWERING <span class="highlight">KSA STUDENTS</span></span></span>
-                <span class="line-wrap"><span class="line line-2">WITH ARDUINO & DIY PROJECTS.</span></span>
-            </h1>
+            <h1 data-translate="heroTitle"></h1>
             <p data-translate="heroSubtitle">The easiest way for students and hobbyists in KSA to master electronics. Get pre-built Arduino Projects KSA, DIY kits, local support, and fast delivery to start coding and building your future, today.</p>
-            </div>
+        </div>
     </header>
 
     <main>
+        
         <section id="about" class="content-wrapper">
             <div class="about-section">
                 <div class="about-text fade-in-section">
-                    <h2 class="section-title" style="text-align: left; margin: 0 0 2rem 0;" data-translate="aboutTitle">From Riyadh, <br><span>For Everyone.</span></h2>
+                    <h2 class="section-title" style="text-align: left; margin: 0 0 2rem 0;" data-translate="aboutTitle"></h2>
                     <p data-translate="aboutPara1">RIYADUINO ignited from a single spark: electronics in Saudi Arabia should be accessible, exciting, and empowering for all. Born in Riyadh from a team of passionate engineers and educators, we saw the gap between brilliant ideas and the complex, frustrating path to bringing them to life.</p>
                     <p data-translate="aboutPara2">Our mission: to bridge that gap. We meticulously design, build, and rigorously test every DIY project, so you can bypass the troubleshooting and dive straight into what matters: learning, coding, and creating.</p>
                 </div>
@@ -834,58 +918,91 @@
                     <p data-translate="value2Desc">Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.</p>
                 </div>
                 <div class="value-card">
-                    <div class="value-icon">🎓</div>
+                    <div class="value-icon">💡</div>
                     <h3 data-translate="value3Title">Education First</h3>
                     <p data-translate="value3Desc">Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike. Our goal is to spark curiosity and accelerate learning.</p>
                 </div>
             </div>
         </section>
-        
-        <section id="gallery" class="content-wrapper">
-             <h2 class="section-title" data-translate="galleryTitle">Project <span>Gallery</span></h2>
-             <div class="gallery-grid fade-in-section">
-                 <div class="gallery-item" onclick="openLightbox(0)">
-                     <img src="robin-glauser-zP7X_B86xOg-unsplash.jpg" alt="A variety of electronic components laid out, including an Arduino, breadboards, and sensors.">
-                 </div>
-                 <div class="gallery-item" onclick="openLightbox(1)">
-                     <img src="vishnu-mohanan-LC_SOISs-74-unsplash.jpg" alt="A detailed close-up of an Arduino UNO circuit board on a dark background.">
-                 </div>
-                 <div class="gallery-item" onclick="openLightbox(2)">
-                     <img src="spencer-lbqLxgvLt0U-unsplash.jpg" alt="A beginner's electronics project on a breadboard, next to an open book and an Arduino.">
-                 </div>
-                 <div class="gallery-item" onclick="openLightbox(3)">
-                     <img src="sahand-babali-gavODTHG36Y-unsplash.jpg" alt="An Arduino UNO board surrounded by small electronic components like LEDs and potentiometers on a blue background.">
-                 </div>
-             </div>
+
+        <section id="projects" class="content-wrapper">
+            <h2 class="section-title" data-translate="projectsTitle">Featured <span>Projects</span></h2>
+            <div class="project-grid">
+                
+                <div class="product-card">
+                    <h3>Desktop Weather Station 🌤️</h3>
+                    <div>
+                        <p class="price">150 SAR</p>
+                        <a href="#contact" class="btn-store-style" data-translate="shareInterestBtn">
+                            SHARE YOUR INTEREST
+                        </a>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <h3>Touch-Lamp Cube 💡</h3>
+                    <div>
+                        <p class="price">150 SAR</p>
+                        <a href="#contact" class="btn-store-style" data-translate="shareInterestBtn">
+                            SHARE YOUR INTEREST
+                        </a>
+                    </div>
+                </div>
+
+                <div class="product-card">
+                    <h3>Remote-Controlled Lamp 📺</h3>
+                    <div>
+                        <p class="price">150 SAR</p>
+                        <a href="#contact" class="btn-store-style" data-translate="shareInterestBtn">
+                            SHARE YOUR INTEREST
+                        </a>
+                    </div>
+                </div>
+
+            </div>
         </section>
+
+        <section id="gallery" class="content-wrapper">
+            <h2 class="section-title" data-translate="galleryTitle">Project <span>Gallery</span></h2>
+            <div class="gallery-grid fade-in-section">
+                <div class="gallery-item" onclick="openLightbox(0)">
+                    <img src="robin-glauser-zP7X_B86xOg-unsplash.jpg" alt="A variety of electronic components laid out, including an Arduino, breadboards, and sensors.">
+                </div>
+                <div class="gallery-item" onclick="openLightbox(1)">
+                    <img src="vishnu-mohanan-LC_SOISs-74-unsplash.jpg" alt="A detailed close-up of an Arduino UNO circuit board on a dark background.">
+                </div>
+                <div class="gallery-item" onclick="openLightbox(2)">
+                    <img src="spencer-lbqLxgvLt0U-unsplash.jpg" alt="A beginner's electronics project on a breadboard, next to an open book and an Arduino.">
+                </div>
+                <div class="gallery-item" onclick="openLightbox(3)">
+                    <img src="sahand-babali-gavODTHG36Y-unsplash.jpg" alt="An Arduino UNO board surrounded by small electronic components like LEDs and potentiometers on a blue background.">
+                </div>
+            </div>
+        </section>
+
         <section id="contact" class="content-wrapper">
-            <h2 class="contact-h1" data-translate="discountTitle">
-                MEMBERSHIP <span>DISCOUNT</span>
-            </h2>
-            <p class="contact-subtitle-form" data-translate="discountSubtitle">
-                Fill this form and take 20% forever! Share your interest below.
-            </p>
-            
+            <h2 class="contact-h1" data-translate="discountTitle"> MEMBERSHIP <span>DISCOUNT</span> </h2>
+            <p class="contact-subtitle-form" data-translate="discountSubtitle"> Fill this form and take 20% forever! Share your interest below. </p>
             <form class="contact-form fade-in-section" action="https://formspree.io/f/xzzkyzzp" method="POST">
                 
                 <div class="form-group">
                     <label for="name" data-translate="formName">Full Name</label>
                     <input type="text" id="name" name="name" required placeholder="Enter your full name">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="email" data-translate="formEmail">Primary Contact Email</label>
                     <input type="email" id="email" name="email" required placeholder="your.professional.email@example.com">
                 </div>
-                
+
                 <div class="form-group">
                     <label for="city_ksa" data-translate="formCityKSA">City in KSA</label>
                     <select id="city_ksa" name="city_ksa" required>
                         <option value="" data-translate="formSelectCityDefault">-- Select your city in KSA --</option>
                         <option value="Riyadh" data-translate="cityRiyadh">Riyadh</option>
                         <option value="Jeddah" data-translate="cityJeddah">Jeddah</option>
-                        <option value="Mecca" data-translate="cityMecca">Mecca (Makkah)</option>
-                        <option value="Medina" data-translate="cityMedina">Medina (Madinah)</option>
+                        <option value="Mecca" data-translate="cityMecca">Mecca</option>
+                        <option value="Medina" data-translate="cityMedina">Medina</option>
                         <option value="Dammam" data-translate="cityDammam">Dammam</option>
                         <option value="Khobar" data-translate="cityKhobar">Khobar</option>
                         <option value="Dhahran" data-translate="cityDhahran">Dhahran</option>
@@ -893,32 +1010,63 @@
                         <option value="Abha" data-translate="cityAbha">Abha</option>
                         <option value="Jubail" data-translate="cityJubail">Jubail</option>
                         <option value="Yanbu" data-translate="cityYanbu">Yanbu</option>
-                        <option value="other" data-translate="cityOther">Other KSA City</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="interest_level" data-translate="formExpertise">Expertise Level</label>
-                    <select id="interest_level" name="interest_level" required>
-                        <option value="" data-translate="formSelectDefault">-- Select your expertise level --</option>
-                        <option value="novice" data-translate="formExpertiseNovice">Novice (Exploring fundamentals)</option>
-                        <option value="intermediate" data-translate="formExpertiseIntermediate">Intermediate (Building small projects)</option>
-                        <option value="advanced" data-translate="formExpertiseAdvanced">Advanced (Developing complex systems)</option>
-                        <option value="expert" data-translate="formExpertiseExpert">Expert (Consulting/Teaching)</option>
+                        <option value="Other_KSA" data-translate="cityOther">Other Saudi City</option>
                     </select>
                 </div>
 
                 <div class="form-group">
-                    <label for="goals" data-translate="formGoals">Key Objectives with RIYADUINO Technology</label>
-                    <textarea id="goals" name="goals" required placeholder="Briefly describe what you aim to achieve..."></textarea>
+                    <label for="looking_for" data-translate="formLookingFor">What are you primarily looking for?</label>
+                    <select id="looking_for" name="looking_for" required>
+                        <option value="" data-translate="formSelectLookingForDefault">-- Select your primary interest --</option>
+                        <option value="DIY_Kits" data-translate="formLookingForKits">DIY Kits (To build myself)</option>
+                        <option value="Ready_Projects" data-translate="formLookingForReady">Ready-made Projects (Pre-built)</option>
+                        <option value="Components_Only" data-translate="formLookingForComponents">Components Only (Sensors, boards, etc.)</option>
+                        <option value="Workshops_Tutorials" data-translate="formLookingForTutorials">Workshops & Tutorials</option>
+                        <option value="Other" data-translate="formLookingForOther">Other (Please specify in goals)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="expertise" data-translate="formExpertise">Your Arduino/Electronics Skill Level</label>
+                    <select id="expertise" name="expertise" required>
+                        <option value="" data-translate="formSelectDefault">-- Select your expertise level --</option>
+                        <option value="Novice" data-translate="formExpertiseNovice">Novice (Just starting out)</option>
+                        <option value="Intermediate" data-translate="formExpertiseIntermediate">Intermediate (I've built a few projects)</option>
+                        <option value="Advanced" data-translate="formExpertiseAdvanced">Advanced (I design my own projects)</option>
+                        <option value="Expert" data-translate="formExpertiseExpert">Expert (I teach or work professionally)</option>
+                    </select>
                 </div>
                 
+                <div class="form-group">
+                    <label for="goals" data-translate="formGoals">What do you want to build or learn?</label>
+                    <textarea id="goals" name="goals" rows="4" placeholder="Example: 'Build a smart home project', 'Find kits for my kids'"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="referral" data-translate="formReferral">How did you hear about us?</label>
+                    <select id="referral" name="referral" required>
+                        <option value="" data-translate="formSelectReferralDefault">-- Select an option --</option>
+                        <option value="social_media" data-translate="formReferralSocial">Social Media (Twitter, Instagram, etc.)</option>
+                        <option value="friend" data-translate="formReferralFriend">Friend or Colleague</option>
+                        <option value="university" data-translate="formReferralUniversity">University / School</option>
+                        <option value="google" data-translate="formReferralGoogle">Google Search</option>
+                        <option value="other" data-translate="formReferralOther">Other</option>
+                    </select>
+                </div>
+
+                <p class="beta-note" data-translate="formBetaNote">
+                    <strong>Please Note:</strong> RIYADUINO is in BETA. This form helps us gauge interest and build what you need. The 20% discount will apply to our official launch!
+                </p>
+
                 <div style="text-align: center;">
                     <button type="submit" class="cta-button" data-translate="formSubmit">
                         SUBMIT & SECURE MY 20% DISCOUNT
                     </button>
                 </div>
+
             </form>
         </section>
+
     </main>
 
     <footer class="footer">
@@ -934,249 +1082,266 @@
             <a class="next-btn" onclick="plusSlides(1, event)">&#10095;</a>
         </div>
     </div>
+
     <script>
-    document.addEventListener("DOMContentLoaded", function() {
-
-        // --- SCROLL ANIMATIONS ---
-        // IntersectionObserver is already very efficient.
-        const observerOptions = {
-            root: null,
-            rootMargin: '0px',
-            threshold: 0.1
-        };
-
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('is-visible');
-                    // Removed observer.unobserve(entry.target); 
-                    // Keeping unobserve() for one-time animation sections (like the hero text) is good. 
-                    // However, for sections like .about-text, it's better to keep observing if elements might leave/re-enter the viewport, 
-                    // but the original code only adds 'is-visible', implying it's a one-time thing, so I'll put it back for efficiency.
-                    observer.unobserve(entry.target);
-                }
-            });
-        }, observerOptions);
-
-        const sections = document.querySelectorAll('.fade-in-section, .values-grid, .contact-form, .gallery-grid');
-        sections.forEach(section => {
-            observer.observe(section);
-        });
-
-        // --- LIGHTBOX GALLERY LOGIC ---
-        
-        const galleryImages = Array.from(document.querySelectorAll('.gallery-grid img'));
-        const lightboxModal = document.getElementById('lightboxModal');
-        const lightboxImage = document.getElementById('lightboxImage');
-        let currentImageIndex = 0;
-
-        window.openLightbox = function(index) {
-            currentImageIndex = index;
-            lightboxImage.src = galleryImages[currentImageIndex].src;
-            lightboxModal.style.display = "flex";
-            document.body.style.overflow = 'hidden';
-        }
-
-        window.closeLightbox = function() {
-            lightboxModal.style.display = "none";
-            document.body.style.overflow = '';
-        }
-        
-        window.plusSlides = function(n, event) {
-            event.stopPropagation();
-            showSlides(currentImageIndex + n);
-        }
-
-        function showSlides(n) {
-            if (n >= galleryImages.length) {
-                currentImageIndex = 0;
-            } else if (n < 0) {
-                currentImageIndex = galleryImages.length - 1;
-            } else {
-                currentImageIndex = n;
-            }
-            lightboxImage.src = galleryImages[currentImageIndex].src;
-        }
-
-        // Optimized: Added { passive: true } for potential performance gain on mobile
-        document.addEventListener('keydown', function(e) {
-            if (e.key === "Escape" && lightboxModal.style.display === "flex") {
-                closeLightbox();
-            }
-            if (lightboxModal.style.display === "flex") {
-                // Prevent default scrolling behaviour for arrow keys when modal is open
-                if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
-                    e.preventDefault(); 
-                }
-
-                const isRTL = document.documentElement.dir === 'rtl';
-                if (e.key === "ArrowRight") {
-                    if (isRTL) {
-                        plusSlides(-1, e);
-                    } else {
-                        plusSlides(1, e);
-                    }
-                } else if (e.key === "ArrowLeft") {
-                    if (isRTL) {
-                        plusSlides(1, e);
-                    } else {
-                        plusSlides(-1, e);
-                    }
-                }
-            }
-        }, { passive: false }); // Needs to be false to allow preventDefault on arrow keys
-
-
-        // --- TRANSLATION LOGIC ---
-        
-        const translations = {
-            en: {
-                navAbout: "About Us",
-                navValues: "Our Values",
-                navGallery: "Gallery",
-                navContact: "Share Your Interest",
-                heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">EMPOWERING <span class=\"highlight\">KSA STUDENTS</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">WITH ARDUINO & DIY PROJECTS.</span></span>",
-                heroSubtitle: "The easiest way for students and hobbyists in KSA to master electronics. Get pre-built Arduino Projects KSA, DIY kits, local support, and fast delivery to start coding and building your future, today.",
-                aboutTitle: "From Riyadh, <br><span>For Everyone.</span>",
-                aboutPara1: "RIYADUINO ignited from a single spark: electronics in Saudi Arabia should be accessible, exciting, and empowering for all. Born in Riyadh from a team of passionate engineers and educators, we saw the gap between brilliant ideas and the complex, frustrating path to bringing them to life.",
-                aboutPara2: "Our mission: to bridge that gap. We meticulously design, build, and rigorously test every DIY project, so you can bypass the troubleshooting and dive straight into what matters: learning, coding, and creating.",
-                valuesTitle: "Our Core <span>Values</span>",
-                value1Title: "Local Empowerment",
-                value1Desc: "We are a proud Saudi-based initiative. By providing fast, local delivery and dedicated support, we empower our community to build the future, right here at home.",
-                value2Title: "Uncompromising Quality",
-                value2Desc: "Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.",
-                value3Title: "Education First",
-                value3Desc: "Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike. Our goal is to spark curiosity and accelerate learning.",
-                galleryTitle: "Project <span>Gallery</span>",
-                discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
-                discountSubtitle: "Fill this form and take 20% forever! Share your interest below.",
-                formName: "Full Name",
-                formEmail: "Primary Contact Email",
-                formCityKSA: "City in KSA",
-                formSelectCityDefault: "-- Select your city in KSA --",
-                cityRiyadh: "Riyadh",
-                cityJeddah: "Jeddah",
-                cityMecca: "Mecca (Makkah)",
-                cityMedina: "Medina (Madinah)",
-                cityDammam: "Dammam",
-                cityKhobar: "Khobar",
-                cityDhahran: "Dhahran",
-                cityTaif: "Taif",
-                cityAbha: "Abha",
-                cityJubail: "Jubail",
-                cityYanbu: "Yanbu",
-                cityOther: "Other KSA City",
-                formExpertise: "Expertise Level",
-                formSelectDefault: "-- Select your expertise level --",
-                formExpertiseNovice: "Novice (Exploring fundamentals)",
-                formExpertiseIntermediate: "Intermediate (Building small projects)",
-                formExpertiseAdvanced: "Advanced (Developing complex systems)",
-                formExpertiseExpert: "Expert (Consulting/Teaching)",
-                formGoals: "Key Objectives with RIYADUINO Technology",
-                formSubmit: "SUBMIT & SECURE MY 20% DISCOUNT",
-                closeBtn: "\u00d7",
-                footerText: "© 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia."
-            },
-            ar: {
-                navAbout: "من نحن",
-                navValues: "قيمنا",
-                navGallery: "المعرض",
-                navContact: "شارك اهتمامك",
-                heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\"><span class=\"highlight\">مشاريع أردوينو</span> للسعودية</span></span><span class=\"line-wrap\"><span class=\"line line-2\">وإلكترونيات DIY في الرياض.</span></span>",
-                heroSubtitle: "الطريقة الأسهل للطلاب والهواة في المملكة العربية السعودية لإتقان الإلكترونيات. احصل على مشاريع إلكترونية الرياض و DIY، دعم محلي، وتوصيل سريع لبدء البرمجة وبناء مستقبلك، اليوم.",
-                aboutTitle: "من الرياض، <br><span>للجميع.</span>",
-                aboutPara1: "انطلقت \"رياضوينو\" من شرارة واحدة: يجب أن تكون الإلكترونية في المملكة العربية السعودية متاحة، ومثيرة، ومُمكّنة للجميع. وُلدنا في الرياض على يد فريق من المهندسين والمعلمين الشغوفين، ورأينا الفجوة بين الأفكار اللامعة والطريق المعقد والمحبط لتحويلها إلى واقع.",
-                aboutPara2: "مهمتنا: سد هذه الفجوة. نحن نصمم، ونبني، ونختبر بدقة كل مشروع، حتى تتمكن من تجاوز مرحلة استكشاف الأخطاء والانطلاق مباشرة إلى ما يهم: التعلم، والبرمجة، والإبداع.",
-                valuesTitle: "قيمنا <span>الأساسية</span>",
-                value1Title: "تمكين محلي",
-                value1Desc: "نحن فخورون بكوننا مبادرة سعودية. من خلال توفير التوصيل المحلي السريع والدعم المخصص، نمكّن مجتمعنا من بناء المستقبل، هنا في وطننا.",
-                value2Title: "جودة لا تقبل المساومة",
-                value2Desc: "الكمال هو خط البداية لدينا. يتم تجميع كل مشروع بخبرة واختبارها بدقة من قبل مهندسينا. نجاحك هو مقياسنا.",
-                value3Title: "التعليم أولاً",
-                value3Desc: "هدفنا هو إثارة الفضول وتسريع التعلم. تم تصميم مشاريعنا كأدوات تعليمية قوية للطلاب، والهواة، والمحترفين على حد سواء.",
-                galleryTitle: "معرض <span>المشاريع</span>",
-                discountTitle: "خصم <span>العضوية</span>",
-                discountSubtitle: "املأ هذا النموذج واحصل على خصم 20% للأبد! شارك اهتمامك أدناه.",
-                formName: "الاسم الكامل",
-                formEmail: "البريد الإلكتروني الأساسي",
-                formCityKSA: "المدينة في المملكة العربية السعودية",
-                formSelectCityDefault: "-- اختر مدينتك في المملكة --",
-                cityRiyadh: "الرياض",
-                cityJeddah: "جدة",
-                cityMecca: "مكة المكرمة",
-                cityMedina: "المدينة المنورة",
-                cityDammam: "الدمام",
-                cityKhobar: "الخبر",
-                cityDhahran: "الظهران",
-                cityTaif: "الطائف",
-                cityAbha: "أبها",
-                cityJubail: "الجبيل",
-                cityYanbu: "ينبع",
-                cityOther: "مدينة سعودية أخرى",
-                formExpertise: "مستوى الخبرة",
-                formSelectDefault: "-- اختر مستوى خبرتك --",
-                formExpertiseNovice: "مبتدئ (استكشاف الأساسيات)",
-                formExpertiseIntermediate: "متوسط (بناء مشاريع صغيرة)",
-                formExpertiseAdvanced: "متقدم (تطوير أنظمة معقدة)",
-                formExpertiseExpert: "خبير (استشارات/تدريس)",
-                formGoals: "الأهداف الرئيسية من استخدام تقنية رياضوينو",
-                formSubmit: "إرسال وتأمين خصم 20% الخاص بي",
-                closeBtn: "\u00d7",
-                footerText: "© 2025 رياضوينو. جميع الحقوق محفوظة. الرياض، المملكة العربية السعودية."
-            }
-        };
-
-        const translateBtnEn = document.getElementById('translateBtnEn'); 
-        const translateBtnAr = document.getElementById('translateBtnAr');
-
-        let currentLang = 'en';
-        
-        const updateElementTranslation = (el, key) => {
-            const translation = translations[currentLang][key];
-            if (translation) {
-                if (el.tagName === 'OPTION' || el.tagName === 'BUTTON' || el.classList.contains('close-btn')) {
-                    el.textContent = translation;
-                } else {
-                    el.innerHTML = translation;
-                }
-            }
-        };
-
-        const updateTranslations = () => {
-            document.querySelectorAll('[data-translate]').forEach(el => {
-                const key = el.dataset.translate;
-                updateElementTranslation(el, key);
-            });
+        document.addEventListener("DOMContentLoaded", function() {
             
-            document.querySelectorAll('select option').forEach(option => {
-                if(option.dataset.translate) {
-                    updateElementTranslation(option, option.dataset.translate);
-                }
-            });
-        };
-        
-        const toggleLanguage = () => {
-            if (currentLang === 'en') {
-                currentLang = 'ar';
-                document.documentElement.lang = 'ar';
-                document.documentElement.dir = 'rtl';
-                if(translateBtnEn) translateBtnEn.style.display = 'none'; 
-                if(translateBtnAr) translateBtnAr.style.display = 'block'; 
-            } else {
-                currentLang = 'en';
-                document.documentElement.lang = 'en';
-                document.documentElement.dir = 'ltr';
-                if(translateBtnEn) translateBtnEn.style.display = 'block'; 
-                if(translateBtnAr) translateBtnAr.style.display = 'none'; 
-            }
-            updateTranslations();
-        };
+            // --- SCROLL ANIMATIONS ---
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.1
+            };
 
-        if(translateBtnEn) translateBtnEn.addEventListener('click', toggleLanguage);
-        if(translateBtnAr) translateBtnAr.addEventListener('click', toggleLanguage);
-        
-        updateTranslations();
-    });
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.fade-in-section').forEach(section => {
+                observer.observe(section);
+            });
+
+
+            // --- LIGHTBOX GALLERY LOGIC ---
+            const galleryImages = [
+                "robin-glauser-zP7X_B86xOg-unsplash.jpg",
+                "vishnu-mohanan-LC_SOISs-74-unsplash.jpg",
+                "spencer-lbqLxgvLt0U-unsplash.jpg",
+                "sahand-babali-gavODTHG36Y-unsplash.jpg"
+            ];
+            let currentImageIndex = 0;
+            const lightboxModal = document.getElementById('lightboxModal');
+            const lightboxImage = document.getElementById('lightboxImage');
+
+            window.openLightbox = function(index) {
+                currentImageIndex = index;
+                lightboxImage.src = galleryImages[currentImageIndex];
+                lightboxModal.style.display = 'flex';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling when modal is open
+            }
+
+            window.closeLightbox = function() {
+                lightboxModal.style.display = 'none';
+                document.body.style.overflow = ''; // Restore scrolling
+            }
+
+            window.plusSlides = function(n, event) {
+                if (event) event.stopPropagation(); // Stop click from propagating to modal background
+                currentImageIndex += n;
+                if (currentImageIndex >= galleryImages.length) {
+                    currentImageIndex = 0;
+                } else if (currentImageIndex < 0) {
+                    currentImageIndex = galleryImages.length - 1;
+                }
+                lightboxImage.src = galleryImages[currentImageIndex];
+            }
+            
+            // Close lightbox when clicking outside the content (which is handled by closeLightbox)
+            // Or via escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === "Escape" && lightboxModal.style.display === 'flex') {
+                    closeLightbox();
+                } else if (e.key === "ArrowRight" && lightboxModal.style.display === 'flex') {
+                    plusSlides(1, e);
+                } else if (e.key === "ArrowLeft" && lightboxModal.style.display === 'flex') {
+                    plusSlides(-1, e);
+                }
+            }, { passive: false });
+
+
+            // --- TRANSLATION LOGIC ---
+            let currentLang = document.documentElement.lang || 'en'; 
+            const translateBtnEn = document.getElementById('translateBtnEn');
+            const translateBtnAr = document.getElementById('translateBtnAr');
+
+            const translations = {
+                en: {
+                    navAbout: "About Us",
+                    navValues: "Our Values",
+                    navProjects: "Projects",
+                    navGallery: "Gallery",
+                    navContact: "Share Your Interest",
+                    heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\">EMPOWERING <span class=\"highlight\">KSA STUDENTS</span></span></span><span class=\"line-wrap\"><span class=\"line line-2\">WITH ARDUINO & DIY PROJECTS.</span></span>",
+                    heroSubtitle: "The easiest way for students and hobbyists in KSA to master electronics. Get pre-built Arduino Projects KSA, DIY kits, local support, and fast delivery to start coding and building your future, today.",
+                    aboutTitle: "From Riyadh, <br><span>For Everyone.</span>",
+                    aboutPara1: "RIYADUINO ignited from a single spark: electronics in Saudi Arabia should be accessible, exciting, and empowering for all. Born in Riyadh from a team of passionate engineers and educators, we saw the gap between brilliant ideas and the complex, frustrating path to bringing them to life.",
+                    aboutPara2: "Our mission: to bridge that gap. We meticulously design, build, and rigorously test every DIY project, so you can bypass the troubleshooting and dive straight into what matters: learning, coding, and creating.",
+                    valuesTitle: "Our Core <span>Values</span>",
+                    value1Title: "Local Empowerment",
+                    value1Desc: "We are a proud Saudi-based initiative. By providing fast, local delivery and dedicated support, we empower our community to build the future, right here at home.",
+                    value2Title: "Uncompromising Quality",
+                    value2Desc: "Perfection is our starting line. Every project is expertly assembled and rigorously tested by our engineers. Your success is our metric.",
+                    value3Title: "Education First",
+                    value3Desc: "Our DIY projects are designed as powerful educational tools for students, hobbyists, and professionals alike. Our goal is to spark curiosity and accelerate learning.",
+                    projectsTitle: "Featured <span>Projects</span>",
+                    shareInterestBtn: "SHARE YOUR INTEREST",
+                    galleryTitle: "Project <span>Gallery</span>",
+                    discountTitle: "MEMBERSHIP <span>DISCOUNT</span>",
+                    discountSubtitle: "Fill this form and take 20% forever! Share your interest below.",
+                    formName: "Full Name",
+                    formEmail: "Primary Contact Email",
+                    formCityKSA: "City in KSA",
+                    formSelectCityDefault: "-- Select your city in KSA --",
+                    cityRiyadh: "Riyadh",
+                    cityJeddah: "Jeddah",
+                    cityMecca: "Mecca",
+                    cityMedina: "Medina",
+                    cityDammam: "Dammam",
+                    cityKhobar: "Khobar",
+                    cityDhahran: "Dhahran",
+                    cityTaif: "Taif",
+                    cityAbha: "Abha",
+                    cityJubail: "Jubail",
+                    cityYanbu: "Yanbu",
+                    cityOther: "Other Saudi City",
+                    formLookingFor: "What are you primarily looking for?",
+                    formSelectLookingForDefault: "-- Select your primary interest --",
+                    formLookingForKits: "DIY Kits (To build myself)",
+                    formLookingForReady: "Ready-made Projects (Pre-built)",
+                    formLookingForComponents: "Components Only (Sensors, boards, etc.)",
+                    formLookingForTutorials: "Workshops & Tutorials",
+                    formLookingForOther: "Other (Please specify in goals)",
+                    formExpertise: "Your Arduino/Electronics Skill Level",
+                    formSelectDefault: "-- Select your expertise level --",
+                    formExpertiseNovice: "Novice (Just starting out)",
+                    formExpertiseIntermediate: "Intermediate (I've built a few projects)",
+                    formExpertiseAdvanced: "Advanced (I design my own projects)",
+                    formExpertiseExpert: "Expert (I teach or work professionally)",
+                    formGoals: "What do you want to build or learn?",
+                    formReferral: "How did you hear about us?",
+                    formSelectReferralDefault: "-- Select an option --",
+                    formReferralSocial: "Social Media (Twitter, Instagram, etc.)",
+                    formReferralFriend: "Friend or Colleague",
+                    formReferralUniversity: "University / School",
+                    formReferralGoogle: "Google Search",
+                    formReferralOther: "Other",
+                    formBetaNote: "<strong>Please Note:</strong> RIYADUINO is in BETA. This form helps us gauge interest and build what you need. The 20% discount will apply to our official launch!",
+                    formSubmit: "SUBMIT & SECURE MY 20% DISCOUNT",
+                    closeBtn: "\u00d7",
+                    footerText: "© 2025 RIYADUINO. All Rights Reserved. Riyadh, Saudi Arabia."
+                },
+                ar: {
+                    navAbout: "من نحن",
+                    navValues: "قيمنا",
+                    navProjects: "المشاريع",
+                    navGallery: "المعرض",
+                    navContact: "شارك اهتمامك",
+                    heroTitle: "<span class=\"line-wrap\"><span class=\"line line-1\"><span class=\"highlight\">مشاريع أردوينو</span> للسعودية</span></span><span class=\"line-wrap\"><span class=\"line line-2\">وإلكترونيات DIY في الرياض.</span></span>",
+                    heroSubtitle: "الطريقة الأسهل للطلاب والهواة في المملكة العربية السعودية لإتقان الإلكترونيات. احصل على مشاريع إلكترونية الرياض و DIY، دعم محلي، وتوصيل سريع لبدء البرمجة وبناء مستقبلك، اليوم.",
+                    aboutTitle: "من الرياض، <br><span>للجميع.</span>",
+                    aboutPara1: "انطلقت \"رياضوينو\" من شرارة واحدة: يجب أن تكون الإلكترونية في المملكة العربية السعودية متاحة، ومثيرة، ومُمكّنة للجميع. وُلدنا في الرياض على يد فريق من المهندسين والمعلمين الشغوفين، ورأينا الفجوة بين الأفكار اللامعة والطريق المعقد والمحبط لتحويلها إلى واقع.",
+                    aboutPara2: "مهمتنا: سد هذه الفجوة. نحن نصمم، ونبني، ونختبر بدقة كل مشروع، حتى تتمكن من تجاوز مرحلة استكشاف الأخطاء والانطلاق مباشرة إلى ما يهم: التعلم، والبرمجة، والإبداع.",
+                    valuesTitle: "قيمنا <span>الأساسية</span>",
+                    value1Title: "التمكين المحلي",
+                    value1Desc: "نحن مبادرة سعودية فخورة. من خلال توفير توصيل محلي سريع ودعم مخصص، نمكّن مجتمعنا من بناء المستقبل، هنا في الوطن.",
+                    value2Title: "جودة لا تقبل المساومة",
+                    value2Desc: "الكمال هو نقطة انطلاقنا. يتم تجميع كل مشروع واختباره بدقة من قبل مهندسينا. نجاحك هو مقياسنا.",
+                    value3Title: "التعليم أولاً",
+                    value3Desc: "تم تصميم مشاريع DIY الخاصة بنا كأدوات تعليمية قوية للطلاب والهواة والمحترفين على حد سواء. هدفنا هو إثارة الفضول وتسريع التعلم.",
+                    projectsTitle: "مشاريع <span>مميزة</span>",
+                    shareInterestBtn: "شارك اهتمامك",
+                    galleryTitle: "معرض <span>المشاريع</span>",
+                    discountTitle: "خصم <span>عضوية</span>",
+                    discountSubtitle: "املأ النموذج واحصل على خصم 20% مدى الحياة! شارك اهتمامك أدناه.",
+                    formName: "الاسم الكامل",
+                    formEmail: "البريد الإلكتروني الأساسي",
+                    formCityKSA: "المدينة في المملكة العربية السعودية",
+                    formSelectCityDefault: "-- اختر مدينتك في المملكة --",
+                    cityRiyadh: "الرياض",
+                    cityJeddah: "جدة",
+                    cityMecca: "مكة المكرمة",
+                    cityMedina: "المدينة المنورة",
+                    cityDammam: "الدمام",
+                    cityKhobar: "الخبر",
+                    cityDhahran: "الظهران",
+                    cityTaif: "الطائف",
+                    cityAbha: "أبها",
+                    cityJubail: "الجبيل",
+                    cityYanbu: "ينبع",
+                    cityOther: "مدينة سعودية أخرى",
+                    formLookingFor: "عما تبحث بشكل أساسي؟",
+                    formSelectLookingForDefault: "-- اختر اهتمامك الأساسي --",
+                    formLookingForKits: "مجموعات DIY (لأبنيها بنفسي)",
+                    formLookingForReady: "مشاريع جاهزة (مبنية مسبقًا)",
+                    formLookingForComponents: "مكونات فقط (حساسات، لوحات، إلخ)",
+                    formLookingForTutorials: "ورش عمل ودروس تعليمية",
+                    formLookingForOther: "أخرى (يرجى التحديد في الأهداف)",
+                    formExpertise: "مستوى مهارتك في الأردوينو/الإلكترونيات",
+                    formSelectDefault: "-- اختر مستوى خبرتك --",
+                    formExpertiseNovice: "مبتدئ (أبدأ للتو)",
+                    formExpertiseIntermediate: "متوسط (بنيت بعض المشاريع)",
+                    formExpertiseAdvanced: "متقدم (أصمم مشاريعي الخاصة)",
+                    formExpertiseExpert: "خبير (أقوم بالتدريس أو أعمل باحتراف)",
+                    formGoals: "ماذا تريد أن تبني أو تتعلم؟",
+                    formReferral: "كيف سمعت عنا؟",
+                    formSelectReferralDefault: "-- اختر خياراً --",
+                    formReferralSocial: "وسائل التواصل الاجتماعي (تويتر، إنستغرام، إلخ)",
+                    formReferralFriend: "صديق أو زميل",
+                    formReferralUniversity: "الجامعة / المدرسة",
+                    formReferralGoogle: "بحث جوجل",
+                    formReferralOther: "أخرى",
+                    formBetaNote: "<strong>ملاحظة:</strong> رياضوينو في المرحلة التجريبية (BETA). يساعدنا هذا النموذج في قياس الاهتمام وبناء ما تحتاجه. سيتم تطبيق خصم 20% على إطلاقنا الرسمي!",
+                    formSubmit: "إرسال وتأمين خصمي 20%",
+                    closeBtn: "\u00d7",
+                    footerText: "© 2025 رياضوينو. جميع الحقوق محفوظة. الرياض، المملكة العربية السعودية."
+                }
+            };
+            
+            const updateElementTranslation = (el, key) => {
+                const translation = translations[currentLang][key];
+                if (translation) {
+                    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                        el.placeholder = translation;
+                    } else if (el.tagName === 'OPTION') {
+                        el.textContent = translation;
+                    } else if (el.dataset.raw) {
+                        el.innerHTML = translation;
+                    } else {
+                        // Use innerHTML for titles that contain span/br tags
+                        el.innerHTML = translation;
+                    }
+                }
+            };
+
+            const updateTranslations = () => {
+                document.querySelectorAll('[data-translate]').forEach(el => {
+                    const key = el.dataset.translate;
+                    updateElementTranslation(el, key);
+                });
+                
+                document.querySelectorAll('select option').forEach(option => {
+                    if(option.dataset.translate) {
+                        updateElementTranslation(option, option.dataset.translate);
+                    }
+                });
+            };
+            
+            const toggleLanguage = () => {
+                if (currentLang === 'en') {
+                    currentLang = 'ar';
+                    document.documentElement.lang = 'ar';
+                    document.documentElement.dir = 'rtl';
+                    if(translateBtnEn) translateBtnEn.style.display = 'none'; 
+                    if(translateBtnAr) translateBtnAr.style.display = 'block'; 
+                } else {
+                    currentLang = 'en';
+                    document.documentElement.lang = 'en';
+                    document.documentElement.dir = 'ltr';
+                    if(translateBtnEn) translateBtnEn.style.display = 'block'; 
+                    if(translateBtnAr) translateBtnAr.style.display = 'none'; 
+                }
+                updateTranslations();
+            };
+
+            if(translateBtnEn) translateBtnEn.addEventListener('click', toggleLanguage);
+            if(translateBtnAr) translateBtnAr.addEventListener('click', toggleLanguage);
+            
+            updateTranslations(); // Initial load
+        });
     </script>
 
 </body>
