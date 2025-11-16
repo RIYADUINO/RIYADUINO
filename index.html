@@ -8,6 +8,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="THIS_IS_YOUR_CLIENT_ID.apps.googleusercontent.com">
+    
     <style>
         :root {
             --bg-color: #000000;
@@ -595,6 +598,7 @@
             max-width: 500px;
         }
 
+        /* CHANGED: Removed formspree action, changed to a div/form container for sign-in */
         .contact-form {
             max-width: 800px;
             margin: 0 auto;
@@ -692,6 +696,8 @@
         .beta-note strong {
             color: var(--accent-yellow);
         }
+        
+        /* REMOVED: Google Sign-In container styles (g-signin2 is hidden) */
 
         /* --- Footer Styles (Optimized) --- */
         .footer {
@@ -983,16 +989,20 @@
         <section id="contact" class="content-wrapper">
             <h2 class="contact-h1" data-translate="discountTitle"> MEMBERSHIP <span>DISCOUNT</span> </h2>
             <p class="contact-subtitle-form" data-translate="discountSubtitle"> Fill this form and take 20% forever! Share your interest below. </p>
-            <form class="contact-form fade-in-section" action="https://formspree.io/f/xzzkyzzp" method="POST">
+            
+            <div class="contact-form fade-in-section">
                 
+                <div id="hiddenSignIn" style="display: none;">
+                    <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+                </div>
                 <div class="form-group">
                     <label for="name" data-translate="formName">Full Name</label>
-                    <input type="text" id="name" name="name" required placeholder="Enter your full name">
+                    <input type="text" id="name" name="name" placeholder="Enter your full name (Optional, will auto-fill with Google)">
                 </div>
 
                 <div class="form-group">
                     <label for="email" data-translate="formEmail">Primary Contact Email</label>
-                    <input type="email" id="email" name="email" required placeholder="your.professional.email@example.com">
+                    <input type="email" id="email" name="email" placeholder="your.professional.email@example.com (Optional, will auto-fill with Google)">
                 </div>
 
                 <div class="form-group">
@@ -1059,13 +1069,13 @@
                 </p>
 
                 <div style="text-align: center;">
-                    <button type="submit" class="cta-button" data-translate="formSubmit">
+                    <button type="button" class="cta-button" id="submitButton" onclick="handleSubmission()" data-translate="formSubmit">
                         SUBMIT & SECURE MY 20% DISCOUNT
                     </button>
                 </div>
 
-            </form>
-        </section>
+            </div>
+            </section>
 
     </main>
 
@@ -1084,6 +1094,77 @@
     </div>
 
     <script>
+        
+        // NEW FUNCTION: Triggers the Google Sign-In flow
+        window.handleSubmission = function() {
+            // 1. Get the reference to the hidden Google Sign-In button
+            const hiddenGoogleButton = document.querySelector('#hiddenSignIn .g-signin2 div[role="button"]');
+
+            if (hiddenGoogleButton) {
+                // 2. Programmatically click the hidden button to open the Google Sign-In prompt
+                hiddenGoogleButton.click();
+            } else {
+                console.error("Google Sign-In button element not found. Make sure the Google Platform library loaded correctly.");
+                alert("Sign-In functionality failed to load. Please try refreshing the page.");
+            }
+        };
+
+        // UPDATED: Google Sign-In Function - This is called *after* the user successfully signs in
+        function onSignIn(googleUser) {
+            var profile = googleUser.getBasicProfile();
+            
+            // --- Collect all form data ---
+            const formData = {
+                // Google Profile Data (guaranteed)
+                google_id: profile.getId(), 
+                name: profile.getName(),
+                email: profile.getEmail(),
+                image_url: profile.getImageUrl(),
+
+                // Form Data (must be collected from inputs)
+                city_ksa: document.getElementById('city_ksa').value,
+                looking_for: document.getElementById('looking_for').value,
+                expertise: document.getElementById('expertise').value,
+                goals: document.getElementById('goals').value,
+                referral: document.getElementById('referral').value,
+            };
+
+            // 1. Auto-fill the Name/Email fields for user clarity
+            document.getElementById('name').value = formData.name;
+            document.getElementById('email').value = formData.email;
+            
+            // 2. Log data for demonstration
+            console.log('Google Sign-In Successful. Form data collected:', formData);
+            
+            // 3. !!! CRITICAL: SEND DATA TO YOUR BACKEND SERVER !!!
+            // You must replace this placeholder with a real fetch/AJAX call 
+            // to your server endpoint to save the data to your database.
+            
+            /*
+            fetch('/api/save-discount-signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    // Optional: Authorization header with the ID token if you need to verify sign-in server-side
+                    'Authorization': 'Bearer ' + googleUser.getAuthResponse().id_token 
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Success! Your 20% discount is secured and your profile is created.');
+                // Redirect or show a success message
+            })
+            .catch((error) => {
+                console.error('Error saving data:', error);
+                alert('An error occurred during sign-up. Please try again.');
+            });
+            */
+            
+            alert('Sign-In Complete! Data logged to console. You must implement the backend database saving logic (fetch API call) inside the onSignIn function.');
+        }
+        // END UPDATED
+
         document.addEventListener("DOMContentLoaded", function() {
             
             // --- SCROLL ANIMATIONS ---
