@@ -17,8 +17,8 @@
             --secondary-text: #cccccc;
             
             /* GRADIENT PALETTE */
-            --gradient-start: #FFEB3B; /* Bright Yellow */
-            --gradient-end: #FF9800;   /* Deep Orange */
+            --gradient-start: #FFEB3B;
+            --gradient-end: #FF9800;
             --accent-gradient: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
             
             --border-color: rgba(255, 235, 59, 0.3);
@@ -392,36 +392,44 @@
     // --- FORM SUBMIT (Connected to Formspree) ---
     var form = document.querySelector(".contact-form");
     
-    async function handleSubmit(event) {
+    function handleSubmit(event) {
+        // PREVENT default page refresh
         event.preventDefault();
-        var data = new FormData(event.target);
-        const name = document.getElementById('fullName').value; // Get name for alert
+        
+        const data = new FormData(event.target);
+        const name = document.getElementById('fullName').value;
 
+        // FETCH API sends data to Formspree without leaving the page
         fetch(event.target.action, {
-            method: form.method,
+            method: 'POST', // Ensure method is POST
             body: data,
             headers: {
-                'Accept': 'application/json'
+                // Requesting a JSON response, which avoids page redirect
+                'Accept': 'application/json' 
             }
-        }).then(response => {
+        })
+        .then(response => {
             if (response.ok) {
                 // SUCCESS!
-                alert(`Thank you, ${name}! We have received your interest and will be in touch soon.`);
+                alert(`Thank you, ${name}! We have received your interest and will be in touch soon. (Check your Formspree dashboard or email for verification!)`);
                 form.reset();
             } else {
-                // ERROR
+                // Handle submission error (e.g., failed validation, unverified form)
                 response.json().then(data => {
-                    if (Object.hasOwn(data, 'errors')) {
-                        alert("Error: " + data["errors"].map(error => error["message"]).join(", "));
+                    if (data.errors) {
+                        alert("Error: " + data.errors.map(error => error.message).join(", "));
                     } else {
-                        alert("Oops! There was a problem submitting your form");
+                        alert("Oops! There was a problem submitting your form. Did you verify your Formspree email?");
                     }
-                })
+                });
             }
-        }).catch(error => {
-            alert("Oops! There was a problem submitting your form");
+        })
+        .catch(error => {
+            // Handle network failure
+            alert("Network Error: Could not connect to the form server.");
         });
     }
+    // Attach the submit handler to the form
     form.addEventListener("submit", handleSubmit);
 
     // --- TRANSLATIONS (KEPT AS-IS) ---
