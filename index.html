@@ -411,7 +411,8 @@
         .then(response => {
             if (response.ok) {
                 // SUCCESS!
-                alert(`Thank you, ${name}! We have received your interest and will be in touch soon. (Check your Formspree dashboard or email for verification!)`);
+                // MODIFIED: Removed Formspree verification note
+                alert(`Thank you, ${name}! We have received your interest and will be in touch soon.`); 
                 form.reset();
             } else {
                 // Handle submission error (e.g., failed validation, unverified form)
@@ -419,7 +420,8 @@
                     if (data.errors) {
                         alert("Error: " + data.errors.map(error => error.message).join(", "));
                     } else {
-                        alert("Oops! There was a problem submitting your form. Did you verify your Formspree email?");
+                        // MODIFIED: Simplified error message
+                        alert("Oops! There was a problem submitting your form"); 
                     }
                 });
             }
