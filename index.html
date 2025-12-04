@@ -12,11 +12,11 @@
     <style>
         :root {
             --bg-color: #050505;
-            --surface-color: rgba(20, 20, 20, 0.8); /* More transparent for PCB bleed-through */
+            --surface-color: rgba(20, 20, 20, 0.8);
             --primary-text: #FFFFFF;
             --secondary-text: #cccccc;
             
-            /* NEW GRADIENT PALETTE based on your image */
+            /* GRADIENT PALETTE */
             --gradient-start: #FFEB3B; /* Bright Yellow */
             --gradient-end: #FF9800;   /* Deep Orange */
             --accent-gradient: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
@@ -42,20 +42,16 @@
             -webkit-font-smoothing: antialiased;
         }
 
-        /* --- NEW BACKGROUND VISUALS (Circuit Board) --- */
+        /* --- BACKGROUND VISUALS (Circuit Board) --- */
         .background-visuals {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2;
-            /* Dark Circuit Board Image */
             background-image: url('https://images.unsplash.com/photo-1555664424-778a1e5e1b48?q=80&w=2070&auto=format&fit=crop'); 
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* Make it monochrome and dark like the reference image */
             filter: grayscale(100%) contrast(1.2) brightness(0.25);
             will-change: transform;
         }
-        
-        /* Grid overlay to add texture */
         .background-visuals::after {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
@@ -65,14 +61,12 @@
         /* --- Typography & Gradient Text --- */
         h1, h2, h3 { font-family: var(--font-heading); font-weight: 900; letter-spacing: -0.5px; color: var(--primary-text); }
         
-        /* Apply the Yellow/Orange gradient to text */
         .highlight, h2.section-title span, .price, .footer .nav-logo span {
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            color: var(--gradient-start); /* Fallback */
-            text-shadow: none; /* Remove shadow to keep gradient clean */
+            color: var(--gradient-start);
         }
 
         h2.section-title { font-size: clamp(2.5rem, 5vw, 4rem); text-align: center; margin-bottom: 4rem; }
@@ -114,7 +108,7 @@
         }
         @keyframes gentle-sway-rtl { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(15px); } }
 
-        /* --- CTA Button (Updated to Gradient) --- */
+        /* --- CTA Button --- */
         .cta-button {
             display: inline-block; font-family: var(--font-heading); font-weight: 800; font-size: 1.1rem;
             text-decoration: none; color: #000; 
@@ -156,9 +150,7 @@
         .value-card:nth-child(2) { animation-delay: 0.2s; } .value-card:nth-child(3) { animation-delay: 0.4s; }
         .value-card:hover { transform: translateY(-10px); border-color: var(--gradient-start); box-shadow: 0 0 20px rgba(255, 235, 59, 0.2); }
         
-        /* SVG Icon Styling */
         .value-icon { width: 60px; height: 60px; margin-bottom: 1rem; display: block; }
-        /* Apply gradient to SVGs via defs is hard in CSS, so filling with Gold */
         .value-icon svg { width: 100%; height: 100%; fill: var(--gradient-start); animation: float-icon 4s ease-in-out infinite; will-change: transform; }
         @keyframes float-icon { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
@@ -170,14 +162,12 @@
             justify-content: space-between; transition: transform 0.4s, box-shadow 0.4s, border-color 0.4s;
             min-height: 300px; position: relative; overflow: hidden;
         }
-        /* Add a subtle glow behind cards */
         .product-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px;
             background: var(--accent-gradient); opacity: 0; transition: opacity 0.4s;
         }
         .product-card:hover { transform: translateY(-10px); box-shadow: 0 10px 40px rgba(0,0,0,0.8); border-color: var(--gradient-start); }
         .product-card:hover::before { opacity: 1; }
-
         .product-card h3 { font-size: 1.4rem; text-transform: uppercase; margin-bottom: 1rem; color: #fff; }
         .product-card .price { font-size: 1.5rem; font-weight: 800; margin-bottom: 1.5rem; display: block; }
         
@@ -225,12 +215,10 @@
         .fade-in-section { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease-out, transform 0.6s ease-out; }
         .fade-in-section.is-visible { opacity: 1; transform: translateY(0); }
         
-        /* Lightbox */
         .lightbox-modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); align-items: center; justify-content: center; }
         .lightbox-content img { max-width: 90%; max-height: 80vh; }
         .close-btn { position: absolute; top: 30px; right: 30px; color: #fff; font-size: 40px; cursor: pointer; }
 
-        /* RTL */
         html[dir="rtl"] { text-align: right; }
         html[dir="rtl"] .nav-content { flex-direction: row-reverse; }
         html[dir="rtl"] .form-group label { text-align: right; }
@@ -341,22 +329,22 @@
             <h2 class="section-title" data-translate="contactTitle">Share Your <span>Interest</span></h2>
             <p class="contact-subtitle-form" data-translate="contactSubtitle">Tell us about your interests and study level so we can send you relevant offers.</p>
             
-            <form class="contact-form fade-in-section">
+            <form class="contact-form fade-in-section" action="https://formspree.io/f/xzzkyzzp" method="POST">
                 <div class="form-group">
                     <label data-translate="formLabelName">Full Name</label>
-                    <input type="text" id="fullName" required>
+                    <input type="text" id="fullName" name="name" required>
                 </div>
                 <div class="form-group">
                     <label data-translate="formLabelEmail">Email Address</label>
-                    <input type="email" id="emailAddress" required>
+                    <input type="email" id="emailAddress" name="email" required>
                 </div>
                 <div class="form-group">
                     <label data-translate="formLabelPhone">Phone Number (KSA)</label>
-                    <input type="tel" id="phoneNumber" required pattern="05[0-9]{8}" placeholder="05XXXXXXXX">
+                    <input type="tel" id="phoneNumber" name="phone" required pattern="05[0-9]{8}" placeholder="05XXXXXXXX">
                 </div>
                 <div class="form-group">
                     <label data-translate="formLabelLocation">Location in KSA</label>
-                    <select id="ksaLocation" required>
+                    <select id="ksaLocation" name="location" required>
                         <option value="" disabled selected>Select City</option>
                         <option value="riyadh" data-translate="formOptionRiyadh">Riyadh</option>
                         <option value="jeddah" data-translate="formOptionJeddah">Jeddah</option>
@@ -366,7 +354,7 @@
                 </div>
                 <div class="form-group">
                     <label data-translate="formLabelStudyLevel">Education Level</label>
-                    <select id="studyLevel" required>
+                    <select id="studyLevel" name="education_level" required>
                         <option value="" disabled selected>Select Level</option>
                         <option value="mid_school" data-translate="formOptionStudyMidSchool">Middle School</option>
                         <option value="high_school" data-translate="formOptionStudyHighSchool">High School</option>
@@ -377,7 +365,7 @@
                 </div>
                 <div class="form-group">
                     <label data-translate="formLabelInterest">Area of Interest</label>
-                    <select id="areaOfInterest" required>
+                    <select id="areaOfInterest" name="interest" required>
                         <option value="" disabled selected>Select Interest</option>
                         <option value="robotics" data-translate="formOptionInterestRobotics">Robotics</option>
                         <option value="iot" data-translate="formOptionInterestIot">IoT</option>
@@ -401,13 +389,40 @@
     </div>
     
     <script>
-    // --- FORM SUBMIT ---
-    document.querySelector('.contact-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const name = document.getElementById('fullName').value;
-        alert(`Thank you, ${name}! We have received your interest and will be in touch soon.`);
-        this.reset();
-    });
+    // --- FORM SUBMIT (Connected to Formspree) ---
+    var form = document.querySelector(".contact-form");
+    
+    async function handleSubmit(event) {
+        event.preventDefault();
+        var data = new FormData(event.target);
+        const name = document.getElementById('fullName').value; // Get name for alert
+
+        fetch(event.target.action, {
+            method: form.method,
+            body: data,
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                // SUCCESS!
+                alert(`Thank you, ${name}! We have received your interest and will be in touch soon.`);
+                form.reset();
+            } else {
+                // ERROR
+                response.json().then(data => {
+                    if (Object.hasOwn(data, 'errors')) {
+                        alert("Error: " + data["errors"].map(error => error["message"]).join(", "));
+                    } else {
+                        alert("Oops! There was a problem submitting your form");
+                    }
+                })
+            }
+        }).catch(error => {
+            alert("Oops! There was a problem submitting your form");
+        });
+    }
+    form.addEventListener("submit", handleSubmit);
 
     // --- TRANSLATIONS (KEPT AS-IS) ---
     let currentLang = 'en';
