@@ -327,7 +327,9 @@
 
         <section id="contact" class="content-wrapper">
             <h2 class="section-title" data-translate="contactTitle">Share Your <span>Interest</span></h2>
-            <p class="contact-subtitle-form" data-translate="contactSubtitle">Tell us about your interests and study level so we can send you relevant offers.</p>
+            <p class="contact-subtitle-form" data-translate="contactSubtitle" style="text-align: center; max-width: 700px; margin: 0 auto 2rem auto;">
+                We are currently in Beta (Early Release). Your feedback helps us build a better experience!
+            </p>
             
             <form class="contact-form fade-in-section" action="https://formspree.io/f/xzzkyzzp" method="POST">
                 <div class="form-group">
@@ -411,7 +413,6 @@
         .then(response => {
             if (response.ok) {
                 // SUCCESS!
-                // MODIFIED: Removed Formspree verification note
                 alert(`Thank you, ${name}! We have received your interest and will be in touch soon.`); 
                 form.reset();
             } else {
@@ -420,7 +421,6 @@
                     if (data.errors) {
                         alert("Error: " + data.errors.map(error => error.message).join(", "));
                     } else {
-                        // MODIFIED: Simplified error message
                         alert("Oops! There was a problem submitting your form"); 
                     }
                 });
@@ -434,7 +434,7 @@
     // Attach the submit handler to the form
     form.addEventListener("submit", handleSubmit);
 
-    // --- TRANSLATIONS (KEPT AS-IS) ---
+    // --- TRANSLATIONS ---
     let currentLang = 'en';
     const translations = {
         en: {
@@ -453,7 +453,8 @@
             shareInterestBtn: "SHARE INTEREST",
             galleryTitle: "Project <span>Gallery</span>",
             contactTitle: "Share Your <span>Interest</span>",
-            contactSubtitle: "Tell us about your interests and study level so we can send you relevant offers.",
+            // MODIFIED: English translation updated
+            contactSubtitle: "We are currently in Beta (Early Release). Your feedback helps us build a better experience!",
             formLabelName: "Full Name", formLabelEmail: "Email", formLabelPhone: "Phone (KSA)",
             formLabelLocation: "Location", formOptionRiyadh: "Riyadh", formOptionJeddah: "Jeddah", formOptionDammam: "Dammam", formOptionOther: "Other",
             formLabelStudyLevel: "Education Level", 
@@ -482,7 +483,8 @@
             shareInterestBtn: "شارك اهتمامك",
             galleryTitle: "معرض <span>المشاريع</span>",
             contactTitle: "شارك <span>اهتمامك</span>",
-            contactSubtitle: "أخبرنا عن اهتماماتك ومستواك الدراسي حتى نرسل لك العروض المناسبة.",
+            // MODIFIED: Arabic translation updated
+            contactSubtitle: "نحن حالياً في مرحلة الإطلاق التجريبي (بيتا). ملاحظاتكم تساعدنا على التحسن!",
             formLabelName: "الاسم الكامل", formLabelEmail: "البريد الإلكتروني", formLabelPhone: "الجوال",
             formLabelLocation: "المدينة", formOptionRiyadh: "الرياض", formOptionJeddah: "جدة", formOptionDammam: "الدمام", formOptionOther: "أخرى",
             formLabelStudyLevel: "المستوى الدراسي", 
