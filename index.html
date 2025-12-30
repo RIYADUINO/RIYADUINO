@@ -5,9 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RIYADUINO | Systems Online</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;600&family=Syne:wght@700;800&family=Fira+Code:wght@400;500&family=Rakkas&family=IBM+Plex+Sans+Arabic:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;600&family=Syne:wght@700;800&family=Fira+Code:wght@400;500&family=IBM+Plex+Sans+Arabic:wght@300;400;700&display=swap" rel="stylesheet">
 
     <style>
+        /* --- CUSTOM FONT SETUP --- */
+        @font-face {
+            font-family: 'Badeen Display';
+            src: url('fonts/BadeenDisplay-Regular.woff2') format('woff2'); /* Path to your local file */
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
         :root {
             --bg-deep: #050505;
             --bg-panel: #0E0E0E;
@@ -18,7 +27,7 @@
             --border-tech: 1px solid rgba(255, 255, 255, 0.1);
             --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-arabic-body: 'IBM Plex Sans Arabic', sans-serif;
-            --font-arabic-cool: 'Rakkas', display;
+            --font-arabic-cool: 'Badeen Display', sans-serif; /* Your new font */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
@@ -31,25 +40,24 @@
             line-height: 1.6;
         }
 
-        /* --- COOL ARABIC STYLING --- */
+        /* --- ARABIC STYLING --- */
         body.rtl { 
             direction: rtl; 
             text-align: right; 
             font-family: var(--font-arabic-body);
         }
         
-        /* Heading Glow and Font for Arabic */
+        /* Applied Badeen Display Regular 400 to Arabic headers */
         body.rtl h1, body.rtl h2, body.rtl h3, body.rtl .logo {
             font-family: var(--font-arabic-cool);
+            font-weight: 400; 
             letter-spacing: 0 !important;
             text-shadow: 0 0 10px var(--gold-glow);
-            font-weight: 400; /* Rakkas looks best at normal weight */
         }
 
         body.rtl .btn {
             font-family: var(--font-arabic-body);
             font-weight: 700;
-            text-transform: uppercase;
         }
 
         /* --- BANNER --- */
@@ -115,7 +123,7 @@
         .typewriter { color: var(--gold-primary); border-right: 3px solid var(--gold-primary); padding-right: 12px; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { border-color: transparent; } }
 
-        /* --- ABOUT --- */
+        /* --- ABOUT (New Headline Location) --- */
         .about-section { background: rgba(14, 14, 14, 0.3); border-top: var(--border-tech); border-bottom: var(--border-tech); padding: 80px 20px; }
         .about-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
         .about-content h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: var(--gold-primary); margin-bottom: 25px; }
@@ -129,7 +137,6 @@
         .gallery-header { text-align: center; margin-bottom: 50px; }
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
         .gallery-item { border-radius: 15px; height: 350px; overflow: hidden; border: var(--border-tech); position: relative; transition: 0.4s; }
-        .gallery-item:hover { border-color: var(--gold-primary); transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255, 215, 0, 0.1); }
         .gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         .gallery-item:hover img { filter: grayscale(0%); transform: scale(1.08); }
 
@@ -181,7 +188,8 @@
     <section class="about-section" id="about">
         <div class="about-grid">
             <div class="about-content">
-                <h2 data-en="EMPOWERING VISION 2030" data-ar="تمكين رؤية 2030">EMPOWERING VISION 2030</h2>
+                <h2 data-en="CRAFTING SAUDI INNOVATION" data-ar="نصنع الابتكار السعودي">CRAFTING SAUDI INNOVATION</h2>
+                
                 <p data-en="RIYADUINO was born from a simple mission: to make world-class robotics and electronics education accessible to every curious mind in Saudi Arabia." data-ar="ولدت ريادوينو من مهمة بسيطة: جعل تعليم الروبوتات والإلكترونيات العالمي في متناول كل عقل طموح في المملكة العربية السعودية.">RIYADUINO was born from a simple mission: to make world-class robotics and electronics education accessible to every curious mind in Saudi Arabia.</p>
                 <p data-en="We believe that the engineers of tomorrow aren't just found in universities—they are built in classrooms and homes today." data-ar="نؤمن بأن مهندسي الغد لا يوجدون فقط في الجامعات - بل يتم بناؤهم في الفصول الدراسية والمنازل اليوم.">We believe that the engineers of tomorrow aren't just found in universities—they are built in classrooms and homes today.</p>
                 <div class="stat-box">
@@ -233,35 +241,15 @@
             
             <form action="https://formspree.io/f/xzzkyzzp" method="POST">
                 <input type="text" name="name" id="form-name" placeholder="Name / الاسم" data-en="Name" data-ar="الاسم الكامل" required>
-                
-                <input type="email" name="email" id="form-email" placeholder="Gmail or Email / البريد الإلكتروني" 
-                       data-en="Gmail or Email" data-ar="البريد الإلكتروني" required>
-                
+                <input type="email" name="email" id="form-email" placeholder="Gmail or Email / البريد الإلكتروني" data-en="Gmail or Email" data-ar="البريد الإلكتروني" required>
                 <input type="tel" name="phone" id="form-phone" placeholder="Phone / الجوال" data-en="Phone" data-ar="رقم الجوال" required>
-                
-                <input type="number" name="age" id="form-age" placeholder="Age / العمر" min="1" max="100" 
-                       data-en="Age" data-ar="العمر" required>
+                <input type="number" name="age" id="form-age" placeholder="Age / العمر" min="1" max="100" data-en="Age" data-ar="العمر" required>
                 
                 <select id="city-select" name="city" required>
                     <option value="" data-en="Select City" data-ar="اختر المدينة">Select City / اختر المدينة</option>
                     <option value="Riyadh">Riyadh / الرياض</option>
                     <option value="Jeddah">Jeddah / جدة</option>
                     <option value="Dammam">Dammam / الدمام</option>
-                    <option value="Mecca">Mecca / مكة المكرمة</option>
-                    <option value="Medina">Medina / المدينة المنورة</option>
-                    <option value="Khobar">Al Khobar / الخبر</option>
-                    <option value="Dhahran">Dhahran / الظهران</option>
-                    <option value="Tabuk">Tabuk / تبوك</option>
-                    <option value="Abha">Abha / أبها</option>
-                    <option value="Khamis Mushait">Khamis Mushait / خميس مشيط</option>
-                    <option value="Buraidah">Buraidah / بريدة</option>
-                    <option value="Al Ahsa">Al Ahsa / الأحساء</option>
-                    <option value="Jazan">Jazan / جازان</option>
-                    <option value="Hail">Hail / حائل</option>
-                    <option value="Najran">Najran / نجران</option>
-                    <option value="Yanbu">Yanbu / ينبع</option>
-                    <option value="Jubail">Al Jubail / الجبيل</option>
-                    <option value="Taif">Taif / الطائف</option>
                     <option value="International">International / خارج المملكة</option>
                 </select>
 
@@ -298,8 +286,9 @@
             });
 
             const citySelect = document.getElementById('city-select');
-            const firstOption = citySelect.options[0];
-            firstOption.innerText = firstOption.getAttribute(`data-${currentLang}`);
+            if(citySelect.options[0]) {
+                citySelect.options[0].innerText = citySelect.options[0].getAttribute(`data-${currentLang}`);
+            }
             
             charIndex = 0; isDeleting = false;
         }
