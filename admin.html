@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Riyaduino | Content Manager</title>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+</head>
+<body>
+  <script>
+    // This allows the CMS to talk to GitHub
+    CMS.init({
+      config: {
+        backend: {
+          name: "github",
+          repo: "YOUR_GITHUB_USERNAME/YOUR_REPO_NAME", // Change this to your repo!
+          branch: "main",
+        },
+        media_folder: "images/uploads",
+        public_folder: "/images/uploads",
+        collections: [
+          {
+            name: "products",
+            label: "Products",
+            folder: "data/products", // Products will be saved here as JSON
+            create: true,
+            slug: "{{title}}",
+            fields: [
+              { label: "Product Name (EN)", name: "title", widget: "string" },
+              { label: "Product Name (AR)", name: "title_ar", widget: "string" },
+              { label: "Price (SAR)", name: "price", widget: "number" },
+              { label: "Image", name: "image", widget: "image" },
+              { label: "Description (EN)", name: "body", widget: "markdown" },
+              { label: "Description (AR)", name: "body_ar", widget: "markdown" },
+              { label: "Tags", name: "tags", widget: "list" }
+            ],
+          },
+        ],
+      },
+    });
+  </script>
+</body>
+</html>
