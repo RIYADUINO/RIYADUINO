@@ -11,7 +11,7 @@
         /* --- CUSTOM FONT SETUP --- */
         @font-face {
             font-family: 'Badeen Display';
-            src: url('fonts/BadeenDisplay-Regular.woff2') format('woff2'); /* Path to your local file */
+            src: url('fonts/BadeenDisplay-Regular.woff2') format('woff2'); 
             font-weight: 400;
             font-style: normal;
             font-display: swap;
@@ -27,7 +27,7 @@
             --border-tech: 1px solid rgba(255, 255, 255, 0.1);
             --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-arabic-body: 'IBM Plex Sans Arabic', sans-serif;
-            --font-arabic-cool: 'Badeen Display', sans-serif; /* Your new font */
+            --font-arabic-cool: 'Badeen Display', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
@@ -47,7 +47,6 @@
             font-family: var(--font-arabic-body);
         }
         
-        /* Applied Badeen Display Regular 400 to Arabic headers */
         body.rtl h1, body.rtl h2, body.rtl h3, body.rtl .logo {
             font-family: var(--font-arabic-cool);
             font-weight: 400; 
@@ -106,7 +105,7 @@
 
         .nav-links { display: flex; align-items: center; }
         .nav-links a { color: #fff; text-decoration: none; font-size: 0.75rem; font-weight: 700; margin-left: clamp(10px, 3vw, 25px); letter-spacing: 1px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--gold-primary); }
+        .nav-links a:hover, .nav-links a.active { color: var(--gold-primary); }
 
         .lang-btn {
             background: none; border: 1px solid #444; color: #fff; padding: 5px 12px; 
@@ -123,7 +122,7 @@
         .typewriter { color: var(--gold-primary); border-right: 3px solid var(--gold-primary); padding-right: 12px; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { border-color: transparent; } }
 
-        /* --- ABOUT (New Headline Location) --- */
+        /* --- ABOUT --- */
         .about-section { background: rgba(14, 14, 14, 0.3); border-top: var(--border-tech); border-bottom: var(--border-tech); padding: 80px 20px; }
         .about-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
         .about-content h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: var(--gold-primary); margin-bottom: 25px; }
@@ -168,10 +167,11 @@
 
     <nav>
         <div class="logo-wrap">
-            <a href="#" class="logo">RIYAD<span>UINO</span></a>
+            <a href="index.html" class="logo">RIYAD<span>UINO</span></a>
             <div class="beta-tag">BETA</div>
         </div>
         <div class="nav-links">
+            <a href="store.html" data-en="STORE" data-ar="المتجر" style="color: var(--gold-primary); font-weight: 900;">STORE</a>
             <a href="#about" data-en="ABOUT" data-ar="عنّا">ABOUT</a>
             <a href="#gallery" data-en="GALLERY" data-ar="المعرض">GALLERY</a>
             <a href="#projects" data-en="KITS" data-ar="الحقائب">KITS</a>
@@ -189,7 +189,6 @@
         <div class="about-grid">
             <div class="about-content">
                 <h2 data-en="CRAFTING SAUDI INNOVATION" data-ar="نصنع الابتكار السعودي">CRAFTING SAUDI INNOVATION</h2>
-                
                 <p data-en="RIYADUINO was born from a simple mission: to make world-class robotics and electronics education accessible to every curious mind in Saudi Arabia." data-ar="ولدت ريادوينو من مهمة بسيطة: جعل تعليم الروبوتات والإلكترونيات العالمي في متناول كل عقل طموح في المملكة العربية السعودية.">RIYADUINO was born from a simple mission: to make world-class robotics and electronics education accessible to every curious mind in Saudi Arabia.</p>
                 <p data-en="We believe that the engineers of tomorrow aren't just found in universities—they are built in classrooms and homes today." data-ar="نؤمن بأن مهندسي الغد لا يوجدون فقط في الجامعات - بل يتم بناؤهم في الفصول الدراسية والمنازل اليوم.">We believe that the engineers of tomorrow aren't just found in universities—they are built in classrooms and homes today.</p>
                 <div class="stat-box">
@@ -238,7 +237,6 @@
     <section class="contact-area" id="contact" style="margin-bottom: 100px;">
         <div class="form-box">
             <h2 style="margin-bottom: 15px; text-align: center;" data-en="JOIN THE WAITLIST" data-ar="انضم للقائمة">JOIN THE WAITLIST</h2>
-            
             <form action="https://formspree.io/f/xzzkyzzp" method="POST">
                 <input type="text" name="name" id="form-name" placeholder="Name / الاسم" data-en="Name" data-ar="الاسم الكامل" required>
                 <input type="email" name="email" id="form-email" placeholder="Gmail or Email / البريد الإلكتروني" data-en="Gmail or Email" data-ar="البريد الإلكتروني" required>
