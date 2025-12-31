@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIYADUINO | Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Plus+Jakarta+Sans:wght@300;400;600&family=IBM+Plex+Sans+Arabic:wght@300;400;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+    <style>
+        /* --- THEME STYLES (MATCHING YOUR HOME) --- */
+        :root {
+            --bg-deep: #050505;
+            --bg-panel: #0E0E0E;
+            --gold-primary: #FFD700;
+            --text-white: #ffffff;
+            --text-grey: #999999;
+            --border-tech: 1px solid rgba(255, 255, 255, 0.1);
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-arabic-body: 'IBM Plex Sans Arabic', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background-color: var(--bg-deep); color: var(--text-white); font-family: var(--font-main); }
+        
+        /* Navigation */
+        nav {
+            position: sticky; top: 15px; margin: 15px auto; max-width: 1200px; width: 92%;
+            background: rgba(14, 14, 14, 0.85); backdrop-filter: blur(15px);
+            border: var(--border-tech); border-radius: 15px; padding: 12px 25px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+        }
+        .logo { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 1.4rem; color: #fff; text-decoration: none; }
+        .logo span { color: var(--gold-primary); }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { color: #fff; text-decoration: none; font-size: 0.75rem; font-weight: 700; margin-left: 20px; transition: 0.3s; }
+        .nav-links a:hover { color: var(--gold-primary); }
+        .lang-btn { background: none; border: 1px solid #444; color: #fff; padding: 5px 12px; cursor: pointer; margin-left: 15px; border-radius: 5px; }
+
+        /* Store Layout */
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        
+        .store-header { text-align: center; margin-bottom: 50px; }
+        .store-header h1 { font-family: 'Orbitron', sans-serif; color: var(--gold-primary); font-size: 2.5rem; margin-bottom: 10px; }
+        
+        /* Loading Spinner */
+        #loader { text-align: center; color: var(--gold-primary); font-family: 'Orbitron', sans-serif; margin-top: 50px; }
+
+        /* Grid */
+        .products-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: var(--bg-panel); border: var(--border-tech); border-radius: 15px; overflow: hidden;
+            transition: 0.3s; display: flex; flex-direction: column;
+        }
+        .product-card:hover { transform: translateY(-5px); border-color: var(--gold-primary); }
+
+        .img-box { height: 220px; width: 100%; background: #000; position: relative; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* Badges */
+        .status-badge {
+            position: absolute; top: 10px; right: 10px; padding: 4px 10px; font-size: 0.7rem; font-weight: bold; border-radius: 4px; z-index: 2;
+        }
+        .in-stock-badge { background: #00ff41; color: #000; box-shadow: 0 0 10px rgba(0,255,65,0.4); }
+        .out-stock-badge { background: #ff003c; color: #fff; box-shadow: 0 0 10px rgba(255,0,60,0.4); }
+
+        .p-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .p-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin-bottom: 8px; color: #fff; }
+        .p-desc { color: var(--text-grey); font-size: 0.85rem; margin-bottom: 15px; flex-grow: 1; line-height: 1.5; }
+        .p-price { font-size: 1.25rem; color: var(--gold-primary); font-weight: 700; margin-bottom: 15px; }
+        
+        .buy-btn {
+            width: 100%; padding: 12px; border: none; font-weight: 700; cursor: pointer; border-radius: 6px; 
+            font-family: 'Orbitron', sans-serif; letter-spacing: 1px; transition: 0.3s;
+        }
+        .buy-btn.active { background: #fff; color: #000; }
+        .buy-btn.active:hover { background: var(--gold-primary); }
+        .buy-btn.disabled { background: #222; color: #555; cursor: not-allowed; border: 1px solid #333; }
+
+        /* Mobile Responsive */
+        @media(max-width: 768px) { .nav-links a:not(.lang-btn) { display: none; } }
+        
+        body.rtl { direction: rtl; text-align: right; }
+        body.rtl .nav-links a { margin-left: 0; margin-right: 20px; }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo-wrap">
+            <a href="index.html" class="logo">RIYAD<span>UINO</span></a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html" data-en="HOME" data-ar="الرئيسية">HOME</a>
+            <a href="#" class="active" style="color:var(--gold-primary);">STORE</a>
+            <button class="lang-btn" onclick="toggleLang()">EN/AR</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="store-header">
+            <h1 data-en="OFFICIAL STORE" data-ar="المتجر الرسمي">OFFICIAL STORE</h1>
+            <p style="color: var(--text-grey);" data-en="Order parts directly. Updated daily." data-ar="اطلب القطع مباشرة. يتم التحديث يومياً.">Order parts directly. Updated daily.</p>
+        </div>
+
+        <div id="loader">LOADING PRODUCTS... / جاري تحميل المنتجات...</div>
+        <div class="products-grid" id="productsGrid"></div>
+    </div>
+
+    <script>
+        // ==========================================================
+        // CONFIGURATION: PASTE YOUR GOOGLE SHEET CSV LINK HERE
+        // ==========================================================
+        const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBQd3LUgZKxeuRQA2B0Cj3IvJBSSS0VL2vnmtOryQxFsAK-Kikg_NZTVGtlYghB96yFYyvqXrPGJEu/pub?output=csv";
+        // ==========================================================
+
+        const grid = document.getElementById('productsGrid');
+        const loader = document.getElementById('loader');
+        let currentLang = 'en';
+
+        // 1. Fetch Data from Google Sheets
+        function loadProducts() {
+            Papa.parse(sheetURL, {
+                download: true,
+                header: true,
+                complete: function(results) {
+                    const products = results.data;
+                    renderProducts(products);
+                    loader.style.display = 'none';
+                },
+                error: function(err) {
+                    loader.innerHTML = "Error loading store database. Please try again later.";
+                    console.error("Error:", err);
+                }
+            });
+        }
+
+        // 2. Render Cards
+        function renderProducts(products) {
+            grid.innerHTML = "";
+            
+            products.forEach(product => {
+                // Skip empty rows if any
+                if(!product.name) return;
+
+                // Check stock (Reads "TRUE" or "FALSE" text from sheet)
+                const isStock = product.instock && product.instock.toUpperCase().trim() === 'TRUE';
+                
+                const badgeClass = isStock ? 'in-stock-badge' : 'out-stock-badge';
+                const badgeText = isStock ? 'IN STOCK' : 'SOLD OUT';
+                const btnClass = isStock ? 'active' : 'disabled';
+                const btnText = isStock ? 'ADD TO CART' : 'OUT OF STOCK';
+                
+                // Fallback image if empty
+                const imgUrl = product.image ? product.image : 'https://placehold.co/400x300/000000/FFF?text=No+Image';
+
+                const html = `
+                    <div class="product-card">
+                        <div class="img-box">
+                            <img src="${imgUrl}" alt="${product.name}">
+                            <div class="status-badge ${badgeClass}">${badgeText}</div>
+                        </div>
+                        <div class="p-info">
+                            <div class="p-title">${product.name}</div>
+                            <div class="p-desc">${product.description}</div>
+                            <div class="p-price">${product.price}</div>
+                            <button class="buy-btn ${btnClass}">${btnText}</button>
+                        </div>
+                    </div>
+                `;
+                grid.innerHTML += html;
+            });
+        }
+
+        // 3. Language Toggle (Matches Home)
+        function toggleLang() {
+            currentLang = currentLang === 'en' ? 'ar' : 'en';
+            document.body.classList.toggle('rtl', currentLang === 'ar');
+            
+            document.querySelectorAll('[data-en]').forEach(el => {
+                el.innerText = el.getAttribute(`data-${currentLang}`);
+            });
+        }
+
+        // Run on load
+        loadProducts();
+    </script>
+</body>
+</html>
