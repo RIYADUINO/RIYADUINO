@@ -11,7 +11,7 @@
         /* --- CUSTOM FONT SETUP --- */
         @font-face {
             font-family: 'Badeen Display';
-            src: url('fonts/BadeenDisplay-Regular.woff2') format('woff2'); /* Path to your local file */
+            src: url('fonts/BadeenDisplay-Regular.woff2') format('woff2'); 
             font-weight: 400;
             font-style: normal;
             font-display: swap;
@@ -27,7 +27,7 @@
             --border-tech: 1px solid rgba(255, 255, 255, 0.1);
             --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-arabic-body: 'IBM Plex Sans Arabic', sans-serif;
-            --font-arabic-cool: 'Badeen Display', sans-serif; /* Your new font */
+            --font-arabic-cool: 'Badeen Display', sans-serif;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
@@ -40,39 +40,18 @@
             line-height: 1.6;
         }
 
-        /* --- ARABIC STYLING --- */
         body.rtl { 
             direction: rtl; 
             text-align: right; 
             font-family: var(--font-arabic-body);
         }
         
-        /* Applied Badeen Display Regular 400 to Arabic headers */
         body.rtl h1, body.rtl h2, body.rtl h3, body.rtl .logo {
             font-family: var(--font-arabic-cool);
             font-weight: 400; 
-            letter-spacing: 0 !important;
             text-shadow: 0 0 10px var(--gold-glow);
         }
 
-        body.rtl .btn {
-            font-family: var(--font-arabic-body);
-            font-weight: 700;
-        }
-
-        /* --- BANNER --- */
-        .coming-soon {
-            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
-            padding: 12px 10px;
-            text-align: center;
-            font-family: 'Orbitron', sans-serif;
-            font-size: clamp(0.6rem, 2vw, 0.85rem);
-            letter-spacing: 2px;
-            animation: pulse 2s infinite;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.3);
-        }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
-        
         /* --- NAVIGATION --- */
         nav {
             position: sticky;
@@ -93,88 +72,44 @@
         .logo-wrap { display: flex; align-items: center; gap: 12px; }
         .logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: clamp(1rem, 4vw, 1.4rem); color: #fff; text-decoration: none; text-transform: uppercase; }
         .logo span { color: var(--gold-primary); }
-        
-        .beta-tag {
-            background: var(--gold-primary);
-            color: #000;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.6rem;
-            font-weight: 900;
-            padding: 2px 8px;
-            border-radius: 4px;
-        }
-
-        .nav-links { display: flex; align-items: center; }
-        .nav-links a { color: #fff; text-decoration: none; font-size: 0.75rem; font-weight: 700; margin-left: clamp(10px, 3vw, 25px); letter-spacing: 1px; transition: 0.3s; }
+        .nav-links a { color: #fff; text-decoration: none; font-size: 0.75rem; font-weight: 700; margin-left: clamp(10px, 3vw, 25px); transition: 0.3s; }
         .nav-links a:hover { color: var(--gold-primary); }
-
-        .lang-btn {
-            background: none; border: 1px solid #444; color: #fff; padding: 5px 12px; 
-            cursor: pointer; margin-left: 15px; border-radius: 5px; font-family: 'Fira Code', monospace; font-size: 0.75rem;
-        }
+        .lang-btn { background: none; border: 1px solid #444; color: #fff; padding: 5px 12px; cursor: pointer; border-radius: 5px; font-family: 'Fira Code', monospace; }
 
         /* --- HERO --- */
-        .hero {
-            min-height: 60vh; 
-            display: flex; flex-direction: column; justify-content: center; align-items: center; 
-            text-align: center; padding: 60px 20px; 
-        }
-        .hero h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(2.2rem, 8vw, 4.5rem); margin-bottom: 10px; line-height: 1.1; }
+        .hero { min-height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 60px 20px; }
+        .hero h1 { font-family: 'Orbitron', sans-serif; font-size: clamp(2.2rem, 8vw, 4.5rem); margin-bottom: 10px; }
         .typewriter { color: var(--gold-primary); border-right: 3px solid var(--gold-primary); padding-right: 12px; animation: blink 0.7s infinite; }
         @keyframes blink { 50% { border-color: transparent; } }
 
-        /* --- ABOUT (New Headline Location) --- */
-        .about-section { background: rgba(14, 14, 14, 0.3); border-top: var(--border-tech); border-bottom: var(--border-tech); padding: 80px 20px; }
-        .about-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .about-content h2 { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: var(--gold-primary); margin-bottom: 25px; }
-        .about-content p { color: var(--text-grey); font-size: 1.1rem; margin-bottom: 20px; }
-        .stat-box { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 40px; }
-        .stat-item h4 { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 1.5rem; }
-        .stat-item p { font-size: 0.85rem; color: var(--gold-primary); }
-
-        /* --- GALLERY --- */
-        .gallery-wrap { padding: 80px 5%; max-width: 1300px; margin: 0 auto; }
-        .gallery-header { text-align: center; margin-bottom: 50px; }
-        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
-        .gallery-item { border-radius: 15px; height: 350px; overflow: hidden; border: var(--border-tech); position: relative; transition: 0.4s; }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); transition: 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
-        .gallery-item:hover img { filter: grayscale(0%); transform: scale(1.08); }
-
-        /* --- PROJECTS --- */
+        /* --- STORE/KITS SECTION --- */
         .section-container { max-width: 1200px; margin: 0 auto; padding: 80px 20px; }
         .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
         .card { background: var(--bg-panel); padding: 30px; border-radius: 15px; border: var(--border-tech); transition: 0.3s; }
         .card:hover { border-color: var(--gold-primary); transform: translateY(-5px); }
-        .card h3 { font-family: 'Orbitron', sans-serif; color: var(--gold-primary); margin-bottom: 15px; }
-        .tag-box { display: flex; gap: 8px; margin-top: 15px; flex-wrap: wrap; }
+        .card img { width: 100%; border-radius: 10px; margin-bottom: 15px; height: 200px; object-fit: cover; border: var(--border-tech); }
+        .card h3 { font-family: 'Orbitron', sans-serif; color: var(--gold-primary); margin-bottom: 10px; }
+        .price { font-weight: bold; color: #fff; font-size: 1.2rem; margin-bottom: 15px; }
+        .tag-box { display: flex; gap: 8px; flex-wrap: wrap; }
         .tag { background: #1a1a1a; padding: 4px 10px; font-size: 0.7rem; border-radius: 4px; border: 1px solid #333; }
 
         /* --- FORM --- */
-        .form-box { max-width: 550px; margin: 0 auto; background: var(--bg-panel); padding: 40px; border-radius: 15px; border: var(--border-tech); }
-        input, select { width: 100%; padding: 14px; background: rgba(0, 0, 0, 0.6); border: 1px solid #333; color: #fff; margin-bottom: 15px; border-radius: 8px; font-family: inherit; }
+        .form-box { max-width: 550px; margin: 80px auto; background: var(--bg-panel); padding: 40px; border-radius: 15px; border: var(--border-tech); }
+        input, select { width: 100%; padding: 14px; background: rgba(0, 0, 0, 0.6); border: 1px solid #333; color: #fff; margin-bottom: 15px; border-radius: 8px; }
         .btn { width: 100%; padding: 16px; background: var(--gold-primary); color: #000; border: none; font-family: 'Orbitron', sans-serif; font-weight: 900; cursor: pointer; border-radius: 8px; }
 
-        @media (max-width: 900px) {
-            .about-grid { grid-template-columns: 1fr; }
-            .nav-links a:not(.lang-btn) { display: none; }
-        }
+        @media (max-width: 900px) { .nav-links a:not(.lang-btn) { display: none; } }
     </style>
 </head>
 <body>
 
-    <div class="coming-soon">
-        <span data-en="⚡ LAUNCHING SOON | PRE-ORDERS OPENING EARLY 2026 ⚡" data-ar="⚡ قريباً | الطلبات المسبقة تفتح أوائل 2026 ⚡">⚡ LAUNCHING SOON | PRE-ORDERS OPENING EARLY 2026 ⚡</span>
-    </div>
-
     <nav>
         <div class="logo-wrap">
             <a href="#" class="logo">RIYAD<span>UINO</span></a>
-            <div class="beta-tag">BETA</div>
         </div>
         <div class="nav-links">
-            <a href="#about" data-en="ABOUT" data-ar="عنّا">ABOUT</a>
-            <a href="#gallery" data-en="GALLERY" data-ar="المعرض">GALLERY</a>
-            <a href="#projects" data-en="KITS" data-ar="الحقائب">KITS</a>
+            <a href="#store" data-en="STORE" data-ar="المتجر">STORE</a>
+            <a href="#contact" data-en="JOIN" data-ar="انضم">JOIN</a>
             <button class="lang-btn" onclick="toggleLang()">EN/AR</button>
         </div>
     </nav>
@@ -182,116 +117,93 @@
     <section class="hero">
         <h1 data-en="THE FUTURE IS" data-ar="المستقبل هو">THE FUTURE IS</h1>
         <h1><span class="typewriter" id="typewriter-text"></span></h1>
-        <p style="margin-top: 15px; max-width: 500px; color: var(--text-grey);" data-en="Premium Arduino educational kits delivered across the Kingdom." data-ar="حقائب أردوينو تعليمية فاخرة تصلك إلى جميع أنحاء المملكة.">Premium Arduino educational kits delivered across the Kingdom.</p>
     </section>
 
-    <section class="about-section" id="about">
-        <div class="about-grid">
-            <div class="about-content">
-                <h2 data-en="CRAFTING SAUDI INNOVATION" data-ar="نصنع الابتكار السعودي">CRAFTING SAUDI INNOVATION</h2>
-                
-                <p data-en="RIYADUINO was born from a simple mission: to make world-class robotics and electronics education accessible to every curious mind in Saudi Arabia." data-ar="ولدت ريادوينو من مهمة بسيطة: جعل تعليم الروبوتات والإلكترونيات العالمي في متناول كل عقل طموح في المملكة العربية السعودية.">RIYADUINO was born from a simple mission: to make world-class robotics and electronics education accessible to every curious mind in Saudi Arabia.</p>
-                <p data-en="We believe that the engineers of tomorrow aren't just found in universities—they are built in classrooms and homes today." data-ar="نؤمن بأن مهندسي الغد لا يوجدون فقط في الجامعات - بل يتم بناؤهم في الفصول الدراسية والمنازل اليوم.">We believe that the engineers of tomorrow aren't just found in universities—they are built in classrooms and homes today.</p>
-                <div class="stat-box">
-                    <div class="stat-item"><p data-en="CURATED FOR" data-ar="مُخصصة لـ">CURATED FOR</p><h4 data-en="KSA" data-ar="المملكة">KSA</h4></div>
-                    <div class="stat-item"><p data-en="QUALITY" data-ar="الجودة">QUALITY</p><h4 data-en="PREMIUM" data-ar="فاخرة">PREMIUM</h4></div>
-                </div>
-            </div>
-            <div class="gallery-item" style="height: 450px;">
-                <img src="Gemini_Generated_Image_msifcymsifcymsif.jpg" alt="Innovation">
-            </div>
+    <section class="section-container" id="store">
+        <h2 style="margin-bottom: 40px; text-align: center;" data-en="AVAILABLE KITS" data-ar="الحقائب المتوفرة">AVAILABLE KITS</h2>
+        <div id="product-list" class="grid-3">
+            <p style="text-align: center; grid-column: 1/-1;">Loading modules...</p>
         </div>
     </section>
 
-    <section class="gallery-wrap" id="gallery">
-        <div class="gallery-header">
-            <h2 data-en="GALLERY" data-ar="المعرض" style="font-size: 2rem; color: var(--gold-primary);">GALLERY</h2>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item"><img src="unnamed (1).jpg" alt="Gallery Item 1"></div>
-            <div class="gallery-item"><img src="Gemini_Generated_Image_msifcymsifcymsif.jpg" alt="Gallery Item 2"></div>
-            <div class="gallery-item"><img src="unnamed.jpg" alt="Gallery Item 3"></div>
-        </div>
-    </section>
-
-    <section class="section-container" id="projects">
-        <h2 style="margin-bottom: 30px; text-align: center;" data-en="PROJECT EXAMPLES" data-ar="أمثلة المشاريع">PROJECT EXAMPLES</h2>
-        <div class="grid-3">
-            <div class="card">
-                <h3 data-en="Smart Door" data-ar="الباب الذكي">Smart Door</h3>
-                <p data-en="Build a security system that opens with an ID card." data-ar="اصنع نظام حماية يفتح ببطاقة الهوية.">Build a security system that opens with an ID card.</p>
-                <div class="tag-box"><span class="tag">RFID</span><span class="tag">Servo</span></div>
-            </div>
-            <div class="card">
-                <h3 data-en="Fast Racer" data-ar="المتسابق السريع">Fast Racer</h3>
-                <p data-en="A robot car that follows lines automatically." data-ar="سيارة روبوت تتبع الخطوط تلقائياً.">A robot car that follows lines automatically.</p>
-                <div class="tag-box"><span class="tag">Sensors</span><span class="tag">Motors</span></div>
-            </div>
-            <div class="card">
-                <h3 data-en="Auto Farm" data-ar="المزرعة الآلية">Auto Farm</h3>
-                <p data-en="Sensors detect plant thirst and pump water." data-ar="حساسات تكتشف عطش النبات وتضخ الماء.">Sensors detect plant thirst and pump water.</p>
-                <div class="tag-box"><span class="tag">Soil Sensor</span><span class="tag">Pump</span></div>
-            </div>
-        </div>
-    </section>
-
-    <section class="contact-area" id="contact" style="margin-bottom: 100px;">
+    <section class="contact-area" id="contact">
         <div class="form-box">
             <h2 style="margin-bottom: 15px; text-align: center;" data-en="JOIN THE WAITLIST" data-ar="انضم للقائمة">JOIN THE WAITLIST</h2>
-            
             <form action="https://formspree.io/f/xzzkyzzp" method="POST">
-                <input type="text" name="name" id="form-name" placeholder="Name / الاسم" data-en="Name" data-ar="الاسم الكامل" required>
-                <input type="email" name="email" id="form-email" placeholder="Gmail or Email / البريد الإلكتروني" data-en="Gmail or Email" data-ar="البريد الإلكتروني" required>
-                <input type="tel" name="phone" id="form-phone" placeholder="Phone / الجوال" data-en="Phone" data-ar="رقم الجوال" required>
-                <input type="number" name="age" id="form-age" placeholder="Age / العمر" min="1" max="100" data-en="Age" data-ar="العمر" required>
-                
-                <select id="city-select" name="city" required>
-                    <option value="" data-en="Select City" data-ar="اختر المدينة">Select City / اختر المدينة</option>
-                    <option value="Riyadh">Riyadh / الرياض</option>
-                    <option value="Jeddah">Jeddah / جدة</option>
-                    <option value="Dammam">Dammam / الدمام</option>
-                    <option value="International">International / خارج المملكة</option>
-                </select>
-
-                <input type="text" name="_gotcha" style="display:none">
-                <button type="submit" class="btn" data-en="SUBMIT INTEREST" data-ar="إرسال الاهتمام">SUBMIT INTEREST</button>
+                <input type="text" name="name" placeholder="Name" data-en="Name" data-ar="الاسم" required>
+                <input type="email" name="email" placeholder="Email" data-en="Email" data-ar="البريد" required>
+                <button type="submit" class="btn" data-en="SUBMIT" data-ar="إرسال">SUBMIT</button>
             </form>
         </div>
     </section>
 
     <script>
-        const words = { en: ["CODE.", "BUILT.", "YOURS."], ar: ["برمجة.", "بناء.", "إبداع."] };
-        let currentLang = 'en', wordIndex = 0, charIndex = 0, isDeleting = false;
-        const typeTarget = document.getElementById('typewriter-text');
+        // CONFIGURATION: Replace with your GitHub info
+        const GITHUB_USER = "YOUR_USERNAME";
+        const GITHUB_REPO = "YOUR_REPO";
+        const PRODUCT_PATH = "data/products";
 
+        let currentLang = 'en';
+        const words = { en: ["CODE.", "BUILT.", "YOURS."], ar: ["برمجة.", "بناء.", "إبداع."] };
+        let wordIndex = 0, charIndex = 0, isDeleting = false;
+
+        // --- TYPEWRITER ---
         function type() {
+            const target = document.getElementById('typewriter-text');
             const currentWord = words[currentLang][wordIndex];
-            typeTarget.textContent = isDeleting ? currentWord.substring(0, charIndex--) : currentWord.substring(0, charIndex++);
+            target.textContent = isDeleting ? currentWord.substring(0, charIndex--) : currentWord.substring(0, charIndex++);
             if (!isDeleting && charIndex > currentWord.length) { isDeleting = true; setTimeout(type, 1500); }
             else if (isDeleting && charIndex < 0) { isDeleting = false; charIndex = 0; wordIndex = (wordIndex + 1) % words[currentLang].length; setTimeout(type, 500); }
             else { setTimeout(type, isDeleting ? 100 : 200); }
         }
-        type();
+
+        // --- FETCH PRODUCTS FROM CMS (DATABASE) ---
+        async function loadProducts() {
+            const container = document.getElementById('product-list');
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_USER}/${GITHUB_REPO}/contents/${PRODUCT_PATH}`);
+                const files = await res.json();
+                
+                container.innerHTML = ''; // Clear loader
+
+                for (let file of files) {
+                    if (file.name.endsWith('.json')) {
+                        const dataRes = await fetch(file.download_url);
+                        const p = await dataRes.json();
+                        
+                        const card = `
+                            <div class="card">
+                                <img src="${p.image}" alt="${p.title}">
+                                <h3 data-en="${p.title}" data-ar="${p.title_ar}">${currentLang === 'en' ? p.title : p.title_ar}</h3>
+                                <p class="price">${p.price} SAR</p>
+                                <div class="tag-box">
+                                    ${p.tags.map(t => `<span class="tag">${t}</span>`).join('')}
+                                </div>
+                                <button class="btn" style="margin-top:20px; font-size:0.7rem;" 
+                                    onclick="window.open('https://wa.me/YOUR_PHONE?text=Interested in ${p.title}')">
+                                    ORDER VIA WHATSAPP
+                                </button>
+                            </div>
+                        `;
+                        container.innerHTML += card;
+                    }
+                }
+            } catch (err) {
+                container.innerHTML = '<p>Error loading store. Ensure data/products folder exists.</p>';
+            }
+        }
 
         function toggleLang() {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
             document.body.classList.toggle('rtl', currentLang === 'ar');
-            
             document.querySelectorAll('[data-en]').forEach(el => {
-                if (el.tagName === 'INPUT') {
-                    el.placeholder = el.getAttribute(`data-${currentLang}`);
-                } else {
-                    el.innerText = el.getAttribute(`data-${currentLang}`);
-                }
+                el.innerText = el.getAttribute(`data-${currentLang}`);
             });
-
-            const citySelect = document.getElementById('city-select');
-            if(citySelect.options[0]) {
-                citySelect.options[0].innerText = citySelect.options[0].getAttribute(`data-${currentLang}`);
-            }
-            
             charIndex = 0; isDeleting = false;
+            loadProducts(); // Refresh product names to correct language
         }
+
+        window.onload = () => { type(); loadProducts(); };
     </script>
 </body>
 </html>
