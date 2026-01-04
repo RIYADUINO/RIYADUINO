@@ -9,36 +9,65 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
 
     <style>
+        /* --- RESTORING ARABIC FONT FROM MAIN PAGE --- */
+        @font-face {
+            font-family: 'Badeen Display';
+            src: url('fonts/BadeenDisplay-Regular.woff2') format('woff2'); 
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
         /* --- THEME STYLES --- */
         :root {
             --bg-deep: #050505;
             --bg-panel: #0E0E0E;
             --gold-primary: #FFD700;
+            --gold-glow: rgba(255, 215, 0, 0.6);
             --text-white: #ffffff;
             --text-grey: #999999;
             --border-tech: 1px solid rgba(255, 255, 255, 0.1);
             --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-arabic-body: 'IBM Plex Sans Arabic', sans-serif;
+            --font-arabic-cool: 'Badeen Display', sans-serif; /* Added to match Home */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background-color: var(--bg-deep); color: var(--text-white); font-family: var(--font-main); position: relative; }
+        body { background-color: var(--bg-deep); color: var(--text-white); font-family: var(--font-main); position: relative; overflow-x: hidden; }
         
+        /* --- ANIMATIONS --- */
+        @keyframes glow-pulse {
+            0% { text-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
+            50% { text-shadow: 0 0 20px var(--gold-glow); }
+            100% { text-shadow: 0 0 5px rgba(255, 215, 0, 0.2); }
+        }
+        
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         /* Navigation */
         nav {
             position: sticky; top: 15px; margin: 15px auto; max-width: 1200px; width: 92%;
             background: rgba(14, 14, 14, 0.85); backdrop-filter: blur(15px);
             border: var(--border-tech); border-radius: 15px; padding: 12px 25px;
             display: flex; justify-content: space-between; align-items: center; z-index: 1000;
+            transition: 0.3s;
         }
+        nav:hover { border-color: var(--gold-primary); box-shadow: 0 0 15px rgba(255,215,0,0.1); }
+
         .logo { font-family: 'Orbitron', sans-serif; font-weight: 800; font-size: 1.4rem; color: #fff; text-decoration: none; }
-        .logo span { color: var(--gold-primary); }
+        .logo span { color: var(--gold-primary); animation: glow-pulse 3s infinite; }
+        
         .nav-links { display: flex; align-items: center; }
         .nav-links a { color: #fff; text-decoration: none; font-size: 0.75rem; font-weight: 700; margin-left: 20px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--gold-primary); }
-        .lang-btn { background: none; border: 1px solid #444; color: #fff; padding: 5px 12px; cursor: pointer; margin-left: 15px; border-radius: 5px; }
+        .nav-links a:hover { color: var(--gold-primary); text-shadow: 0 0 8px var(--gold-primary); transform: scale(1.05); }
+        .lang-btn { background: none; border: 1px solid #444; color: #fff; padding: 5px 12px; cursor: pointer; margin-left: 15px; border-radius: 5px; transition: 0.3s; }
+        .lang-btn:hover { border-color: var(--gold-primary); color: var(--gold-primary); }
 
-        .cart-icon { cursor: pointer; position: relative; margin-left: 20px; }
+        .cart-icon { cursor: pointer; position: relative; margin-left: 20px; transition: 0.3s; }
+        .cart-icon:hover { transform: scale(1.1); filter: drop-shadow(0 0 5px var(--gold-primary)); }
         .cart-count { 
             position: absolute; top: -8px; right: -10px; background: var(--gold-primary); color: #000; 
             font-size: 0.7rem; font-weight: bold; width: 18px; height: 18px; border-radius: 50%; 
@@ -48,11 +77,14 @@
         /* Store Layout */
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         
-        .store-header { text-align: center; margin-bottom: 50px; }
-        .store-header h1 { font-family: 'Orbitron', sans-serif; color: var(--gold-primary); font-size: 2.5rem; margin-bottom: 10px; }
+        .store-header { text-align: center; margin-bottom: 50px; animation: slideUpFade 1s ease-out; }
+        .store-header h1 { 
+            font-family: 'Orbitron', sans-serif; color: var(--gold-primary); font-size: 2.5rem; margin-bottom: 10px; 
+            animation: glow-pulse 3s infinite alternate;
+        }
         
         /* Loading Spinner */
-        #loader { text-align: center; color: var(--gold-primary); font-family: 'Orbitron', sans-serif; margin-top: 50px; }
+        #loader { text-align: center; color: var(--gold-primary); font-family: 'Orbitron', sans-serif; margin-top: 50px; animation: glow-pulse 1s infinite; }
 
         /* Grid */
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
@@ -60,12 +92,20 @@
         /* Product Card */
         .product-card {
             background: var(--bg-panel); border: var(--border-tech); border-radius: 15px; overflow: hidden;
-            transition: 0.3s; display: flex; flex-direction: column;
+            transition: all 0.3s ease; display: flex; flex-direction: column;
+            animation: slideUpFade 0.8s ease-out backwards;
         }
-        .product-card:hover { transform: translateY(-5px); border-color: var(--gold-primary); }
+        /* Stagger animation delay via JS or CSS logic (using simple delay here for simplicity) */
+        .product-card:nth-child(1) { animation-delay: 0.1s; }
+        .product-card:nth-child(2) { animation-delay: 0.2s; }
+        .product-card:nth-child(3) { animation-delay: 0.3s; }
+        .product-card:nth-child(4) { animation-delay: 0.4s; }
 
-        .img-box { height: 220px; width: 100%; background: #000; position: relative; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .product-card:hover { transform: translateY(-10px); border-color: var(--gold-primary); box-shadow: 0 10px 30px rgba(0,0,0,0.6); }
+
+        .img-box { height: 220px; width: 100%; background: #000; position: relative; overflow: hidden; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .product-card:hover .img-box img { transform: scale(1.1); }
         
         /* Badges */
         .status-badge {
@@ -77,14 +117,26 @@
         .p-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
         .p-title { font-family: 'Orbitron', sans-serif; font-size: 1.1rem; margin-bottom: 8px; color: #fff; }
         .p-desc { color: var(--text-grey); font-size: 0.85rem; margin-bottom: 15px; flex-grow: 1; line-height: 1.5; }
-        .p-price { font-size: 1.25rem; color: var(--gold-primary); font-weight: 700; margin-bottom: 15px; }
+        .p-price { font-size: 1.25rem; color: var(--gold-primary); font-weight: 700; margin-bottom: 15px; text-shadow: 0 0 5px rgba(255,215,0,0.3); }
         
+        /* Animated Button */
         .buy-btn {
             width: 100%; padding: 12px; border: none; font-weight: 700; cursor: pointer; border-radius: 6px; 
-            font-family: 'Orbitron', sans-serif; letter-spacing: 1px; transition: 0.3s;
+            font-family: 'Orbitron', sans-serif; letter-spacing: 1px; transition: all 0.3s ease;
+            position: relative; overflow: hidden;
         }
         .buy-btn.active { background: #fff; color: #000; }
-        .buy-btn.active:hover { background: var(--gold-primary); }
+        .buy-btn.active::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.5), transparent);
+            transition: 0.5s;
+        }
+        .buy-btn.active:hover { 
+            background: var(--gold-primary); transform: scale(1.03); 
+            box-shadow: 0 0 15px var(--gold-primary); 
+        }
+        .buy-btn.active:hover::before { left: 100%; }
+
         .buy-btn.disabled { background: #222; color: #555; cursor: not-allowed; border: 1px solid #333; }
 
         /* --- CART MODAL & CHECKOUT --- */
@@ -92,15 +144,20 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
             display: none; justify-content: center; align-items: center; z-index: 2000;
+            animation: fadeIn 0.3s;
         }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         .modal-content {
             background: #111; width: 95%; max-width: 500px; padding: 30px; border-radius: 15px;
             border: 1px solid var(--gold-primary); position: relative;
             max-height: 90vh; overflow-y: auto;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
         }
-        .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 1.5rem; cursor: pointer; }
+        .close-modal { position: absolute; top: 15px; right: 20px; color: #fff; font-size: 1.5rem; cursor: pointer; transition: 0.3s; }
+        .close-modal:hover { color: var(--gold-primary); transform: rotate(90deg); }
         
-        .modal-title { font-family: 'Orbitron'; color: var(--gold-primary); margin-bottom: 20px; font-size: 1.4rem; text-align: center; }
+        .modal-title { font-family: 'Orbitron'; color: var(--gold-primary); margin-bottom: 20px; font-size: 1.4rem; text-align: center; animation: glow-pulse 3s infinite; }
 
         /* Cart Items List */
         .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #333; padding: 10px 0; }
@@ -108,7 +165,7 @@
         .cart-item-info p { color: var(--gold-primary); font-size: 0.8rem; }
         
         .qty-controls { display: flex; align-items: center; gap: 10px; }
-        .qty-btn { background: #333; color: #fff; border: none; padding: 2px 8px; cursor: pointer; border-radius: 4px; }
+        .qty-btn { background: #333; color: #fff; border: none; padding: 2px 8px; cursor: pointer; border-radius: 4px; transition: 0.3s; }
         .qty-btn:hover { background: var(--gold-primary); color: #000; }
         
         /* Checkout Form */
@@ -119,21 +176,39 @@
             width: 100%; padding: 12px; background: #0a0a0a; border: 1px solid #444; 
             color: #fff; border-radius: 6px; font-family: var(--font-main); transition: 0.3s;
         }
-        .form-input:focus { outline: none; border-color: var(--gold-primary); }
+        .form-input:focus { outline: none; border-color: var(--gold-primary); box-shadow: 0 0 10px rgba(255, 215, 0, 0.2); }
         
         /* Error Styling */
         .form-input.error { border-color: #ff3333; box-shadow: 0 0 5px rgba(255, 51, 51, 0.5); }
         .error-msg { color: #ff3333; font-size: 0.75rem; margin-top: 4px; display: none; }
         
         .coupon-box { display: flex; gap: 10px; margin-bottom: 15px; }
-        .checkout-btn { width: 100%; padding: 14px; background: var(--gold-primary); color: #000; font-weight: 900; border: none; border-radius: 6px; cursor: pointer; font-family: 'Orbitron'; margin-top: 10px; }
+        .checkout-btn { 
+            width: 100%; padding: 14px; background: var(--gold-primary); color: #000; 
+            font-weight: 900; border: none; border-radius: 6px; cursor: pointer; 
+            font-family: 'Orbitron'; margin-top: 10px; transition: 0.3s; 
+        }
+        .checkout-btn:hover { background: #fff; box-shadow: 0 0 20px var(--gold-primary); transform: scale(1.02); }
         
         /* Mobile Responsive */
         @media(max-width: 768px) { .nav-links a:not(.lang-btn) { display: none; } }
         
+        /* --- ARABIC HANDLING (MATCHED TO HOME) --- */
         body.rtl { direction: rtl; text-align: right; }
         body.rtl .nav-links a { margin-left: 0; margin-right: 20px; }
         body.rtl .cart-icon { margin-left: 0; margin-right: 20px; }
+        
+        /* Apply Cool Arabic Font to Titles */
+        body.rtl h1, body.rtl h2, body.rtl h3, body.rtl .logo, body.rtl .modal-title, body.rtl .store-header h1 {
+            font-family: var(--font-arabic-cool);
+            font-weight: 400;
+            letter-spacing: 0;
+            line-height: 1.2;
+        }
+        body.rtl .checkout-btn, body.rtl .buy-btn {
+            font-family: var(--font-arabic-body);
+            font-weight: 700;
+        }
     </style>
 </head>
 <body>
@@ -243,7 +318,6 @@
                 const badgeText = isStock ? 'IN STOCK' : 'SOLD OUT';
                 const imgUrl = product.image ? product.image : 'https://placehold.co/400x300/000000/FFF?text=No+Image';
 
-                // We create the button differently based on stock
                 let btnHtml = "";
                 if(isStock) {
                     btnHtml = `<button class="buy-btn active" onclick="addToCart(${index})">${currentLang === 'en' ? 'ADD TO CART' : 'أضف للسلة'}</button>`;
@@ -251,8 +325,11 @@
                     btnHtml = `<button class="buy-btn disabled">${currentLang === 'en' ? 'OUT OF STOCK' : 'نفذت الكمية'}</button>`;
                 }
 
+                // Add animation delay based on index
+                const delay = index * 0.1;
+
                 const html = `
-                    <div class="product-card">
+                    <div class="product-card" style="animation-delay: ${delay}s">
                         <div class="img-box">
                             <img src="${imgUrl}" alt="${product.name}">
                             <div class="status-badge ${badgeClass}">${badgeText}</div>
@@ -285,7 +362,7 @@
                 });
             }
             updateCartUI();
-            toggleCart(); // Auto open cart to show confirmation
+            toggleCart(); // Auto open cart
         }
 
         function updateQty(id, change) {
@@ -303,11 +380,9 @@
             const cartList = document.getElementById('cartItemsList');
             const cartCount = document.getElementById('cartCount');
             
-            // Update Badge Count
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             cartCount.innerText = totalQty;
 
-            // Render List
             if(cart.length === 0) {
                 cartList.innerHTML = `<p style="text-align: center; color: #777; margin: 20px 0;">${currentLang === 'en' ? 'Cart is empty.' : 'السلة فارغة.'}</p>`;
                 return;
@@ -337,15 +412,11 @@
             modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        // 5. VALIDATION & SUBMIT
         function validateAndSubmit(e) {
-            // Prevent default just to check, then allow submit if valid
-            
             const form = document.getElementById('orderForm');
             const inputs = form.querySelectorAll('input[required]');
             let isValid = true;
 
-            // Reset errors
             inputs.forEach(input => {
                 input.classList.remove('error');
                 if(input.nextElementSibling && input.nextElementSibling.classList.contains('error-msg')) {
@@ -353,7 +424,6 @@
                 }
             });
 
-            // Check Empty fields
             inputs.forEach(input => {
                 if(!input.value.trim()) {
                     isValid = false;
@@ -364,7 +434,6 @@
                 }
             });
 
-            // Prepare Order Data String for Formspree
             if(cart.length === 0) {
                 alert(currentLang === 'en' ? "Your cart is empty!" : "السلة فارغة!");
                 e.preventDefault();
@@ -372,42 +441,32 @@
             }
 
             if(isValid) {
-                // Compile cart to string
                 let orderString = "--- ORDER SUMMARY ---\n";
                 cart.forEach(item => {
                     orderString += `- ${item.name} (x${item.qty}) @ ${item.price}\n`;
                 });
                 document.getElementById('hiddenOrderData').value = orderString;
-                return true; // Submit form
+                return true;
             } else {
                 e.preventDefault();
                 return false;
             }
         }
 
-        // 6. LANGUAGE TOGGLE
+        // 5. LANGUAGE TOGGLE
         function toggleLang() {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
             document.body.classList.toggle('rtl', currentLang === 'ar');
             
-            // Text Elements
             document.querySelectorAll('[data-en]').forEach(el => {
-                if(el.tagName === 'INPUT') return; // Skip inputs handled separately below
+                if(el.tagName === 'INPUT') return;
                 el.innerText = el.getAttribute(`data-${currentLang}`);
             });
 
-            // Input Placeholders
-            document.querySelectorAll('input').forEach(input => {
-                if(input.placeholder.includes('/')) return; // If dual lang placeholder, skip
-                // Ideally add data attributes to inputs if you want strict switching
-            });
-
-            // Validation Messages
             document.querySelectorAll('.error-msg').forEach(msg => {
                 msg.innerText = msg.getAttribute(`data-${currentLang}`);
             });
 
-            // Re-render products to update buttons
             renderProducts(allProducts);
             updateCartUI();
         }
