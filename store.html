@@ -142,7 +142,7 @@
         /* --- CART MODAL & CHECKOUT --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(5px);
             display: none; justify-content: center; align-items: center; z-index: 2000;
             animation: fadeIn 0.3s;
         }
@@ -190,53 +190,6 @@
         }
         .checkout-btn:hover { background: #fff; box-shadow: 0 0 20px var(--gold-primary); transform: scale(1.02); }
         
-        /* Success Screen Overlay */
-        #successOverlay {
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 40px 20px;
-            animation: slideUpFade 0.6s ease-out;
-        }
-        .success-icon {
-            font-size: 4rem;
-            color: var(--gold-primary);
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px var(--gold-glow));
-        }
-        .success-title {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 1.8rem;
-            color: #fff;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            line-height: 1.3;
-        }
-        .success-title span { color: var(--gold-primary); }
-        .success-text {
-            color: var(--text-grey);
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-        .success-glow-btn {
-            background: transparent;
-            border: 1px solid var(--gold-primary);
-            color: var(--gold-primary);
-            padding: 12px 30px;
-            font-family: 'Orbitron';
-            cursor: pointer;
-            transition: 0.4s;
-            border-radius: 4px;
-        }
-        .success-glow-btn:hover {
-            background: var(--gold-primary);
-            color: #000;
-            box-shadow: 0 0 20px var(--gold-glow);
-        }
-
         /* Mobile Responsive */
         @media(max-width: 768px) { .nav-links a:not(.lang-btn) { display: none; } }
         
@@ -246,13 +199,13 @@
         body.rtl .cart-icon { margin-left: 0; margin-right: 20px; }
         
         /* Apply Cool Arabic Font to Titles */
-        body.rtl h1, body.rtl h2, body.rtl h3, body.rtl .logo, body.rtl .modal-title, body.rtl .store-header h1, body.rtl .success-title {
+        body.rtl h1, body.rtl h2, body.rtl h3, body.rtl .logo, body.rtl .modal-title, body.rtl .store-header h1 {
             font-family: var(--font-arabic-cool);
             font-weight: 400;
             letter-spacing: 0;
             line-height: 1.2;
         }
-        body.rtl .checkout-btn, body.rtl .buy-btn, body.rtl .success-glow-btn {
+        body.rtl .checkout-btn, body.rtl .buy-btn {
             font-family: var(--font-arabic-body);
             font-weight: 700;
         }
@@ -290,62 +243,49 @@
     <div class="modal-overlay" id="cartModal">
         <div class="modal-content">
             <span class="close-modal" onclick="toggleCart()">&times;</span>
+            <h2 class="modal-title" data-en="YOUR CART" data-ar="سلة المشتريات">YOUR CART</h2>
             
-            <div id="cartMainUI">
-                <h2 class="modal-title" data-en="YOUR CART" data-ar="سلة المشتريات">YOUR CART</h2>
+            <div id="cartItemsList">
+                <p style="text-align: center; color: #777;">Cart is empty.</p>
+            </div>
+
+            <form action="https://formspree.io/f/xzzkyzzp" method="POST" class="checkout-form" id="orderForm" novalidate onsubmit="return validateAndSubmit(event)">
                 
-                <div id="cartItemsList">
-                    <p style="text-align: center; color: #777;">Cart is empty.</p>
+                <h3 style="color: #fff; margin-bottom: 15px; font-family: 'Orbitron';" data-en="CHECKOUT DETAILS" data-ar="بيانات الطلب">CHECKOUT DETAILS</h3>
+
+                <input type="hidden" name="Order Details" id="hiddenOrderData">
+
+                <div class="form-group">
+                    <input type="text" name="name" class="form-input" placeholder="Full Name / الاسم الكامل" required>
+                    <div class="error-msg" data-en="Please enter your name" data-ar="الرجاء إدخال الاسم">Please enter your name</div>
                 </div>
 
-                <form action="https://formspree.io/f/xzzkyzzp" method="POST" class="checkout-form" id="orderForm" novalidate onsubmit="return validateAndSubmit(event)">
-                    
-                    <h3 style="color: #fff; margin-bottom: 15px; font-family: 'Orbitron';" data-en="CHECKOUT DETAILS" data-ar="بيانات الطلب">CHECKOUT DETAILS</h3>
+                <div class="form-group">
+                    <input type="email" name="email" class="form-input" placeholder="Email Address / البريد الإلكتروني" required>
+                    <div class="error-msg" data-en="Please enter a valid email" data-ar="الرجاء إدخال بريد صحيح">Please enter a valid email</div>
+                </div>
 
-                    <input type="hidden" name="Order Details" id="hiddenOrderData">
+                <div class="form-group">
+                    <input type="tel" name="phone" class="form-input" placeholder="Phone Number / رقم الجوال" required>
+                    <div class="error-msg" data-en="Phone number is required" data-ar="رقم الجوال مطلوب">Phone number is required</div>
+                </div>
 
-                    <div class="form-group">
-                        <input type="text" name="name" class="form-input" placeholder="Full Name / الاسم الكامل" required>
-                        <div class="error-msg" data-en="Please enter your name" data-ar="الرجاء إدخال الاسم">Please enter your name</div>
-                    </div>
+                <div class="form-group coupon-box">
+                    <input type="text" name="coupon" class="form-input" placeholder="Coupon Code / كود الخصم" style="margin-bottom: 0;">
+                </div>
 
-                    <div class="form-group">
-                        <input type="email" name="email" class="form-input" placeholder="Email Address / البريد الإلكتروني" required>
-                        <div class="error-msg" data-en="Please enter a valid email" data-ar="الرجاء إدخال بريد صحيح">Please enter a valid email</div>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="tel" name="phone" class="form-input" placeholder="Phone Number / رقم الجوال" required>
-                        <div class="error-msg" data-en="Phone number is required" data-ar="رقم الجوال مطلوب">Phone number is required</div>
-                    </div>
-
-                    <div class="form-group coupon-box">
-                        <input type="text" name="coupon" class="form-input" placeholder="Coupon Code / كود الخصم" style="margin-bottom: 0;">
-                    </div>
-
-                    <button type="submit" class="checkout-btn" data-en="PLACE ORDER" data-ar="إتمام الطلب">PLACE ORDER</button>
-                </form>
-            </div>
-
-            <div id="successOverlay">
-                <div class="success-icon">✓</div>
-                <h2 class="success-title">
-                    THANKS FOR SUBMITTING <br> <span>YOUR ORDER</span>
-                </h2>
-                <p class="success-text">
-                    We will check on it soon,<br>
-                    contact you to verify your purchase<br>
-                    and <strong>START WORKING!</strong>
-                </p>
-                <button class="success-glow-btn" onclick="location.reload()" data-en="CONTINUE" data-ar="استمرار">CONTINUE</button>
-            </div>
-
+                <button type="submit" class="checkout-btn" data-en="PLACE ORDER" data-ar="إتمام الطلب">PLACE ORDER</button>
+            </form>
         </div>
     </div>
 
     <script>
+        // ==========================================================
+        // CONFIGURATION: GOOGLE SHEET CSV LINK
+        // ==========================================================
         const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBQd3LUgZKxeuRQA2B0Cj3IvJBSSS0VL2vnmtOryQxFsAK-Kikg_NZTVGtlYghB96yFYyvqXrPGJEu/pub?output=csv";
         
+        // GLOBAL VARIABLES
         let allProducts = [];
         let cart = [];
         let currentLang = 'en';
@@ -353,6 +293,7 @@
         const grid = document.getElementById('productsGrid');
         const loader = document.getElementById('loader');
 
+        // 1. Fetch Data
         function loadProducts() {
             Papa.parse(sheetURL, {
                 download: true, header: true,
@@ -367,6 +308,7 @@
             });
         }
 
+        // 2. Render Cards
         function renderProducts(products) {
             grid.innerHTML = "";
             products.forEach((product, index) => {
@@ -383,6 +325,7 @@
                     btnHtml = `<button class="buy-btn disabled">${currentLang === 'en' ? 'OUT OF STOCK' : 'نفذت الكمية'}</button>`;
                 }
 
+                // Add animation delay based on index
                 const delay = index * 0.1;
 
                 const html = `
@@ -403,23 +346,32 @@
             });
         }
 
+        // 3. CART LOGIC
         function addToCart(index) {
             const product = allProducts[index];
             const existingItem = cart.find(item => item.id === index);
+
             if(existingItem) {
                 existingItem.qty++;
             } else {
-                cart.push({ id: index, name: product.name, price: product.price, qty: 1 });
+                cart.push({
+                    id: index,
+                    name: product.name,
+                    price: product.price,
+                    qty: 1
+                });
             }
             updateCartUI();
-            toggleCart();
+            toggleCart(); // Auto open cart
         }
 
         function updateQty(id, change) {
             const item = cart.find(i => i.id === id);
             if(item) {
                 item.qty += change;
-                if(item.qty <= 0) { cart = cart.filter(i => i.id !== id); }
+                if(item.qty <= 0) {
+                    cart = cart.filter(i => i.id !== id);
+                }
                 updateCartUI();
             }
         }
@@ -427,6 +379,7 @@
         function updateCartUI() {
             const cartList = document.getElementById('cartItemsList');
             const cartCount = document.getElementById('cartCount');
+            
             const totalQty = cart.reduce((sum, item) => sum + item.qty, 0);
             cartCount.innerText = totalQty;
 
@@ -453,16 +406,13 @@
             cartList.innerHTML = html;
         }
 
+        // 4. MODAL & FORM HANDLING
         function toggleCart() {
             const modal = document.getElementById('cartModal');
-            // Reset to main UI when opening/closing
-            document.getElementById('cartMainUI').style.display = 'block';
-            document.getElementById('successOverlay').style.display = 'none';
             modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
         }
 
         function validateAndSubmit(e) {
-            e.preventDefault();
             const form = document.getElementById('orderForm');
             const inputs = form.querySelectorAll('input[required]');
             let isValid = true;
@@ -486,6 +436,7 @@
 
             if(cart.length === 0) {
                 alert(currentLang === 'en' ? "Your cart is empty!" : "السلة فارغة!");
+                e.preventDefault();
                 return false;
             }
 
@@ -495,38 +446,27 @@
                     orderString += `- ${item.name} (x${item.qty}) @ ${item.price}\n`;
                 });
                 document.getElementById('hiddenOrderData').value = orderString;
-                
-                // Submit via AJAX so we can show the cool success message
-                const data = new FormData(form);
-                fetch(form.action, {
-                    method: 'POST',
-                    body: data,
-                    headers: { 'Accept': 'application/json' }
-                }).then(response => {
-                    if (response.ok) {
-                        showSuccess();
-                    }
-                });
+                return true;
+            } else {
+                e.preventDefault();
+                return false;
             }
         }
 
-        function showSuccess() {
-            document.getElementById('cartMainUI').style.display = 'none';
-            document.getElementById('successOverlay').style.display = 'flex';
-            cart = [];
-            updateCartUI();
-        }
-
+        // 5. LANGUAGE TOGGLE
         function toggleLang() {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
             document.body.classList.toggle('rtl', currentLang === 'ar');
+            
             document.querySelectorAll('[data-en]').forEach(el => {
                 if(el.tagName === 'INPUT') return;
                 el.innerText = el.getAttribute(`data-${currentLang}`);
             });
+
             document.querySelectorAll('.error-msg').forEach(msg => {
                 msg.innerText = msg.getAttribute(`data-${currentLang}`);
             });
+
             renderProducts(allProducts);
             updateCartUI();
         }
