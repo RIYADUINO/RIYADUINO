@@ -31,20 +31,21 @@
         /* --- COUPON TICKER --- */
         .coupon-strap {
             background: var(--gold-primary); color: #000;
-            padding: 8px 0; font-family: var(--font-tech); font-weight: 900;
-            font-size: 0.8rem; overflow: hidden; white-space: nowrap;
-            position: relative; z-index: 1001;
+            padding: 10px 0; font-family: var(--font-tech); font-weight: 900;
+            font-size: 0.85rem; overflow: hidden; white-space: nowrap;
+            position: relative; z-index: 1001; box-shadow: 0 0 20px rgba(255,215,0,0.3);
         }
         .ticker-text {
-            display: inline-block; animation: ticker 20s linear infinite;
+            display: inline-block; animation: ticker 30s linear infinite;
             padding-left: 100%;
         }
         @keyframes ticker {
             0% { transform: translate3d(0, 0, 0); }
             100% { transform: translate3d(-100%, 0, 0); }
         }
+        .code-fix { direction: ltr; display: inline-block; unicode-bidi: isolate; background: rgba(0,0,0,0.1); padding: 0 5px; border-radius: 3px; }
 
-        /* --- PARTICLES --- */
+        /* --- GOLD DUST PARTICLES --- */
         #particle-canvas {
             position: fixed; top: 0; left: 0; pointer-events: none;
             z-index: 9999; width: 100%; height: 100%;
@@ -52,7 +53,7 @@
 
         /* RIYADUINO MESSAGES (TOASTS) */
         #notification-area {
-            position: fixed; top: 60px; left: 50%; transform: translateX(-50%);
+            position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
             z-index: 5000; display: flex; flex-direction: column; gap: 10px;
             pointer-events: none; width: 90%; max-width: 450px;
         }
@@ -141,16 +142,13 @@
         .panel-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
 
         /* Coupon UI in Cart */
-        .coupon-box {
-            display: flex; gap: 10px; margin-bottom: 15px;
-        }
+        .coupon-box { display: flex; gap: 10px; margin-bottom: 15px; }
         #couponInput {
             flex: 1; background: #000; border: 1px solid #333; color: var(--gold-primary);
-            padding: 8px; border-radius: 4px; outline: none; font-family: var(--font-tech);
+            padding: 10px; border-radius: 4px; outline: none; font-family: var(--font-tech);
         }
-        .apply-btn {
-            background: #222; color: #fff; border: none; padding: 0 15px; cursor: pointer; font-size: 0.7rem; border-radius: 4px;
-        }
+        .apply-btn { background: #222; color: #fff; border: none; padding: 0 15px; cursor: pointer; font-size: 0.75rem; border-radius: 4px; transition: 0.2s; font-family: var(--font-tech); }
+        .apply-btn:hover { background: #333; color: var(--gold-primary); }
 
         .cart-item { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #1a1a1a; padding-bottom: 15px; }
         .cart-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
@@ -162,8 +160,9 @@
 
         #userPhone {
             width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; 
-            border-radius: 6px; outline: none; transition: 0.3s;
+            border-radius: 6px; outline: none; transition: 0.3s; font-size: 1rem;
         }
+        #userPhone:focus { border-color: var(--gold-primary); }
 
         .btn-gold { 
             width: 100%; padding: 15px; background: var(--gold-primary); color: #000; border: none; 
@@ -183,8 +182,8 @@
 
     <div class="coupon-strap">
         <div class="ticker-text">
-            USE CODE: 3mk FOR 15% OFF YOUR ORDER — استخدم الكود 3mk للحصول على خصم 15% على طلبك — 
-            USE CODE: 3mk FOR 15% OFF YOUR ORDER — استخدم الكود 3mk للحصول على خصم 15% على طلبك —
+            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 15% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% على طلبك — 
+            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 15% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% على طلبك —
         </div>
     </div>
 
@@ -228,7 +227,6 @@
                 <h2 id="modalTitle" style="font-family:var(--font-tech); margin-bottom:10px;"></h2>
                 <div id="modalPrice" style="color:var(--gold-primary); font-size:1.5rem; font-weight:700; margin-bottom:15px; font-family:var(--font-tech);"></div>
                 <p id="modalDesc" style="color:#888; font-size:0.9rem; line-height:1.6; margin-bottom:20px;"></p>
-                
                 <div class="quality-selector">
                     <label style="font-size:0.7rem; color:#555; font-weight:bold;" data-en="SELECT QUALITY" data-ar="اختر الجودة">SELECT QUALITY</label>
                     <div class="quality-options">
@@ -249,22 +247,18 @@
             </div>
             <div id="cartItemsList" class="panel-content"></div>
             <div style="padding:25px; border-top:1px solid #222; background:#050505;">
-                
                 <div class="coupon-box">
                     <input type="text" id="couponInput" placeholder="Coupon Code" data-en-p="Coupon Code" data-ar-p="كود الخصم">
                     <button class="apply-btn" onclick="applyCoupon()" data-en="APPLY" data-ar="تطبيق">APPLY</button>
                 </div>
-
                 <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:700; font-size:1.2rem;">
                     <span data-en="Total" data-ar="المجموع">Total</span>
                     <span id="cartTotalDisplay" style="color:var(--gold-primary)">$0.00</span>
                 </div>
-                
                 <div id="phoneInputSection" style="display:none; margin-bottom:15px;">
-                    <label style="font-size:0.75rem; color:var(--gold-primary); margin-bottom:5px; display:block;" data-en="Enter Valid Phone Number:" data-ar="أدخل رقم هاتف صحيح:">Enter Phone Number:</label>
-                    <input type="text" id="userPhone" placeholder="05xxxxxxxx" maxlength="14">
+                    <label style="font-size:0.75rem; color:var(--gold-primary); margin-bottom:5px; display:block;" data-en="Real Phone Number (WhatsApp preferred):" data-ar="رقم هاتف حقيقي (يفضل واتساب):">Real Phone Number:</label>
+                    <input type="tel" id="userPhone" placeholder="05xxxxxxxx" maxlength="15">
                 </div>
-
                 <form action="https://formspree.io/f/xzzkyzzp" method="POST" id="orderForm" onsubmit="validateAndSubmit(event)">
                     <input type="hidden" name="Order_Summary" id="hiddenOrderData">
                     <input type="hidden" name="User_Email" id="hiddenUserEmail">
@@ -304,14 +298,9 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        let currentUser = null;
-        let currentLang = 'en';
-        let allProducts = [];
-        let cart = [];
-        let selectedQuality = 'Mid';
-        let discount = 1.0;
+        let currentUser = null, currentLang = 'en', allProducts = [], cart = [], selectedQuality = 'Mid', discount = 1.0;
 
-        // --- PARTICLE LOGIC ---
+        // --- NEW GOLD DUST PARTICLES ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         let particles = [];
@@ -321,25 +310,40 @@
         class Particle {
             constructor() {
                 this.x = Math.random() * canvas.width;
-                this.y = canvas.height + 10;
-                this.size = Math.random() * 4 + 2;
-                this.speed = Math.random() * 5 + 2;
+                this.y = canvas.height + 20;
+                this.size = Math.random() * 3 + 1;
+                this.speedY = Math.random() * -4 - 2;
+                this.speedX = (Math.random() - 0.5) * 3;
+                this.gravity = 0.05;
                 this.opacity = 1;
+                this.rotation = Math.random() * Math.PI;
             }
-            update() { this.y -= this.speed; this.opacity -= 0.01; }
+            update() {
+                this.y += this.speedY;
+                this.x += this.speedX;
+                this.speedY += this.gravity;
+                this.opacity -= 0.007;
+                this.rotation += 0.1;
+            }
             draw() {
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.rotation);
                 ctx.fillStyle = `rgba(255, 215, 0, ${this.opacity})`;
-                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fill();
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = "gold";
+                ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+                ctx.restore();
             }
         }
 
         function triggerParticles() {
-            particles = Array.from({length: 80}, () => new Particle());
+            particles = Array.from({length: 120}, () => new Particle());
             function animate() {
                 ctx.clearRect(0,0,canvas.width, canvas.height);
                 particles.forEach((p, i) => {
                     p.update(); p.draw();
-                    if(p.opacity <= 0) particles.splice(i, 1);
+                    if(p.opacity <= 0 || p.y > canvas.height + 50) particles.splice(i, 1);
                 });
                 if(particles.length > 0) requestAnimationFrame(animate);
             }
@@ -347,204 +351,121 @@
         }
 
         window.applyCoupon = () => {
-            const input = document.getElementById('couponInput').value.trim();
-            if(input.toLowerCase() === '3mk') {
-                discount = 0.85;
-                triggerParticles();
-                notify(currentLang === 'en' ? "COUPON SUCCESSFUL! 15% OFF" : "تم تطبيق الكود بنجاح! خصم 15%");
+            if(document.getElementById('couponInput').value.trim().toLowerCase() === '3mk') {
+                discount = 0.85; triggerParticles();
+                notify(currentLang === 'en' ? "COUPON ACTIVATED! 15% OFF" : "تم تفعيل الخصم! 15%");
                 updateCartUI();
-            } else {
-                notify(currentLang === 'en' ? "Invalid Code" : "كود غير صالح");
-            }
+            } else notify(currentLang === 'en' ? "Invalid Code" : "كود غير صالح");
         };
 
-        // --- RIYADUINO MESSAGES ---
         window.notify = (msg) => {
             const area = document.getElementById('notification-area');
             const t = document.createElement('div');
             t.className = 'notify-toast';
-            t.innerHTML = `<strong>RIYADUINO SAYS:</strong><br>${msg}`;
+            t.innerHTML = `<strong>RIYADUINO SYSTEM:</strong><br>${msg}`;
             area.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 6000);
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 5000);
         };
 
-        window.handleAuth = async () => {
-            if (currentUser) await signOut(auth);
-            else await signInWithPopup(auth, provider);
-        };
+        window.handleAuth = async () => { if (currentUser) await signOut(auth); else await signInWithPopup(auth, provider); };
 
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
-            const avatar = document.getElementById('userAvatar');
-            const authBtn = document.getElementById('googleAuthBtn');
+            const avatar = document.getElementById('userAvatar'), authBtn = document.getElementById('googleAuthBtn');
             if (user) {
-                avatar.src = user.photoURL; avatar.style.display = 'block';
-                authBtn.style.display = 'none';
+                avatar.src = user.photoURL; avatar.style.display = 'block'; authBtn.style.display = 'none';
                 await syncUserData();
-            } else {
-                avatar.style.display = 'none'; authBtn.style.display = 'flex';
-                cart = []; updateCartUI();
-            }
+            } else { avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); }
         });
 
         async function syncUserData() {
-            const ref = doc(db, "users", currentUser.uid);
-            const snap = await getDoc(ref);
-            if (snap.exists()) {
-                cart = snap.data().cart || [];
-                renderHistory(snap.data().history || []);
-            } else {
-                await setDoc(ref, { cart: [], history: [] });
-            }
+            const ref = doc(db, "users", currentUser.uid), snap = await getDoc(ref);
+            if (snap.exists()) { cart = snap.data().cart || []; renderHistory(snap.data().history || []); }
+            else await setDoc(ref, { cart: [], history: [] });
             updateCartUI();
         }
 
-        async function saveCartToCloud() {
-            if (currentUser) await updateDoc(doc(db, "users", currentUser.uid), { cart: cart });
-        }
-
         const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBQd3LUgZKxeuRQA2B0Cj3IvJBSSS0VL2vnmtOryQxFsAK-Kikg_NZTVGtlYghB96yFYyvqXrPGJEu/pub?output=csv";
-        Papa.parse(sheetURL, {
-            download: true, header: true,
-            complete: (res) => {
-                allProducts = res.data;
-                document.getElementById('loader').style.display = 'none';
-                renderProducts();
-            }
-        });
+        Papa.parse(sheetURL, { download: true, header: true, complete: (res) => { allProducts = res.data; document.getElementById('loader').style.display = 'none'; renderProducts(); } });
 
-        window.setCategory = (cat) => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            renderProducts(cat);
-        };
-
+        window.setCategory = (cat) => { document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active')); event.target.classList.add('active'); renderProducts(cat); };
         function renderProducts(cat = 'pieces') {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = "";
+            const grid = document.getElementById('productsGrid'); grid.innerHTML = "";
             allProducts.filter(p => (p.category || 'pieces').toLowerCase() === cat).forEach((p, i) => {
-                grid.innerHTML += `
-                    <div class="product-card" onclick="openProduct(${allProducts.indexOf(p)})">
-                        <div class="img-box"><img src="${p.image}"></div>
-                        <div class="p-info">
-                            <div class="p-title">${p.name}</div>
-                            <div class="p-price">${p.price}</div>
-                        </div>
-                    </div>`;
+                grid.innerHTML += `<div class="product-card" onclick="openProduct(${allProducts.indexOf(p)})"><div class="img-box"><img src="${p.image}"></div><div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">${p.price}</div></div></div>`;
             });
         }
 
         window.openProduct = (idx) => {
             const p = allProducts[idx];
-            if(p.instock?.toLowerCase() !== 'true') return notify(currentLang==='en'?"Currently Out of Stock!":"نفذت الكمية حالياً!");
-            document.getElementById('modalImg').src = p.image;
-            document.getElementById('modalTitle').innerText = p.name;
-            document.getElementById('modalPrice').innerText = p.price;
-            document.getElementById('modalDesc').innerText = p.description || "...";
-            selectQuality('Mid');
-            document.getElementById('productModal').classList.add('open');
+            if(p.instock?.toLowerCase() !== 'true') return notify(currentLang==='en'?"Out of Stock!":"نفذت الكمية!");
+            document.getElementById('modalImg').src = p.image; document.getElementById('modalTitle').innerText = p.name;
+            document.getElementById('modalPrice').innerText = p.price; document.getElementById('modalDesc').innerText = p.description || "...";
+            selectQuality('Mid'); document.getElementById('productModal').classList.add('open');
             document.getElementById('modalAddBtn').onclick = () => addToCart(idx);
         };
 
-        window.selectQuality = (q) => {
-            selectedQuality = q;
-            document.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected'));
-            document.getElementById('q'+q).classList.add('selected');
-        };
-
+        window.selectQuality = (q) => { selectedQuality = q; document.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected')); document.getElementById('q'+q).classList.add('selected'); };
         window.addToCart = (idx) => {
-            const p = allProducts[idx];
-            let priceNum = parseFloat(p.price.replace(/[^0-9.]/g, ''));
-            if(selectedQuality === 'High') priceNum *= 1.2;
-            const existing = cart.find(item => item.idx === idx && item.quality === selectedQuality);
-            if(existing) existing.qty++;
-            else cart.push({ idx, name: p.name, price: priceNum, qty: 1, quality: selectedQuality, img: p.image });
-            updateCartUI(); saveCartToCloud(); closeModals();
+            const p = allProducts[idx]; let pNum = parseFloat(p.price.replace(/[^0-9.]/g, ''));
+            if(selectedQuality === 'High') pNum *= 1.2;
+            const ex = cart.find(i => i.idx === idx && i.quality === selectedQuality);
+            if(ex) ex.qty++; else cart.push({ idx, name: p.name, price: pNum, qty: 1, quality: selectedQuality, img: p.image });
+            updateCartUI(); updateDoc(doc(db, "users", currentUser.uid), { cart: cart }); closeModals();
         };
 
         window.updateCartUI = () => {
-            const list = document.getElementById('cartItemsList');
-            let total = 0;
-            list.innerHTML = cart.length ? "" : `<div style="text-align:center; padding:50px; color:#444;">${currentLang==='en'?'Empty Cart':'السلة فارغة'}</div>`;
+            const list = document.getElementById('cartItemsList'); let total = 0;
+            list.innerHTML = cart.length ? "" : `<div style="text-align:center; padding:50px; color:#444;">${currentLang==='en'?'Cart is Empty':'السلة فارغة'}</div>`;
             cart.forEach((item, i) => {
                 total += item.price * item.qty;
-                list.innerHTML += `
-                    <div class="cart-item">
-                        <img src="${item.img}">
-                        <div style="flex:1">
-                            <div style="font-size:0.9rem; font-weight:600;">${item.name}</div>
-                            <div style="font-size:0.7rem; color:#666; margin-top:2px;">${item.quality}</div>
-                            <div class="qty-ctrl">
-                                <button class="qty-btn" onclick="changeQty(${i},-1)">-</button>
-                                <span style="font-size:0.8rem">${item.qty}</span>
-                                <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
-                            </div>
-                        </div>
-                        <div style="color:var(--gold-primary); font-weight:700;">$${(item.price * item.qty).toFixed(2)}</div>
-                    </div>`;
+                list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">$${(item.price * item.qty).toFixed(2)}</div></div>`;
             });
-            const finalTotal = total * discount;
-            document.getElementById('cartTotalDisplay').innerText = "$" + finalTotal.toFixed(2);
+            document.getElementById('cartTotalDisplay').innerText = "$" + (total * discount).toFixed(2);
             document.getElementById('cartCount').innerText = cart.reduce((a, b) => a + b.qty, 0);
         };
 
-        window.changeQty = (i, d) => {
-            cart[i].qty += d;
-            if(cart[i].qty <= 0) cart.splice(i, 1);
-            updateCartUI(); saveCartToCloud();
-        };
-
-        document.getElementById('userPhone').addEventListener('keypress', (e) => {
-            if (!/[0-9]/.test(e.key)) e.preventDefault();
-        });
+        window.changeQty = (i, d) => { cart[i].qty += d; if(cart[i].qty <= 0) cart.splice(i, 1); updateCartUI(); updateDoc(doc(db, "users", currentUser.uid), { cart: cart }); };
 
         window.validateAndSubmit = async (e) => {
             e.preventDefault();
             if(!currentUser) return handleAuth();
             if(!cart.length) return;
-            const section = document.getElementById('phoneInputSection');
-            const phoneInput = document.getElementById('userPhone');
-            if(section.style.display === 'none') {
-                section.style.display = 'block'; phoneInput.focus();
-                return notify(currentLang==='en'?"Enter phone to continue.":"يرجى إدخال رقم الهاتف.");
-            }
-            if(phoneInput.value.length < 9) return notify("Invalid Phone");
+            const sec = document.getElementById('phoneInputSection'), ph = document.getElementById('userPhone');
+            if(sec.style.display === 'none') { sec.style.display = 'block'; ph.focus(); return notify(currentLang==='en'?"Almost there! We need your phone.":"خطوة أخيرة! نحتاج رقم هاتفك."); }
             
-            const btn = document.getElementById('checkoutBtn');
-            btn.disabled = true; btn.innerText = "...";
-            const orderStr = cart.map(i => `${i.name} (${i.quality}) x${i.qty}`).join(' | ');
-            document.getElementById('hiddenOrderData').value = orderStr + (discount < 1 ? " [15% DISCOUNT]" : "");
+            // --- REAL PHONE VALIDATION ---
+            const phoneRegex = /^(05|5|\+966|00966)[0-9]{8,11}$/;
+            if(!phoneRegex.test(ph.value.replace(/\s/g, ''))) {
+                ph.style.borderColor = "red";
+                return notify(currentLang==='en'?"Please enter a real, valid phone number!":"يرجى إدخال رقم هاتف حقيقي وصحيح!");
+            }
+
+            const btn = document.getElementById('checkoutBtn'); btn.disabled = true; btn.innerText = "...";
+            const orderStr = cart.map(i => `${i.name} (${i.quality}) x${i.qty}`).join(' | ') + (discount < 1 ? " [15% OFF]" : "");
+            document.getElementById('hiddenOrderData').value = orderStr;
             document.getElementById('hiddenUserEmail').value = currentUser.email;
-            document.getElementById('hiddenUserPhone').value = phoneInput.value;
+            document.getElementById('hiddenUserPhone').value = ph.value;
 
             try {
-                const response = await fetch(e.target.action, { method: 'POST', body: new FormData(e.target), headers: {'Accept': 'application/json'} });
-                if (response.ok) {
-                    await updateDoc(doc(db, "users", currentUser.uid), {
-                        history: arrayUnion({ date: new Date().toLocaleString(), details: orderStr }),
-                        cart: []
-                    });
-                    notify(currentLang==='en' ? "Order Submitted!" : "تم إرسال الطلب!");
-                    cart = []; updateCartUI(); closeModals();
-                    section.style.display = 'none'; phoneInput.value = '';
-                    syncUserData();
+                const res = await fetch(e.target.action, { method: 'POST', body: new FormData(e.target), headers: {'Accept': 'application/json'} });
+                if (res.ok) {
+                    await updateDoc(doc(db, "users", currentUser.uid), { history: arrayUnion({ date: new Date().toLocaleString(), details: orderStr }), cart: [] });
+                    notify(currentLang==='en' ? "Success! Order Logged." : "تم بنجاح! تم تسجيل طلبك.");
+                    cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; syncUserData();
                 }
             } catch (err) { notify("Error!"); } finally { btn.disabled = false; btn.innerText = currentLang==='en'?"CHECKOUT NOW":"إتمام الشراء"; }
         };
 
-        function renderHistory(history) {
-            const cont = document.getElementById('historyContent');
-            cont.innerHTML = history.length ? "" : `<p style='color:#444; text-align:center;'>${currentLang==='en'?'No history':'لا يوجد سجل'}</p>`;
-            [...history].reverse().forEach(h => {
-                cont.innerHTML += `<div class="history-card"><div class="history-date">${h.date}</div><div style="font-size:0.8rem; color:#888;">${h.details}</div></div>`;
-            });
+        function renderHistory(h) {
+            const c = document.getElementById('historyContent'); c.innerHTML = h.length ? "" : `<p style='text-align:center; color:#444;'>No orders yet</p>`;
+            [...h].reverse().forEach(o => { c.innerHTML += `<div class="history-card"><div class="history-date">${o.date}</div><div style="font-size:0.8rem; color:#888;">${o.details}</div></div>`; });
         }
 
         window.togglePanel = (id) => { closeModals(); document.getElementById(id).classList.add('open'); };
         window.closeModals = () => { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); };
         window.toggleLang = () => {
-            currentLang = currentLang === 'en' ? 'ar' : 'en';
-            document.body.className = currentLang;
+            currentLang = currentLang === 'en' ? 'ar' : 'en'; document.body.className = currentLang;
             document.querySelectorAll('[data-en]').forEach(el => el.innerText = el.getAttribute('data-'+currentLang));
             document.querySelectorAll('[data-en-p]').forEach(el => el.placeholder = el.getAttribute('data-'+currentLang+'-p'));
             renderProducts(); updateCartUI();
