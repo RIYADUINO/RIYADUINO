@@ -75,6 +75,14 @@
         .logo { font-family: var(--font-tech); font-weight: 800; font-size: 1.5rem; color: #fff; text-decoration: none; }
         .logo span { color: var(--gold-primary); text-shadow: 0 0 10px var(--gold-glow); }
         .nav-links { display: flex; align-items: center; gap: 15px; }
+        
+        /* Home Button Style */
+        .home-btn {
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         /* Auth & Profile */
         .google-auth-btn {
@@ -193,6 +201,8 @@
     <nav>
         <a href="#" class="logo" onclick="location.reload()">RIYAD<span>UINO</span></a>
         <div class="nav-links">
+            <a href="index.html" class="filter-btn home-btn" style="padding: 5px 10px;" data-en="HOME" data-ar="الرئيسية">HOME</a>
+            
             <button class="filter-btn" style="padding: 5px 10px;" onclick="toggleLang()">EN/AR</button>
             <div class="icon-btn" onclick="togglePanel('historyModal')">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
