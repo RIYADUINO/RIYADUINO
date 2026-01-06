@@ -57,7 +57,8 @@
         }
 
         /* 2. SPECIFIC OVERRIDE FOR HEADINGS/TITLES:
-           Force these specific elements to use the Cool Arabic Display font. */
+           UPDATED: Now uses var(--font-arabic-body) instead of cool font to ensure
+           uniformity across the entire page as requested. */
         body.rtl h1, 
         body.rtl h2, 
         body.rtl h3, 
@@ -70,8 +71,8 @@
         body.rtl .beta-tag,
         body.rtl .stat-item h4,
         body.rtl .card h3 {
-            font-family: var(--font-arabic-cool) !important;
-            font-weight: 400 !important; 
+            font-family: var(--font-arabic-body) !important; /* CHANGED HERE */
+            font-weight: 700 !important; /* Adjusted weight for readability */
             letter-spacing: 0 !important; 
             text-shadow: 0 0 10px var(--gold-glow);
         }
