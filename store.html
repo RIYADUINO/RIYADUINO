@@ -28,6 +28,47 @@
             display: flex; flex-direction: column; min-height: 100vh;
         }
 
+        /* =========================================
+           STRICT ARABIC FONT ENFORCEMENT
+           ========================================= */
+        body.ar { 
+            direction: rtl; 
+            text-align: right;
+        }
+
+        /* 1. UNIVERSAL OVERRIDE: 
+           Force EVERY element inside body.ar to use the Arabic font. */
+        body.ar * {
+            font-family: var(--font-arabic-body) !important;
+        }
+
+        /* 2. SPECIFIC OVERRIDES FOR TECH ELEMENTS:
+           Force elements that usually use 'Orbitron' (Logo, Prices, Buttons) 
+           to switch to Arabic font when in Arabic mode. */
+        body.ar h1, 
+        body.ar h2, 
+        body.ar h3, 
+        body.ar .logo, 
+        body.ar .p-price, 
+        body.ar .coupon-strap,
+        body.ar .filter-btn,
+        body.ar .btn-gold,
+        body.ar .notify-toast,
+        body.ar .badge {
+            font-family: var(--font-arabic-body) !important; 
+            font-weight: 700 !important; 
+            letter-spacing: 0 !important; 
+        }
+
+        body.ar .sidebar-panel { margin-left: 0; margin-right: auto; border-left: none; border-right: 1px solid #222; }
+        
+        /* 3. INPUTS & PLACEHOLDERS */
+        body.ar input, 
+        body.ar input::placeholder,
+        body.ar textarea::placeholder {
+            font-family: var(--font-arabic-body) !important;
+        }
+
         /* --- COUPON TICKER --- */
         .coupon-strap {
             background: var(--gold-primary); color: #000;
@@ -75,7 +116,7 @@
         .logo { font-family: var(--font-tech); font-weight: 800; font-size: 1.5rem; color: #fff; text-decoration: none; }
         .logo span { color: var(--gold-primary); text-shadow: 0 0 10px var(--gold-glow); }
         .nav-links { display: flex; align-items: center; gap: 15px; }
-        
+
         /* Home Button Style */
         .home-btn {
             text-decoration: none;
@@ -176,9 +217,6 @@
             width: 100%; padding: 15px; background: var(--gold-primary); color: #000; border: none; 
             font-weight: 800; cursor: pointer; font-family: var(--font-tech); border-radius: 6px; transition: 0.2s;
         }
-
-        body.ar { direction: rtl; font-family: var(--font-arabic-body); }
-        body.ar .sidebar-panel { margin-left: 0; margin-right: auto; border-left: none; border-right: 1px solid #222; }
 
         @media (max-width: 768px) {
             .detail-modal { grid-template-columns: 1fr; }
