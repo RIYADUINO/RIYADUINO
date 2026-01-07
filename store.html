@@ -36,15 +36,12 @@
             text-align: right;
         }
 
-        /* 1. UNIVERSAL OVERRIDE: 
-           Force EVERY element inside body.ar to use the Arabic font. */
+        /* 1. UNIVERSAL OVERRIDE */
         body.ar * {
             font-family: var(--font-arabic-body) !important;
         }
 
-        /* 2. SPECIFIC OVERRIDES FOR TECH ELEMENTS:
-           Force elements that usually use 'Orbitron' (Logo, Prices, Buttons) 
-           to switch to Arabic font when in Arabic mode. */
+        /* 2. SPECIFIC OVERRIDES FOR TECH ELEMENTS */
         body.ar h1, 
         body.ar h2, 
         body.ar h3, 
@@ -327,10 +324,25 @@
         </div>
     </div>
 
+    <div id="adminBtn" style="display:none; position:fixed; bottom:20px; left:20px; z-index:10000;">
+        <button onclick="toggleAdminPanel()" style="background:#FFD700; color:#000; border:none; padding:12px 20px; border-radius:30px; font-weight:bold; cursor:pointer; box-shadow: 0 0 15px gold;">ADMIN PANEL</button>
+    </div>
+
+    <div class="modal-overlay" id="adminModal" onclick="closeModals()">
+        <div class="sidebar-panel" style="max-width:800px; border-left: 2px solid #FFD700;" onclick="event.stopPropagation()">
+            <div class="panel-header">
+                <h2 style="color:#FFD700">All Orders Management</h2>
+                <span style="cursor:pointer;" onclick="closeModals()">✕</span>
+            </div>
+            <div id="adminOrderList" class="panel-content" style="padding:20px;">
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyCSLy3xjL78iCWG9jLPTAIvi3-TJBPfsjw",
@@ -346,6 +358,7 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
+        const ADMIN_EMAIL = "elnaboulsi.mansour@gmail.com";
         let currentUser = null, currentLang = 'en', allProducts = [], cart = [], selectedQuality = 'Mid', discount = 1.0;
 
         // --- NEW GOLD DUST PARTICLES ---
@@ -420,10 +433,21 @@
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             const avatar = document.getElementById('userAvatar'), authBtn = document.getElementById('googleAuthBtn');
+            const adminBtn = document.getElementById('adminBtn');
+
             if (user) {
                 avatar.src = user.photoURL; avatar.style.display = 'block'; authBtn.style.display = 'none';
+                
+                // Show admin button if email matches
+                if(user.email === ADMIN_EMAIL) adminBtn.style.display = 'block';
+                else adminBtn.style.display = 'none';
+
                 await syncUserData();
-            } else { avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); }
+            } else { 
+                avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; 
+                adminBtn.style.display = 'none';
+                updateCartUI(); 
+            }
         });
 
         async function syncUserData() {
@@ -455,7 +479,6 @@
 
         window.selectQuality = (q) => { selectedQuality = q; document.querySelectorAll('.q-opt').forEach(o => o.classList.remove('selected')); document.getElementById('q'+q).classList.add('selected'); };
         window.addToCart = (idx) => {
-            if(!currentUser) return handleAuth(); // Added check to prevent errors
             const p = allProducts[idx]; let pNum = parseFloat(p.price.replace(/[^0-9.]/g, ''));
             if(selectedQuality === 'High') pNum *= 1.2;
             const ex = cart.find(i => i.idx === idx && i.quality === selectedQuality);
@@ -492,6 +515,18 @@
 
             const btn = document.getElementById('checkoutBtn'); btn.disabled = true; btn.innerText = "...";
             const orderStr = cart.map(i => `${i.name} (${i.quality}) x${i.qty}`).join(' | ') + (discount < 1 ? " [15% OFF]" : "");
+            
+            // Create a proper Order Object
+            const orderId = "ORD-" + Math.random().toString(36).substr(2, 9).toUpperCase();
+            const orderObject = {
+                id: orderId,
+                date: new Date().toLocaleString(),
+                details: orderStr,
+                status: "Processing",
+                userEmail: currentUser.email,
+                userId: currentUser.uid
+            };
+
             document.getElementById('hiddenOrderData').value = orderStr;
             document.getElementById('hiddenUserEmail').value = currentUser.email;
             document.getElementById('hiddenUserPhone').value = ph.value;
@@ -499,7 +534,7 @@
             try {
                 const res = await fetch(e.target.action, { method: 'POST', body: new FormData(e.target), headers: {'Accept': 'application/json'} });
                 if (res.ok) {
-                    await updateDoc(doc(db, "users", currentUser.uid), { history: arrayUnion({ date: new Date().toLocaleString(), details: orderStr }), cart: [] });
+                    await updateDoc(doc(db, "users", currentUser.uid), { history: arrayUnion(orderObject), cart: [] });
                     notify(currentLang==='en' ? "Success! Order Logged." : "تم بنجاح! تم تسجيل طلبك.");
                     cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; syncUserData();
                 }
@@ -507,9 +542,91 @@
         };
 
         function renderHistory(h) {
-            const c = document.getElementById('historyContent'); c.innerHTML = h.length ? "" : `<p style='text-align:center; color:#444;'>No orders yet</p>`;
-            [...h].reverse().forEach(o => { c.innerHTML += `<div class="history-card"><div class="history-date">${o.date}</div><div style="font-size:0.8rem; color:#888;">${o.details}</div></div>`; });
+            const c = document.getElementById('historyContent');
+            c.innerHTML = h.length ? "" : `<p style='text-align:center; color:#444;'>No orders yet</p>`;
+            
+            [...h].reverse().forEach(o => {
+                // Handle both old (string) and new (object) order formats
+                const date = o.date || "N/A";
+                const details = typeof o === 'string' ? o : o.details;
+                const status = o.status || "Processing";
+                
+                let color = "#888";
+                if(status === "Ready") color = "#00FF00";
+                if(status === "Under Construction") color = "#FFA500";
+                if(status === "Cancelled") color = "#FF4444";
+
+                c.innerHTML += `
+                    <div class="history-card">
+                        <div style="display:flex; justify-content:space-between;">
+                            <div class="history-date">${date}</div>
+                            <div style="color:${color}; font-size:0.7rem; border:1px solid ${color}; padding:2px 6px; border-radius:4px;">${status}</div>
+                        </div>
+                        <div style="font-size:0.8rem; color:#888; margin-top:5px;">${details}</div>
+                    </div>`;
+            });
         }
+
+        // --- ADMIN FUNCTIONS ---
+        window.toggleAdminPanel = async () => {
+            document.getElementById('adminModal').classList.add('open');
+            const list = document.getElementById('adminOrderList');
+            list.innerHTML = "<p style='color:#fff;'>Loading all users...</p>";
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "users"));
+                list.innerHTML = "";
+
+                querySnapshot.forEach((userDoc) => {
+                    const userData = userDoc.data();
+                    if (userData.history && userData.history.length > 0) {
+                        userData.history.forEach((order) => {
+                            // Ensure order is an object for new system
+                            if (typeof order === 'object') {
+                                const card = document.createElement('div');
+                                card.className = "history-card";
+                                card.style.borderLeft = "4px solid #FFD700";
+                                card.innerHTML = `
+                                    <div style="color:#FFD700; margin-bottom:5px;">User: ${userData.email || 'Unknown'}</div>
+                                    <div style="font-size:0.75rem; color:#999;">${order.date} (ID: ${order.id})</div>
+                                    <div style="font-size:0.85rem; margin: 5px 0;">${order.details}</div>
+                                    <div style="margin-top:10px; font-weight:bold; color:#fff;">Status: <span style="color:${order.status === 'Ready'?'#0f0':(order.status==='Cancelled'?'#f00':'#ffa500')}">${order.status}</span></div>
+                                    <div style="margin-top:15px; display:flex; gap:10px; flex-wrap:wrap;">
+                                        <button onclick="changeStatus('${userDoc.id}', '${order.id}', 'Under Construction')" style="background:#444; color:orange; border:1px solid orange; padding:5px 10px; cursor:pointer; border-radius:4px;">Building</button>
+                                        <button onclick="changeStatus('${userDoc.id}', '${order.id}', 'Ready')" style="background:#444; color:lime; border:1px solid lime; padding:5px 10px; cursor:pointer; border-radius:4px;">Ready</button>
+                                        <button onclick="changeStatus('${userDoc.id}', '${order.id}', 'Cancelled')" style="background:#444; color:red; border:1px solid red; padding:5px 10px; cursor:pointer; border-radius:4px;">Cancel</button>
+                                    </div>
+                                `;
+                                list.appendChild(card);
+                            }
+                        });
+                    }
+                });
+                
+                if(list.innerHTML === "") list.innerHTML = "<p style='color:#666;'>No orders found in database.</p>";
+
+            } catch(e) {
+                console.error(e);
+                list.innerHTML = "<p style='color:red;'>Error loading data. Check console.</p>";
+            }
+        };
+
+        window.changeStatus = async (uid, orderId, newStatus) => {
+            if(!confirm("Set status to " + newStatus + "?")) return;
+            const userRef = doc(db, "users", uid);
+            const snap = await getDoc(userRef);
+            const history = snap.data().history;
+            
+            // Update the specific order in the array
+            const updatedHistory = history.map(o => {
+                if(o.id === orderId) return { ...o, status: newStatus };
+                return o;
+            });
+
+            await updateDoc(userRef, { history: updatedHistory });
+            notify("Status updated to: " + newStatus);
+            toggleAdminPanel(); // Refresh the list
+        };
 
         window.togglePanel = (id) => { closeModals(); document.getElementById(id).classList.add('open'); };
         window.closeModals = () => { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); };
