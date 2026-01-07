@@ -485,6 +485,26 @@
                 if(status.toLowerCase().includes("under")) color = "#FFA500";
                 if(status.toLowerCase().includes("cancel")) color = "#FF4444";
 
+                // --- NEW LOGIC: SHOW LOCATION & PHONE IF READY ---
+                let pickupInfo = "";
+                if(status.toLowerCase().includes("ready")) {
+                    pickupInfo = `
+                        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #333;">
+                            <div style="color:#00FF00; font-size:0.8rem; font-weight:bold; margin-bottom:5px;">
+                                ${currentLang === 'en' ? 'ORDER READY FOR PICKUP!' : 'الطلب جاهز للاستلام!'}
+                            </div>
+                            <div style="font-size:0.8rem; color:#ccc; margin-bottom:5px;">
+                                📞 ${currentLang === 'en' ? 'Contact' : 'تواصل'}: <a href="tel:0543945482" style="color:var(--gold-primary); text-decoration:none;">0543945482</a>
+                            </div>
+                            <div style="font-size:0.8rem;">
+                                📍 <a href="https://www.google.com/maps/place/RIYADUINO/@24.7062064,46.7416725,17z/data=!3m1!4b1!4m6!3m5!1s0x3e2f03437de4bd47:0xb1ba818f2b0a8cbc!8m2!3d24.7062064!4d46.7416725!16s%2Fg%2F11yn_szgsf?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2OUgBUAM%3D" target="_blank" style="color:var(--gold-primary); text-decoration:underline;">
+                                    ${currentLang === 'en' ? 'View Pickup Location' : 'عرض موقع الاستلام'}
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                }
+
                 c.innerHTML += `
                     <div class="history-card">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -492,6 +512,7 @@
                             <div style="color:${color}; font-size:0.65rem; border:1px solid ${color}; padding:2px 6px; border-radius:4px; font-weight:900;">${status.toUpperCase()}</div>
                         </div>
                         <div style="font-size:0.8rem; color:#888;">${details}</div>
+                        ${pickupInfo}
                     </div>`; 
             });
         }
