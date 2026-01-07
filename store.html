@@ -346,7 +346,7 @@
             animate();
         }
 
-        // --- STATUS SYNC LOGIC ---
+        // --- IMPROVED STATUS SYNC LOGIC ---
         async function fetchStatusSheet() {
             return new Promise((resolve) => {
                 Papa.parse(STATUS_SHEET_URL, {
@@ -354,8 +354,16 @@
                     complete: (results) => {
                         statusMap = {};
                         results.data.forEach(row => {
-                            if(row.OrderID && row.Status) statusMap[row.OrderID.trim()] = row.Status.trim();
+                            // Robust key finding: checks "OrderID", "Order ID", "ID", "id"
+                            let oid = row['OrderID'] || row['Order ID'] || row['id'] || row['ID'] || row['order_id'];
+                            let stat = row['Status'] || row['status'] || row['STATE'];
+                            
+                            if(oid && stat) {
+                                // Store ID in UPPERCASE and trimmed to ensure matching works perfectly
+                                statusMap[oid.trim().toUpperCase()] = stat.trim();
+                            }
                         });
+                        console.log("RIYADUINO: Status Map Loaded", statusMap);
                         resolve();
                     },
                     error: () => resolve()
@@ -478,14 +486,16 @@
                 const id = o.id || "OLD-ORDER";
                 const details = typeof o === 'string' ? o : o.details;
                 const date = o.date || "N/A";
-                let status = statusMap[id] || "Processing";
+                
+                // --- ROBUST LOOKUP ---
+                // Looks up status using the UPPERCASE ID to match what we stored in fetchStatusSheet
+                let status = statusMap[id.trim().toUpperCase()] || "Processing";
                 
                 let color = "#888";
                 if(status.toLowerCase().includes("ready")) color = "#00FF00";
                 if(status.toLowerCase().includes("under")) color = "#FFA500";
                 if(status.toLowerCase().includes("cancel")) color = "#FF4444";
 
-                // --- NEW LOGIC: SHOW LOCATION & PHONE IF READY ---
                 let pickupInfo = "";
                 if(status.toLowerCase().includes("ready")) {
                     pickupInfo = `
