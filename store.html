@@ -372,7 +372,7 @@
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        let currentUser = null, currentLang = 'en', allProducts = [], cart = [], selectedQuality = 'Mid', discount = 1.0;
+        let currentUser = null, currentLang = 'en', allProducts = [], cart = [], currentHistory = [], selectedQuality = 'Mid', discount = 1.0;
         let statusMap = {};
         let oldStatusMap = {}; // To track changes
         let justAppliedCoupon = false; // For animation
@@ -456,7 +456,6 @@
                                     msg = currentLang === 'en' ? "Your Order is Under Review" : "طلبك قيد المراجعة";
                                     shouldNotify = true;
                                 }
-                                // Removed generic else block to satisfy requirement
                                 
                                 if(shouldNotify) {
                                     notify(msg, color);
@@ -473,18 +472,22 @@
             });
         }
 
-        // Poll for updates every 10 seconds
-        setInterval(() => fetchStatusSheet(), 10000);
+        // Poll for updates every 10 seconds AND refresh history UI
+        setInterval(async () => {
+            await fetchStatusSheet();
+            if(currentUser && currentHistory.length > 0) {
+                renderHistory(currentHistory);
+            }
+        }, 10000);
 
         window.applyCoupon = () => {
             if(document.getElementById('couponInput').value.trim().toLowerCase() === '3mk') {
-                discount = 0.80; // Changed to 20% off
+                discount = 0.80; 
                 justAppliedCoupon = true;
                 triggerParticles();
                 notify(currentLang === 'en' ? "COUPON ACTIVATED! 20% OFF" : "تم تفعيل الخصم! 20%", "#00FF00");
                 updateCartUI();
                 
-                // Animation reset after 3 seconds
                 setTimeout(() => {
                     justAppliedCoupon = false;
                     updateCartUI();
@@ -496,7 +499,7 @@
             const area = document.getElementById('notification-area');
             const t = document.createElement('div'); t.className = 'notify-toast';
             t.style.borderLeftColor = color;
-            t.style.boxShadow = `0 5px 20px ${color}40`; // Add transparency to hex
+            t.style.boxShadow = `0 5px 20px ${color}40`; 
             t.innerHTML = `<strong>RIYADUINO SYSTEM:</strong><br>${msg}`;
             area.appendChild(t);
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 5000);
@@ -510,15 +513,19 @@
             if (user) {
                 avatar.src = user.photoURL; avatar.style.display = 'block'; authBtn.style.display = 'none';
                 await syncUserData();
-            } else { avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); }
+            } else { 
+                avatar.style.display = 'none'; authBtn.style.display = 'flex'; 
+                cart = []; currentHistory = []; updateCartUI(); 
+            }
         });
 
         async function syncUserData() {
             const ref = doc(db, "users", currentUser.uid), snap = await getDoc(ref);
             if (snap.exists()) { 
-                cart = snap.data().cart || []; 
+                cart = snap.data().cart || [];
+                currentHistory = snap.data().history || []; 
                 await fetchStatusSheet();
-                renderHistory(snap.data().history || []); 
+                renderHistory(currentHistory); 
             }
             else await setDoc(ref, { cart: [], history: [] });
             updateCartUI();
@@ -533,11 +540,9 @@
                 const animDelay = (i % 10) * 0.05;
                 const isOutOfStock = p.instock && p.instock.toLowerCase() !== 'true';
                 
-                // Add gray styling class if out of stock
                 const cardClass = isOutOfStock ? "product-card out-of-stock-card" : "product-card";
                 const badgeHTML = isOutOfStock ? `<div class="out-of-stock-badge">${currentLang==='en'?'OUT OF STOCK':'نفذت الكمية'}</div>` : '';
                 
-                // Currency logic: strip non-numeric and add SAR
                 const priceNum = p.price.replace(/[^0-9.]/g, '');
                 
                 grid.innerHTML += `
@@ -554,7 +559,6 @@
             if(p.instock?.toLowerCase() !== 'true') return notify(currentLang==='en'?"Out of Stock!":"نفذت الكمية!", "#FF0000");
             document.getElementById('modalImg').src = p.image; document.getElementById('modalTitle').innerText = p.name;
             
-            // Currency logic
             const priceNum = p.price.replace(/[^0-9.]/g, '');
             document.getElementById('modalPrice').innerText = "SAR " + priceNum; 
             
@@ -581,7 +585,6 @@
                 list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">SAR ${(item.price * item.qty).toFixed(2)}</div></div>`;
             });
 
-            // Logic for price display animation
             const displayEl = document.getElementById('cartTotalDisplay');
             if (justAppliedCoupon && discount < 1.0) {
                 displayEl.innerHTML = `<span class="old-price">SAR ${total.toFixed(2)}</span> <span class="new-price">SAR ${(total * discount).toFixed(2)}</span>`;
@@ -618,7 +621,8 @@
                     const newOrder = { id: orderId, date: new Date().toLocaleString(), details: orderStr };
                     await updateDoc(doc(db, "users", currentUser.uid), { history: arrayUnion(newOrder), cart: [] });
                     notify(currentLang==='en' ? "Success! Order Logged." : "تم بنجاح! تم تسجيل طلبك.", "#00FF00");
-                    cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; syncUserData();
+                    cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; 
+                    syncUserData(); // Refresh history
                 }
             } catch (err) { notify("Error!", "#FF0000"); } finally { btn.disabled = false; btn.innerText = currentLang==='en'?"CHECKOUT NOW":"إتمام الشراء"; }
         };
@@ -647,7 +651,6 @@
                 else if(status.toLowerCase().includes("under")) color = "#FFA500";
                 else if(status.toLowerCase().includes("cancel")) color = "#FF4444";
 
-                // Hiding the ID from the display title, showing only Date
                 c.innerHTML += `
                     <div class="history-card" style="border-left: 4px solid ${color}">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
