@@ -33,13 +33,22 @@
 
         body.ar h1, body.ar h2, body.ar h3, body.ar .logo, body.ar .p-price, 
         body.ar .coupon-strap, body.ar .filter-btn, body.ar .btn-gold, 
-        body.ar .notify-toast, body.ar .badge {
+        body.ar .notify-toast, body.ar .badge, body.ar .google-auth-btn {
             font-family: var(--font-arabic-body) !important; 
             font-weight: 700 !important; letter-spacing: 0 !important; 
         }
 
         body.ar .sidebar-panel { margin-left: 0; margin-right: auto; border-left: none; border-right: 1px solid #222; }
         body.ar input, body.ar input::placeholder, body.ar textarea::placeholder { font-family: var(--font-arabic-body) !important; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideInRight { from { transform: translateX(50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes slideInLeft { from { transform: translateX(-50px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes zoomPop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        @keyframes glowPulse { 0% { box-shadow: 0 0 5px var(--gold-primary); } 50% { box-shadow: 0 0 20px var(--gold-primary); } 100% { box-shadow: 0 0 5px var(--gold-primary); } }
+        
+        .product-card { animation: fadeIn 0.6s ease forwards; }
 
         .coupon-strap {
             background: var(--gold-primary); color: #000;
@@ -63,7 +72,7 @@
         }
 
         #notification-area {
-            position: fixed; top: 70px; left: 50%; transform: translateX(-50%);
+            position: fixed; top: 90px; left: 50%; transform: translateX(-50%);
             z-index: 5000; display: flex; flex-direction: column; gap: 10px;
             pointer-events: none; width: 90%; max-width: 450px;
         }
@@ -72,7 +81,7 @@
             color: #fff; padding: 15px 20px; border-radius: 8px; font-family: var(--font-tech);
             font-size: 0.85rem; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
             animation: slideDown 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-            pointer-events: auto; line-height: 1.4;
+            pointer-events: auto; line-height: 1.4; border-left: 5px solid var(--gold-primary);
         }
         @keyframes slideDown { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
@@ -87,17 +96,38 @@
 
         .home-btn { text-decoration: none; display: flex; align-items: center; justify-content: center; }
 
+        /* --- COOL AUTH BUTTON --- */
         .google-auth-btn {
-            display: flex; align-items: center; gap: 8px; background: #fff; color: #111; border: none;
-            padding: 8px 14px; border-radius: 4px; cursor: pointer; font-weight: 700; font-size: 0.8rem;
+            display: flex; align-items: center; gap: 10px; 
+            background: linear-gradient(135deg, #FFD700, #E5C100); 
+            color: #000; border: none;
+            padding: 8px 18px; border-radius: 4px; cursor: pointer; 
+            font-family: var(--font-tech); font-weight: 800; font-size: 0.8rem;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.2);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-transform: uppercase; letter-spacing: 0.5px;
+            position: relative; overflow: hidden;
         }
-        .user-avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--gold-primary); cursor: pointer; display: none; }
+        .google-auth-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transition: 0.5s;
+        }
+        .google-auth-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+        }
+        .google-auth-btn:hover::before { left: 100%; }
+        
+        .user-avatar { width: 35px; height: 35px; border-radius: 50%; border: 2px solid var(--gold-primary); cursor: pointer; display: none; transition: 0.3s; }
+        .user-avatar:hover { box-shadow: 0 0 15px var(--gold-primary); transform: scale(1.1); }
 
         .icon-btn { cursor: pointer; position: relative; color: #fff; transition: 0.2s; }
-        .icon-btn:hover { color: var(--gold-primary); }
+        .icon-btn:hover { color: var(--gold-primary); transform: scale(1.1); }
         .badge { 
             position: absolute; top: -8px; right: -8px; background: var(--gold-primary); color: #000; 
             font-size: 0.65rem; font-weight: bold; padding: 2px 6px; border-radius: 10px;
+            animation: zoomPop 0.3s ease;
         }
 
         .container { max-width: 1300px; margin: 0 auto; padding: 40px 20px; flex-grow: 1; width: 100%; }
@@ -106,16 +136,18 @@
             background: transparent; border: 1px solid #333; color: #888; padding: 10px 25px;
             font-family: var(--font-tech); font-weight: 700; cursor: pointer; border-radius: 4px; transition: 0.3s;
         }
-        .filter-btn.active { background: var(--gold-primary); color: #000; border-color: var(--gold-primary); }
+        .filter-btn:hover { border-color: #666; color: #fff; }
+        .filter-btn.active { background: var(--gold-primary); color: #000; border-color: var(--gold-primary); box-shadow: 0 0 15px var(--gold-glow); }
 
         .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
         .product-card {
             background: var(--bg-panel); border: var(--border-tech); border-radius: 12px; overflow: hidden;
-            transition: 0.3s; cursor: pointer; position: relative;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative;
         }
-        .product-card:hover { border-color: var(--gold-primary); transform: translateY(-5px); }
+        .product-card:hover { border-color: var(--gold-primary); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .img-box { height: 200px; background: #000; overflow: hidden; }
-        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .product-card:hover .img-box img { transform: scale(1.1); }
         .p-info { padding: 20px; }
         .p-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; }
         .p-price { color: var(--gold-primary); font-family: var(--font-tech); font-weight: 700; }
@@ -124,12 +156,20 @@
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
             display: none; justify-content: center; align-items: center; z-index: 2000;
+            opacity: 0; transition: opacity 0.3s;
         }
-        .modal-overlay.open { display: flex; }
+        .modal-overlay.open { display: flex; opacity: 1; }
+
+        /* Animation when opening product modal */
+        .modal-overlay.open .detail-modal { animation: zoomPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* Animation when opening Sidebars */
+        .modal-overlay.open .sidebar-panel { animation: slideInRight 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
+        body.ar .modal-overlay.open .sidebar-panel { animation: slideInLeft 0.4s cubic-bezier(0.23, 1, 0.32, 1); }
 
         .detail-modal { 
             background: #111; width: 90%; max-width: 850px; display: grid; grid-template-columns: 1.2fr 1fr; 
-            border: var(--border-tech); border-radius: 15px; overflow: hidden;
+            border: var(--border-tech); border-radius: 15px; overflow: hidden; box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
         .detail-content { padding: 30px; display: flex; flex-direction: column; justify-content: center; }
         .quality-options { display: flex; gap: 10px; margin: 15px 0; }
@@ -137,11 +177,11 @@
             flex: 1; padding: 10px; border: 1px solid #333; text-align: center; cursor: pointer; 
             border-radius: 6px; font-size: 0.8rem; color: #888; transition: 0.2s;
         }
-        .q-opt.selected { border-color: var(--gold-primary); color: var(--gold-primary); background: rgba(255,215,0,0.1); }
+        .q-opt.selected { border-color: var(--gold-primary); color: var(--gold-primary); background: rgba(255,215,0,0.1); box-shadow: 0 0 10px rgba(255,215,0,0.1); }
 
         .sidebar-panel { 
             background: #0a0a0a; width: 100%; max-width: 450px; height: 100%; margin-left: auto; 
-            border-left: 1px solid #222; display: flex; flex-direction: column;
+            border-left: 1px solid #222; display: flex; flex-direction: column; box-shadow: -10px 0 40px rgba(0,0,0,0.8);
         }
         .panel-header { padding: 25px; border-bottom: 1px solid #222; display: flex; justify-content: space-between; }
         .panel-content { flex-grow: 1; overflow-y: auto; padding: 20px; }
@@ -149,17 +189,25 @@
         .coupon-box { display: flex; gap: 10px; margin-bottom: 15px; }
         #couponInput {
             flex: 1; background: #000; border: 1px solid #333; color: var(--gold-primary);
-            padding: 10px; border-radius: 4px; outline: none; font-family: var(--font-tech);
+            padding: 10px; border-radius: 4px; outline: none; font-family: var(--font-tech); transition: 0.3s;
         }
+        #couponInput:focus { border-color: var(--gold-primary); box-shadow: 0 0 10px rgba(255,215,0,0.2); }
+
         .apply-btn { background: #222; color: #fff; border: none; padding: 0 15px; cursor: pointer; font-size: 0.75rem; border-radius: 4px; transition: 0.2s; font-family: var(--font-tech); }
         .apply-btn:hover { background: #333; color: var(--gold-primary); }
 
-        .cart-item { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #1a1a1a; padding-bottom: 15px; }
+        .cart-item { display: flex; gap: 15px; margin-bottom: 20px; border-bottom: 1px solid #1a1a1a; padding-bottom: 15px; animation: fadeIn 0.3s ease; }
         .cart-item img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; }
         .qty-ctrl { display: flex; align-items: center; gap: 10px; margin-top: 8px; }
-        .qty-btn { background: #222; border: none; color: #fff; width: 25px; height: 25px; cursor: pointer; border-radius: 4px; }
+        .qty-btn { background: #222; border: none; color: #fff; width: 25px; height: 25px; cursor: pointer; border-radius: 4px; transition: 0.2s; }
+        .qty-btn:hover { background: var(--gold-primary); color: #000; }
         
-        .history-card { background: #151515; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #222; }
+        .history-card { 
+            background: #151515; padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #222; 
+            transition: 0.3s; animation: fadeIn 0.4s ease;
+        }
+        .history-card:hover { border-color: #444; transform: translateX(5px); }
+
         .history-date { font-size: 0.7rem; color: var(--gold-primary); font-family: var(--font-tech); margin-bottom: 5px; }
 
         #userPhone {
@@ -171,7 +219,13 @@
         .btn-gold { 
             width: 100%; padding: 15px; background: var(--gold-primary); color: #000; border: none; 
             font-weight: 800; cursor: pointer; font-family: var(--font-tech); border-radius: 6px; transition: 0.2s;
+            position: relative; overflow: hidden;
         }
+        .btn-gold:hover { box-shadow: 0 0 20px rgba(255,215,0,0.4); transform: translateY(-2px); }
+
+        /* Price Animation Classes */
+        .old-price { color: #ff4444; text-decoration: line-through; font-size: 0.9em; margin-right: 10px; opacity: 0.8; }
+        .new-price { color: #00ff00; font-weight: 900; animation: glowPulse 1s infinite; font-size: 1.2em; }
 
         @media (max-width: 768px) {
             .detail-modal { grid-template-columns: 1fr; }
@@ -205,7 +259,7 @@
             </div>
             <div class="auth-btn-wrapper">
                 <button id="googleAuthBtn" class="google-auth-btn" onclick="handleAuth()">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/button/google.svg" width="18">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
                     <span id="authText" data-en="Sign In" data-ar="دخول">Sign In</span>
                 </button>
                 <img id="userAvatar" class="user-avatar" onclick="handleAuth()">
@@ -218,7 +272,7 @@
             <button class="filter-btn active" onclick="setCategory('pieces')" data-en="PIECES" data-ar="القطع">PIECES</button>
             <button class="filter-btn" onclick="setCategory('projects')" data-en="PROJECTS" data-ar="المشاريع">PROJECTS</button>
         </div>
-        <div id="loader" style="text-align:center; color:var(--gold-primary); font-family:var(--font-tech);">INITIALIZING RIYADUINO...</div>
+        <div id="loader" style="text-align:center; color:var(--gold-primary); font-family:var(--font-tech); animation: glowPulse 2s infinite;">INITIALIZING RIYADUINO...</div>
         <div class="products-grid" id="productsGrid"></div>
     </div>
 
@@ -255,9 +309,9 @@
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:700; font-size:1.2rem;">
                     <span data-en="Total" data-ar="المجموع">Total</span>
-                    <span id="cartTotalDisplay" style="color:var(--gold-primary)">$0.00</span>
+                    <span id="cartTotalDisplay" style="color:var(--gold-primary); transition:0.3s;">$0.00</span>
                 </div>
-                <div id="phoneInputSection" style="display:none; margin-bottom:15px;">
+                <div id="phoneInputSection" style="display:none; margin-bottom:15px; animation: slideDown 0.3s ease;">
                     <label style="font-size:0.75rem; color:var(--gold-primary); margin-bottom:5px; display:block;" data-en="Real Phone Number (WhatsApp preferred):" data-ar="رقم هاتف حقيقي (يفضل واتساب):">Real Phone Number:</label>
                     <input type="tel" id="userPhone" placeholder="05xxxxxxxx" maxlength="15">
                 </div>
@@ -306,6 +360,8 @@
 
         let currentUser = null, currentLang = 'en', allProducts = [], cart = [], selectedQuality = 'Mid', discount = 1.0;
         let statusMap = {};
+        let oldStatusMap = {}; // To track changes
+        let justAppliedCoupon = false; // For animation
 
         // --- PARTICLES ---
         const canvas = document.getElementById('particle-canvas');
@@ -346,24 +402,36 @@
             animate();
         }
 
-        // --- IMPROVED STATUS SYNC LOGIC ---
+        // --- STATUS SYNC LOGIC ---
         async function fetchStatusSheet() {
             return new Promise((resolve) => {
                 Papa.parse(STATUS_SHEET_URL, {
                     download: true, header: true,
                     complete: (results) => {
-                        statusMap = {};
+                        const newMap = {};
                         results.data.forEach(row => {
-                            // Robust key finding: checks "OrderID", "Order ID", "ID", "id"
-                            let oid = row['OrderID'] || row['Order ID'] || row['id'] || row['ID'] || row['order_id'];
-                            let stat = row['Status'] || row['status'] || row['STATE'];
-                            
-                            if(oid && stat) {
-                                // Store ID in UPPERCASE and trimmed to ensure matching works perfectly
-                                statusMap[oid.trim().toUpperCase()] = stat.trim();
+                            if(row.OrderID && row.Status) newMap[row.OrderID.trim()] = row.Status.trim();
+                        });
+
+                        // Check for status changes
+                        Object.keys(newMap).forEach(oid => {
+                            const newStatus = newMap[oid];
+                            const oldStatus = oldStatusMap[oid];
+
+                            if(oldStatus && oldStatus !== newStatus) {
+                                let color = "#fff";
+                                if(newStatus.toLowerCase().includes("ready")) color = "#00FF00"; // Green
+                                else if(newStatus.toLowerCase().includes("cancel")) color = "#FF0000"; // Red
+                                else if(newStatus.toLowerCase().includes("under")) color = "#FFA500"; // Orange
+                                
+                                notify(currentLang === 'en' 
+                                    ? `Order ${oid}: Status Changed to ${newStatus}` 
+                                    : `طلب ${oid}: تغيرت الحالة إلى ${newStatus}`, color);
                             }
                         });
-                        console.log("RIYADUINO: Status Map Loaded", statusMap);
+
+                        statusMap = newMap;
+                        oldStatusMap = {...newMap};
                         resolve();
                     },
                     error: () => resolve()
@@ -373,15 +441,25 @@
 
         window.applyCoupon = () => {
             if(document.getElementById('couponInput').value.trim().toLowerCase() === '3mk') {
-                discount = 0.85; triggerParticles();
-                notify(currentLang === 'en' ? "COUPON ACTIVATED! 15% OFF" : "تم تفعيل الخصم! 15%");
+                discount = 0.85; 
+                justAppliedCoupon = true;
+                triggerParticles();
+                notify(currentLang === 'en' ? "COUPON ACTIVATED! 15% OFF" : "تم تفعيل الخصم! 15%", "#00FF00");
                 updateCartUI();
-            } else notify(currentLang === 'en' ? "Invalid Code" : "كود غير صالح");
+                
+                // Animation reset after 3 seconds
+                setTimeout(() => {
+                    justAppliedCoupon = false;
+                    updateCartUI();
+                }, 3000);
+            } else notify(currentLang === 'en' ? "Invalid Code" : "كود غير صالح", "#FF0000");
         };
 
-        window.notify = (msg) => {
+        window.notify = (msg, color = "#FFD700") => {
             const area = document.getElementById('notification-area');
             const t = document.createElement('div'); t.className = 'notify-toast';
+            t.style.borderLeftColor = color;
+            t.style.boxShadow = `0 5px 20px ${color}40`; // Add transparency to hex
             t.innerHTML = `<strong>RIYADUINO SYSTEM:</strong><br>${msg}`;
             area.appendChild(t);
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 5000);
@@ -415,13 +493,15 @@
         function renderProducts(cat = 'pieces') {
             const grid = document.getElementById('productsGrid'); grid.innerHTML = "";
             allProducts.filter(p => (p.category || 'pieces').toLowerCase() === cat).forEach((p, i) => {
-                grid.innerHTML += `<div class="product-card" onclick="openProduct(${allProducts.indexOf(p)})"><div class="img-box"><img src="${p.image}"></div><div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">${p.price}</div></div></div>`;
+                // Added slight delay for cascading animation
+                const animDelay = (i % 10) * 0.05;
+                grid.innerHTML += `<div class="product-card" style="animation-delay:${animDelay}s" onclick="openProduct(${allProducts.indexOf(p)})"><div class="img-box"><img src="${p.image}"></div><div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">${p.price}</div></div></div>`;
             });
         }
 
         window.openProduct = (idx) => {
             const p = allProducts[idx];
-            if(p.instock?.toLowerCase() !== 'true') return notify(currentLang==='en'?"Out of Stock!":"نفذت الكمية!");
+            if(p.instock?.toLowerCase() !== 'true') return notify(currentLang==='en'?"Out of Stock!":"نفذت الكمية!", "#FF0000");
             document.getElementById('modalImg').src = p.image; document.getElementById('modalTitle').innerText = p.name;
             document.getElementById('modalPrice').innerText = p.price; document.getElementById('modalDesc').innerText = p.description || "...";
             selectQuality('Mid'); document.getElementById('productModal').classList.add('open');
@@ -435,6 +515,7 @@
             const ex = cart.find(i => i.idx === idx && i.quality === selectedQuality);
             if(ex) ex.qty++; else cart.push({ idx, name: p.name, price: pNum, qty: 1, quality: selectedQuality, img: p.image });
             updateCartUI(); updateDoc(doc(db, "users", currentUser.uid), { cart: cart }); closeModals();
+            notify(currentLang==='en'?"Added to Cart":"تمت الإضافة للسلة", "#FFD700");
         };
 
         window.updateCartUI = () => {
@@ -444,7 +525,15 @@
                 total += item.price * item.qty;
                 list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">$${(item.price * item.qty).toFixed(2)}</div></div>`;
             });
-            document.getElementById('cartTotalDisplay').innerText = "$" + (total * discount).toFixed(2);
+
+            // Logic for price display animation
+            const displayEl = document.getElementById('cartTotalDisplay');
+            if (justAppliedCoupon && discount < 1.0) {
+                displayEl.innerHTML = `<span class="old-price">$${total.toFixed(2)}</span> <span class="new-price">$${(total * discount).toFixed(2)}</span>`;
+            } else {
+                displayEl.innerText = "$" + (total * discount).toFixed(2);
+            }
+            
             document.getElementById('cartCount').innerText = cart.reduce((a, b) => a + b.qty, 0);
         };
 
@@ -455,7 +544,7 @@
             if(!currentUser) return handleAuth();
             if(!cart.length) return;
             const sec = document.getElementById('phoneInputSection'), ph = document.getElementById('userPhone');
-            if(sec.style.display === 'none') { sec.style.display = 'block'; ph.focus(); return notify(currentLang==='en'?"Almost there! We need your phone.":"خطوة أخيرة! نحتاج رقم هاتفك."); }
+            if(sec.style.display === 'none') { sec.style.display = 'block'; ph.focus(); return notify(currentLang==='en'?"Almost there! We need your phone.":"خطوة أخيرة! نحتاج رقم هاتفك.", "#FFA500"); }
             
             const phoneRegex = /^(05|5|\+966|00966)[0-9]{8,11}$/;
             if(!phoneRegex.test(ph.value.replace(/\s/g, ''))) { ph.style.borderColor = "red"; return; }
@@ -473,10 +562,10 @@
                 if (res.ok) {
                     const newOrder = { id: orderId, date: new Date().toLocaleString(), details: orderStr };
                     await updateDoc(doc(db, "users", currentUser.uid), { history: arrayUnion(newOrder), cart: [] });
-                    notify(currentLang==='en' ? "Success! Order Logged." : "تم بنجاح! تم تسجيل طلبك.");
+                    notify(currentLang==='en' ? "Success! Order Logged." : "تم بنجاح! تم تسجيل طلبك.", "#00FF00");
                     cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; syncUserData();
                 }
-            } catch (err) { notify("Error!"); } finally { btn.disabled = false; btn.innerText = currentLang==='en'?"CHECKOUT NOW":"إتمام الشراء"; }
+            } catch (err) { notify("Error!", "#FF0000"); } finally { btn.disabled = false; btn.innerText = currentLang==='en'?"CHECKOUT NOW":"إتمام الشراء"; }
         };
 
         function renderHistory(h) {
@@ -486,43 +575,20 @@
                 const id = o.id || "OLD-ORDER";
                 const details = typeof o === 'string' ? o : o.details;
                 const date = o.date || "N/A";
-                
-                // --- ROBUST LOOKUP ---
-                // Looks up status using the UPPERCASE ID to match what we stored in fetchStatusSheet
-                let status = statusMap[id.trim().toUpperCase()] || "Processing";
+                let status = statusMap[id] || "Processing";
                 
                 let color = "#888";
                 if(status.toLowerCase().includes("ready")) color = "#00FF00";
                 if(status.toLowerCase().includes("under")) color = "#FFA500";
                 if(status.toLowerCase().includes("cancel")) color = "#FF4444";
 
-                let pickupInfo = "";
-                if(status.toLowerCase().includes("ready")) {
-                    pickupInfo = `
-                        <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #333;">
-                            <div style="color:#00FF00; font-size:0.8rem; font-weight:bold; margin-bottom:5px;">
-                                ${currentLang === 'en' ? 'ORDER READY FOR PICKUP!' : 'الطلب جاهز للاستلام!'}
-                            </div>
-                            <div style="font-size:0.8rem; color:#ccc; margin-bottom:5px;">
-                                📞 ${currentLang === 'en' ? 'Contact' : 'تواصل'}: <a href="tel:0543945482" style="color:var(--gold-primary); text-decoration:none;">0543945482</a>
-                            </div>
-                            <div style="font-size:0.8rem;">
-                                📍 <a href="https://www.google.com/maps/place/RIYADUINO/@24.7062064,46.7416725,17z/data=!3m1!4b1!4m6!3m5!1s0x3e2f03437de4bd47:0xb1ba818f2b0a8cbc!8m2!3d24.7062064!4d46.7416725!16s%2Fg%2F11yn_szgsf?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2OUgBUAM%3D" target="_blank" style="color:var(--gold-primary); text-decoration:underline;">
-                                    ${currentLang === 'en' ? 'View Pickup Location' : 'عرض موقع الاستلام'}
-                                </a>
-                            </div>
-                        </div>
-                    `;
-                }
-
                 c.innerHTML += `
-                    <div class="history-card">
+                    <div class="history-card" style="border-left: 4px solid ${color}">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                             <div class="history-date">${id} | ${date}</div>
                             <div style="color:${color}; font-size:0.65rem; border:1px solid ${color}; padding:2px 6px; border-radius:4px; font-weight:900;">${status.toUpperCase()}</div>
                         </div>
                         <div style="font-size:0.8rem; color:#888;">${details}</div>
-                        ${pickupInfo}
                     </div>`; 
             });
         }
