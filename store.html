@@ -145,12 +145,24 @@
             transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative;
         }
         .product-card:hover { border-color: var(--gold-primary); transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .img-box { height: 200px; background: #000; overflow: hidden; }
+        .img-box { height: 200px; background: #000; overflow: hidden; position: relative; }
         .img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
         .product-card:hover .img-box img { transform: scale(1.1); }
         .p-info { padding: 20px; }
         .p-title { font-weight: 600; font-size: 1.1rem; margin-bottom: 8px; }
         .p-price { color: var(--gold-primary); font-family: var(--font-tech); font-weight: 700; }
+
+        /* OUT OF STOCK STYLING */
+        .out-of-stock-card {
+            filter: grayscale(1) opacity(0.7);
+            pointer-events: none;
+        }
+        .out-of-stock-badge {
+            position: absolute; top: 10px; right: 10px;
+            background: #ff4444; color: white; padding: 5px 10px;
+            font-weight: 900; font-family: var(--font-tech); font-size: 0.7rem;
+            border-radius: 4px; z-index: 10;
+        }
 
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
@@ -209,6 +221,8 @@
         .history-card:hover { border-color: #444; transform: translateX(5px); }
 
         .history-date { font-size: 0.7rem; color: var(--gold-primary); font-family: var(--font-tech); margin-bottom: 5px; }
+        .contact-info { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #333; font-size: 0.8rem; line-height: 1.5; color: #ccc; }
+        .contact-info a { color: var(--gold-primary); text-decoration: none; border-bottom: 1px dotted var(--gold-primary); }
 
         #userPhone {
             width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; 
@@ -420,13 +434,27 @@
 
                             if(oldStatus && oldStatus !== newStatus) {
                                 let color = "#fff";
-                                if(newStatus.toLowerCase().includes("ready")) color = "#00FF00"; // Green
-                                else if(newStatus.toLowerCase().includes("cancel")) color = "#FF0000"; // Red
-                                else if(newStatus.toLowerCase().includes("under")) color = "#FFA500"; // Orange
+                                let msg = "";
                                 
-                                notify(currentLang === 'en' 
-                                    ? `Order ${oid}: Status Changed to ${newStatus}` 
-                                    : `طلب ${oid}: تغيرت الحالة إلى ${newStatus}`, color);
+                                if(newStatus.toLowerCase().includes("ready")) {
+                                    color = "#00FF00"; // Green
+                                    msg = currentLang === 'en'
+                                        ? "Your Order is READY! Contact: 0543945482"
+                                        : "طلبك جاهز! تواصل معنا: 0543945482";
+                                }
+                                else if(newStatus.toLowerCase().includes("cancel")) {
+                                    color = "#FF0000"; // Red
+                                    msg = currentLang === 'en' ? "Your Order was Cancelled" : "تم إلغاء طلبك";
+                                }
+                                else if(newStatus.toLowerCase().includes("under")) {
+                                    color = "#FFA500"; // Orange
+                                    msg = currentLang === 'en' ? "Your Order is Under Review" : "طلبك قيد المراجعة";
+                                }
+                                else {
+                                    msg = currentLang === 'en' ? `Order Status: ${newStatus}` : `حالة الطلب: ${newStatus}`;
+                                }
+                                
+                                notify(msg, color);
                             }
                         });
 
@@ -438,6 +466,9 @@
                 });
             });
         }
+
+        // Poll for updates every 10 seconds
+        setInterval(() => fetchStatusSheet(), 10000);
 
         window.applyCoupon = () => {
             if(document.getElementById('couponInput').value.trim().toLowerCase() === '3mk') {
@@ -493,9 +524,19 @@
         function renderProducts(cat = 'pieces') {
             const grid = document.getElementById('productsGrid'); grid.innerHTML = "";
             allProducts.filter(p => (p.category || 'pieces').toLowerCase() === cat).forEach((p, i) => {
-                // Added slight delay for cascading animation
                 const animDelay = (i % 10) * 0.05;
-                grid.innerHTML += `<div class="product-card" style="animation-delay:${animDelay}s" onclick="openProduct(${allProducts.indexOf(p)})"><div class="img-box"><img src="${p.image}"></div><div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">${p.price}</div></div></div>`;
+                const isOutOfStock = p.instock && p.instock.toLowerCase() !== 'true';
+                
+                // Add gray styling class if out of stock
+                const cardClass = isOutOfStock ? "product-card out-of-stock-card" : "product-card";
+                const badgeHTML = isOutOfStock ? `<div class="out-of-stock-badge">${currentLang==='en'?'OUT OF STOCK':'نفذت الكمية'}</div>` : '';
+                
+                grid.innerHTML += `
+                <div class="${cardClass}" style="animation-delay:${animDelay}s" onclick="openProduct(${allProducts.indexOf(p)})">
+                    ${badgeHTML}
+                    <div class="img-box"><img src="${p.image}"></div>
+                    <div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">${p.price}</div></div>
+                </div>`;
             });
         }
 
@@ -578,17 +619,29 @@
                 let status = statusMap[id] || "Processing";
                 
                 let color = "#888";
-                if(status.toLowerCase().includes("ready")) color = "#00FF00";
-                if(status.toLowerCase().includes("under")) color = "#FFA500";
-                if(status.toLowerCase().includes("cancel")) color = "#FF4444";
+                let extraInfo = "";
 
+                if(status.toLowerCase().includes("ready")) {
+                    color = "#00FF00";
+                    extraInfo = `
+                    <div class="contact-info">
+                        <strong>READY FOR PICKUP!</strong><br>
+                        Number: 0543945482<br>
+                        Location: <a href="https://www.google.com/maps/place/RIYADUINO/@24.7060923,46.7417012,21z/data=!4m6!3m5!1s0x3e2f03437de4bd47:0xb1ba818f2b0a8cbc!8m2!3d24.7062064!4d46.7416725!16s%2Fg%2F11yn_szgsf?entry=ttu&g_ep=EgoyMDI2MDEwNy4wIKXMDSoKLDEwMDc5MjA2OUgBUAM%3D" target="_blank">Click Here</a>
+                    </div>`;
+                }
+                else if(status.toLowerCase().includes("under")) color = "#FFA500";
+                else if(status.toLowerCase().includes("cancel")) color = "#FF4444";
+
+                // Hiding the ID from the display title, showing only Date
                 c.innerHTML += `
                     <div class="history-card" style="border-left: 4px solid ${color}">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                            <div class="history-date">${id} | ${date}</div>
+                            <div class="history-date">${date}</div>
                             <div style="color:${color}; font-size:0.65rem; border:1px solid ${color}; padding:2px 6px; border-radius:4px; font-weight:900;">${status.toUpperCase()}</div>
                         </div>
                         <div style="font-size:0.8rem; color:#888;">${details}</div>
+                        ${extraInfo}
                     </div>`; 
             });
         }
