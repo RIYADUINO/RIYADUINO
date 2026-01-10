@@ -251,8 +251,8 @@
 
     <div class="coupon-strap">
         <div class="ticker-text">
-            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 15% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% على طلبك — 
-            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 15% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% على طلبك —
+            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 20% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 20% على طلبك — 
+            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 20% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 20% على طلبك —
         </div>
     </div>
 
@@ -323,7 +323,7 @@
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:700; font-size:1.2rem;">
                     <span data-en="Total" data-ar="المجموع">Total</span>
-                    <span id="cartTotalDisplay" style="color:var(--gold-primary); transition:0.3s;">$0.00</span>
+                    <span id="cartTotalDisplay" style="color:var(--gold-primary); transition:0.3s;">SAR 0.00</span>
                 </div>
                 <div id="phoneInputSection" style="display:none; margin-bottom:15px; animation: slideDown 0.3s ease;">
                     <label style="font-size:0.75rem; color:var(--gold-primary); margin-bottom:5px; display:block;" data-en="Real Phone Number (WhatsApp preferred):" data-ar="رقم هاتف حقيقي (يفضل واتساب):">Real Phone Number:</label>
@@ -435,26 +435,32 @@
                             if(oldStatus && oldStatus !== newStatus) {
                                 let color = "#fff";
                                 let msg = "";
+                                let shouldNotify = false;
                                 
-                                if(newStatus.toLowerCase().includes("ready")) {
+                                const statusLower = newStatus.toLowerCase();
+
+                                if(statusLower.includes("ready")) {
                                     color = "#00FF00"; // Green
                                     msg = currentLang === 'en'
                                         ? "Your Order is READY! Contact: 0543945482"
                                         : "طلبك جاهز! تواصل معنا: 0543945482";
+                                    shouldNotify = true;
                                 }
-                                else if(newStatus.toLowerCase().includes("cancel")) {
+                                else if(statusLower.includes("cancel")) {
                                     color = "#FF0000"; // Red
                                     msg = currentLang === 'en' ? "Your Order was Cancelled" : "تم إلغاء طلبك";
+                                    shouldNotify = true;
                                 }
-                                else if(newStatus.toLowerCase().includes("under")) {
+                                else if(statusLower.includes("under")) {
                                     color = "#FFA500"; // Orange
                                     msg = currentLang === 'en' ? "Your Order is Under Review" : "طلبك قيد المراجعة";
+                                    shouldNotify = true;
                                 }
-                                else {
-                                    msg = currentLang === 'en' ? `Order Status: ${newStatus}` : `حالة الطلب: ${newStatus}`;
-                                }
+                                // Removed generic else block to satisfy requirement
                                 
-                                notify(msg, color);
+                                if(shouldNotify) {
+                                    notify(msg, color);
+                                }
                             }
                         });
 
@@ -472,10 +478,10 @@
 
         window.applyCoupon = () => {
             if(document.getElementById('couponInput').value.trim().toLowerCase() === '3mk') {
-                discount = 0.85; 
+                discount = 0.80; // Changed to 20% off
                 justAppliedCoupon = true;
                 triggerParticles();
-                notify(currentLang === 'en' ? "COUPON ACTIVATED! 15% OFF" : "تم تفعيل الخصم! 15%", "#00FF00");
+                notify(currentLang === 'en' ? "COUPON ACTIVATED! 20% OFF" : "تم تفعيل الخصم! 20%", "#00FF00");
                 updateCartUI();
                 
                 // Animation reset after 3 seconds
@@ -531,11 +537,14 @@
                 const cardClass = isOutOfStock ? "product-card out-of-stock-card" : "product-card";
                 const badgeHTML = isOutOfStock ? `<div class="out-of-stock-badge">${currentLang==='en'?'OUT OF STOCK':'نفذت الكمية'}</div>` : '';
                 
+                // Currency logic: strip non-numeric and add SAR
+                const priceNum = p.price.replace(/[^0-9.]/g, '');
+                
                 grid.innerHTML += `
                 <div class="${cardClass}" style="animation-delay:${animDelay}s" onclick="openProduct(${allProducts.indexOf(p)})">
                     ${badgeHTML}
                     <div class="img-box"><img src="${p.image}"></div>
-                    <div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">${p.price}</div></div>
+                    <div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">SAR ${priceNum}</div></div>
                 </div>`;
             });
         }
@@ -544,7 +553,12 @@
             const p = allProducts[idx];
             if(p.instock?.toLowerCase() !== 'true') return notify(currentLang==='en'?"Out of Stock!":"نفذت الكمية!", "#FF0000");
             document.getElementById('modalImg').src = p.image; document.getElementById('modalTitle').innerText = p.name;
-            document.getElementById('modalPrice').innerText = p.price; document.getElementById('modalDesc').innerText = p.description || "...";
+            
+            // Currency logic
+            const priceNum = p.price.replace(/[^0-9.]/g, '');
+            document.getElementById('modalPrice').innerText = "SAR " + priceNum; 
+            
+            document.getElementById('modalDesc').innerText = p.description || "...";
             selectQuality('Mid'); document.getElementById('productModal').classList.add('open');
             document.getElementById('modalAddBtn').onclick = () => addToCart(idx);
         };
@@ -564,15 +578,15 @@
             list.innerHTML = cart.length ? "" : `<div style="text-align:center; padding:50px; color:#444;">${currentLang==='en'?'Cart is Empty':'السلة فارغة'}</div>`;
             cart.forEach((item, i) => {
                 total += item.price * item.qty;
-                list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">$${(item.price * item.qty).toFixed(2)}</div></div>`;
+                list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">SAR ${(item.price * item.qty).toFixed(2)}</div></div>`;
             });
 
             // Logic for price display animation
             const displayEl = document.getElementById('cartTotalDisplay');
             if (justAppliedCoupon && discount < 1.0) {
-                displayEl.innerHTML = `<span class="old-price">$${total.toFixed(2)}</span> <span class="new-price">$${(total * discount).toFixed(2)}</span>`;
+                displayEl.innerHTML = `<span class="old-price">SAR ${total.toFixed(2)}</span> <span class="new-price">SAR ${(total * discount).toFixed(2)}</span>`;
             } else {
-                displayEl.innerText = "$" + (total * discount).toFixed(2);
+                displayEl.innerText = "SAR " + (total * discount).toFixed(2);
             }
             
             document.getElementById('cartCount').innerText = cart.reduce((a, b) => a + b.qty, 0);
@@ -591,7 +605,7 @@
             if(!phoneRegex.test(ph.value.replace(/\s/g, ''))) { ph.style.borderColor = "red"; return; }
 
             const btn = document.getElementById('checkoutBtn'); btn.disabled = true; btn.innerText = "...";
-            const orderStr = cart.map(i => `${i.name} (${i.quality}) x${i.qty}`).join(' | ') + (discount < 1 ? " [15% OFF]" : "");
+            const orderStr = cart.map(i => `${i.name} (${i.quality}) x${i.qty}`).join(' | ') + (discount < 1 ? " [20% OFF]" : "");
             
             const orderId = "ORD-" + Math.floor(100000 + Math.random() * 900000);
             document.getElementById('hiddenOrderData').value = `[ID: ${orderId}] \nDetails: ${orderStr}`;
