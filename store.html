@@ -604,27 +604,32 @@
             } else { avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); }
         });
 
-        // --- UPDATED SYNC USER DATA (SAVES EMAIL) ---
+        // --- FIX: UPDATED SYNC USER DATA (FORCE SAVE EMAIL) ---
         async function syncUserData() {
-            const ref = doc(db, "users", currentUser.uid), snap = await getDoc(ref);
+            const ref = doc(db, "users", currentUser.uid);
+
+            // 1. Force save the email using setDoc with merge: true
+            // This ensures the email is written even if the doc already exists
+            await setDoc(ref, { 
+                email: currentUser.email 
+            }, { merge: true });
+
+            // 2. Fetch the updated document
+            const snap = await getDoc(ref);
             
             if (snap.exists()) { 
                 cart = snap.data().cart || []; 
-                await fetchStatusSheet();
-                await fetchInbox(); // Preserved existing logic
                 renderHistory(snap.data().history || []); 
-                
-                // NEW: Update email for returning users
-                await updateDoc(ref, { email: currentUser.email });
             }
             else {
-                // NEW: Create user with email
-                await setDoc(ref, { 
-                    cart: [], 
-                    history: [], 
-                    email: currentUser.email 
-                });
+                // Fallback (should theoretically not be reached if setDoc worked)
+                cart = [];
+                renderHistory([]);
             }
+
+            // 3. Load other features
+            await fetchStatusSheet();
+            await fetchInbox();
             updateCartUI();
         }
 
