@@ -413,8 +413,8 @@
 
         let currentUser = null, currentLang = 'en', allProducts = [], cart = [], selectedQuality = 'Mid', discount = 1.0;
         let statusMap = {};
-        let oldStatusMap = {}; // To track changes
-        let justAppliedCoupon = false; // For animation
+        let oldStatusMap = {}; 
+        let justAppliedCoupon = false; 
 
         // --- PARTICLES ---
         const canvas = document.getElementById('particle-canvas');
@@ -457,13 +457,12 @@
 
         // --- INBOX LOGIC ---
         async function fetchInbox() {
-            if (!currentUser) return; // Don't fetch if not logged in
+            if (!currentUser) return; 
 
             return new Promise((resolve) => {
                 Papa.parse(INBOX_SHEET_URL, {
                     download: true, header: true,
                     complete: (results) => {
-                        // Filter messages where TargetEmail matches current user's email
                         const myMessages = results.data.filter(row => 
                             row.TargetEmail && 
                             row.TargetEmail.trim().toLowerCase() === currentUser.email.toLowerCase()
@@ -480,7 +479,6 @@
             const container = document.getElementById('inboxContent');
             const badge = document.getElementById('inboxCount');
             
-            // Update Badge
             if (messages.length > 0) {
                 badge.innerText = messages.length;
                 badge.style.display = 'block';
@@ -489,14 +487,12 @@
                 badge.style.display = 'none';
             }
 
-            // Render Messages
             if (messages.length === 0) {
                 container.innerHTML = `<div class="empty-inbox">${currentLang === 'en' ? 'No new messages' : 'لا توجد رسائل جديدة'}</div>`;
                 return;
             }
 
             container.innerHTML = "";
-            // Show newest first
             [...messages].reverse().forEach(msg => {
                 container.innerHTML += `
                     <div class="msg-card unread">
@@ -519,7 +515,6 @@
                             if(row.OrderID && row.Status) newMap[row.OrderID.trim()] = row.Status.trim();
                         });
 
-                        // Check for status changes
                         Object.keys(newMap).forEach(oid => {
                             const newStatus = newMap[oid];
                             const oldStatus = oldStatusMap[oid];
@@ -529,23 +524,20 @@
                                 let msg = "";
                                 
                                 if(newStatus.toLowerCase().includes("ready")) {
-                                    color = "#00FF00"; // Green
-                                    msg = currentLang === 'en'
-                                        ? "Your Order is READY! Contact: 0543945482"
-                                        : "طلبك جاهز! تواصل معنا: 0543945482";
+                                    color = "#00FF00"; 
+                                    msg = currentLang === 'en' ? "Your Order is READY!" : "طلبك جاهز!";
                                 }
                                 else if(newStatus.toLowerCase().includes("cancel")) {
-                                    color = "#FF0000"; // Red
+                                    color = "#FF0000"; 
                                     msg = currentLang === 'en' ? "Your Order was Cancelled" : "تم إلغاء طلبك";
                                 }
                                 else if(newStatus.toLowerCase().includes("under")) {
-                                    color = "#FFA500"; // Orange
+                                    color = "#FFA500"; 
                                     msg = currentLang === 'en' ? "Your Order is Under Review" : "طلبك قيد المراجعة";
                                 }
                                 else {
                                     msg = currentLang === 'en' ? `Order Status: ${newStatus}` : `حالة الطلب: ${newStatus}`;
                                 }
-                                
                                 notify(msg, color);
                             }
                         });
@@ -559,7 +551,6 @@
             });
         }
 
-        // Poll for updates every 10 seconds
         setInterval(() => {
             if(currentUser) {
                 fetchStatusSheet();
@@ -574,12 +565,7 @@
                 triggerParticles();
                 notify(currentLang === 'en' ? "COUPON ACTIVATED! 15% OFF" : "تم تفعيل الخصم! 15%", "#00FF00");
                 updateCartUI();
-                
-                // Animation reset after 3 seconds
-                setTimeout(() => {
-                    justAppliedCoupon = false;
-                    updateCartUI();
-                }, 3000);
+                setTimeout(() => { justAppliedCoupon = false; updateCartUI(); }, 3000);
             } else notify(currentLang === 'en' ? "Invalid Code" : "كود غير صالح", "#FF0000");
         };
 
@@ -587,44 +573,76 @@
             const area = document.getElementById('notification-area');
             const t = document.createElement('div'); t.className = 'notify-toast';
             t.style.borderLeftColor = color;
-            t.style.boxShadow = `0 5px 20px ${color}40`; // Add transparency to hex
+            t.style.boxShadow = `0 5px 20px ${color}40`;
             t.innerHTML = `<strong>RIYADUINO SYSTEM:</strong><br>${msg}`;
             area.appendChild(t);
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 5000);
         };
 
-        window.handleAuth = async () => { if (currentUser) await signOut(auth); else await signInWithPopup(auth, provider); };
+        // --- UPDATED AUTH HANDLER (LOUD ERRORS) ---
+        window.handleAuth = async () => { 
+            try {
+                if (currentUser) {
+                    await signOut(auth);
+                    notify("Logged Out", "#FFA500");
+                } else {
+                    notify("Opening Sign In...", "#FFFF00");
+                    await signInWithPopup(auth, provider);
+                }
+            } catch (error) {
+                console.error("Auth Error:", error);
+                alert("SIGN IN ERROR:\n" + error.message);
+            }
+        };
 
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             const avatar = document.getElementById('userAvatar'), authBtn = document.getElementById('googleAuthBtn');
             if (user) {
+                // UI Update first (so it feels fast)
                 avatar.src = user.photoURL; avatar.style.display = 'block'; authBtn.style.display = 'none';
-                await syncUserData();
-            } else { avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); }
+                
+                // Then try to sync
+                try {
+                    await syncUserData();
+                } catch (e) {
+                    console.error("Sync Data Failed", e);
+                    // Don't alert here, syncUserData handles its own alerts if critical
+                }
+            } else { 
+                avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); 
+            }
         });
 
-        // --- FIX: UPDATED SYNC USER DATA (FORCE SAVE EMAIL) ---
+        // --- UPDATED SYNC USER DATA (SAFE MODE) ---
         async function syncUserData() {
+            if(!currentUser) return;
             const ref = doc(db, "users", currentUser.uid);
 
-            // 1. Force save the email using setDoc with merge: true
-            // This ensures the email is written even if the doc already exists
-            await setDoc(ref, { 
-                email: currentUser.email 
-            }, { merge: true });
-
-            // 2. Fetch the updated document
-            const snap = await getDoc(ref);
-            
-            if (snap.exists()) { 
-                cart = snap.data().cart || []; 
-                renderHistory(snap.data().history || []); 
+            // 1. Try to Force Save Email
+            try {
+                await setDoc(ref, { 
+                    email: currentUser.email 
+                }, { merge: true });
+                console.log("Email saved successfully.");
+            } catch (e) {
+                console.error("EMAIL SAVE FAILED:", e);
+                // ALERT THE USER so they know why it might be broken
+                alert("DATABASE PERMISSION ERROR:\nCould not save email.\nDetails: " + e.message + "\n\n(You are still logged in, but history might not save)");
             }
-            else {
-                // Fallback (should theoretically not be reached if setDoc worked)
-                cart = [];
-                renderHistory([]);
+
+            // 2. Fetch Data (Try/Catch to prevent crash)
+            try {
+                const snap = await getDoc(ref);
+                if (snap.exists()) { 
+                    cart = snap.data().cart || []; 
+                    renderHistory(snap.data().history || []); 
+                } else {
+                    cart = [];
+                    renderHistory([]);
+                }
+            } catch (e) {
+                console.warn("Could not fetch user data", e);
             }
 
             // 3. Load other features
@@ -641,8 +659,6 @@
             allProducts.filter(p => (p.category || 'pieces').toLowerCase() === cat).forEach((p, i) => {
                 const animDelay = (i % 10) * 0.05;
                 const isOutOfStock = p.instock && p.instock.toLowerCase() !== 'true';
-                
-                // Add gray styling class if out of stock
                 const cardClass = isOutOfStock ? "product-card out-of-stock-card" : "product-card";
                 const badgeHTML = isOutOfStock ? `<div class="out-of-stock-badge">${currentLang==='en'?'OUT OF STOCK':'نفذت الكمية'}</div>` : '';
                 
@@ -682,7 +698,6 @@
                 list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">$${(item.price * item.qty).toFixed(2)}</div></div>`;
             });
 
-            // Logic for price display animation
             const displayEl = document.getElementById('cartTotalDisplay');
             if (justAppliedCoupon && discount < 1.0) {
                 displayEl.innerHTML = `<span class="old-price">$${total.toFixed(2)}</span> <span class="new-price">$${(total * discount).toFixed(2)}</span>`;
@@ -748,7 +763,6 @@
                 else if(status.toLowerCase().includes("under")) color = "#FFA500";
                 else if(status.toLowerCase().includes("cancel")) color = "#FF4444";
 
-                // Hiding the ID from the display title, showing only Date
                 c.innerHTML += `
                     <div class="history-card" style="border-left: 4px solid ${color}">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
