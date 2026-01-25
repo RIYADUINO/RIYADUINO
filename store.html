@@ -164,6 +164,27 @@
             border-radius: 4px; z-index: 10;
         }
 
+        /* --- INBOX STYLES --- */
+        .msg-card {
+            background: #111; border: 1px solid #222; padding: 15px;
+            border-radius: 8px; margin-bottom: 15px; position: relative;
+            transition: 0.3s; cursor: pointer; border-left: 3px solid #333;
+        }
+        .msg-card:hover { transform: translateX(5px); border-color: #444; }
+        .msg-card.unread { 
+            border-left: 3px solid var(--gold-primary); 
+            background: linear-gradient(90deg, rgba(255,215,0,0.05), transparent);
+        }
+        .msg-card.unread::after {
+            content: ''; position: absolute; top: 15px; right: 15px;
+            width: 8px; height: 8px; background: var(--gold-primary);
+            border-radius: 50%; box-shadow: 0 0 10px var(--gold-primary);
+        }
+        .msg-date { font-size: 0.65rem; color: #666; margin-bottom: 5px; font-family: var(--font-tech); }
+        .msg-title { font-weight: 700; color: #eee; margin-bottom: 5px; font-size: 0.95rem; }
+        .msg-body { font-size: 0.85rem; color: #aaa; line-height: 1.5; }
+        .empty-inbox { text-align: center; padding: 40px; color: #444; font-style: italic; }
+
         .modal-overlay { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
             background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
@@ -251,8 +272,8 @@
 
     <div class="coupon-strap">
         <div class="ticker-text">
-            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 20% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 20% على طلبك — 
-            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 20% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 20% على طلبك —
+            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 15% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% على طلبك — 
+            USE CODE: <bdi class="code-fix">3mk</bdi> FOR 15% OFF YOUR ORDER — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% على طلبك —
         </div>
     </div>
 
@@ -267,6 +288,12 @@
             <div class="icon-btn" onclick="togglePanel('historyModal')">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
+            
+            <div class="icon-btn" onclick="togglePanel('inboxModal')">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                <div class="badge" id="inboxCount" style="display:none">0</div>
+            </div>
+
             <div class="icon-btn" onclick="togglePanel('cartModal')">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
                 <div class="badge" id="cartCount">0</div>
@@ -309,6 +336,17 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="inboxModal" onclick="closeModals()">
+        <div class="sidebar-panel" onclick="event.stopPropagation()">
+            <div class="panel-header">
+                <h2 data-en="INBOX" data-ar="الوارد">INBOX</h2>
+                <span style="cursor:pointer; font-size:1.5rem" onclick="closeModals()">✕</span>
+            </div>
+            <div id="inboxContent" class="panel-content">
+                </div>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="cartModal" onclick="closeModals()">
         <div class="sidebar-panel" onclick="event.stopPropagation()">
             <div class="panel-header">
@@ -323,7 +361,7 @@
                 </div>
                 <div style="display:flex; justify-content:space-between; margin-bottom:20px; font-weight:700; font-size:1.2rem;">
                     <span data-en="Total" data-ar="المجموع">Total</span>
-                    <span id="cartTotalDisplay" style="color:var(--gold-primary); transition:0.3s;">SAR 0.00</span>
+                    <span id="cartTotalDisplay" style="color:var(--gold-primary); transition:0.3s;">$0.00</span>
                 </div>
                 <div id="phoneInputSection" style="display:none; margin-bottom:15px; animation: slideDown 0.3s ease;">
                     <label style="font-size:0.75rem; color:var(--gold-primary); margin-bottom:5px; display:block;" data-en="Real Phone Number (WhatsApp preferred):" data-ar="رقم هاتف حقيقي (يفضل واتساب):">Real Phone Number:</label>
@@ -366,13 +404,14 @@
 
         const PRODUCTS_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTBQd3LUgZKxeuRQA2B0Cj3IvJBSSS0VL2vnmtOryQxFsAK-Kikg_NZTVGtlYghB96yFYyvqXrPGJEu/pub?output=csv";
         const STATUS_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT6DBal_jf2UrdNIk1CTaIy92As8Jex2UQYPYqkdmWSovDbanvdLiV3BBmnN2B2iGfLpR012Rh4Z3oZ/pub?output=csv";
+        const INBOX_SHEET_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8RKrJTVh6tHKWP7p-f5PtL-g1YdpkOBU1Sqr5_KMivVzh5xfB2SncxEMZncjRdcuMeXavuJnuGdM9/pub?output=csv";
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
         const provider = new GoogleAuthProvider();
 
-        let currentUser = null, currentLang = 'en', allProducts = [], cart = [], currentHistory = [], selectedQuality = 'Mid', discount = 1.0;
+        let currentUser = null, currentLang = 'en', allProducts = [], cart = [], selectedQuality = 'Mid', discount = 1.0;
         let statusMap = {};
         let oldStatusMap = {}; // To track changes
         let justAppliedCoupon = false; // For animation
@@ -416,6 +455,59 @@
             animate();
         }
 
+        // --- INBOX LOGIC ---
+        async function fetchInbox() {
+            if (!currentUser) return; // Don't fetch if not logged in
+
+            return new Promise((resolve) => {
+                Papa.parse(INBOX_SHEET_URL, {
+                    download: true, header: true,
+                    complete: (results) => {
+                        // Filter messages where TargetEmail matches current user's email
+                        const myMessages = results.data.filter(row => 
+                            row.TargetEmail && 
+                            row.TargetEmail.trim().toLowerCase() === currentUser.email.toLowerCase()
+                        );
+                        renderInbox(myMessages);
+                        resolve();
+                    },
+                    error: () => resolve()
+                });
+            });
+        }
+
+        function renderInbox(messages) {
+            const container = document.getElementById('inboxContent');
+            const badge = document.getElementById('inboxCount');
+            
+            // Update Badge
+            if (messages.length > 0) {
+                badge.innerText = messages.length;
+                badge.style.display = 'block';
+                badge.style.animation = 'zoomPop 0.3s ease';
+            } else {
+                badge.style.display = 'none';
+            }
+
+            // Render Messages
+            if (messages.length === 0) {
+                container.innerHTML = `<div class="empty-inbox">${currentLang === 'en' ? 'No new messages' : 'لا توجد رسائل جديدة'}</div>`;
+                return;
+            }
+
+            container.innerHTML = "";
+            // Show newest first
+            [...messages].reverse().forEach(msg => {
+                container.innerHTML += `
+                    <div class="msg-card unread">
+                        <div class="msg-date">${msg.Date || 'Just now'}</div>
+                        <div class="msg-title">${msg.Title}</div>
+                        <div class="msg-body">${msg.Message}</div>
+                    </div>
+                `;
+            });
+        }
+
         // --- STATUS SYNC LOGIC ---
         async function fetchStatusSheet() {
             return new Promise((resolve) => {
@@ -435,31 +527,26 @@
                             if(oldStatus && oldStatus !== newStatus) {
                                 let color = "#fff";
                                 let msg = "";
-                                let shouldNotify = false;
                                 
-                                const statusLower = newStatus.toLowerCase();
-
-                                if(statusLower.includes("ready")) {
+                                if(newStatus.toLowerCase().includes("ready")) {
                                     color = "#00FF00"; // Green
                                     msg = currentLang === 'en'
                                         ? "Your Order is READY! Contact: 0543945482"
                                         : "طلبك جاهز! تواصل معنا: 0543945482";
-                                    shouldNotify = true;
                                 }
-                                else if(statusLower.includes("cancel")) {
+                                else if(newStatus.toLowerCase().includes("cancel")) {
                                     color = "#FF0000"; // Red
                                     msg = currentLang === 'en' ? "Your Order was Cancelled" : "تم إلغاء طلبك";
-                                    shouldNotify = true;
                                 }
-                                else if(statusLower.includes("under")) {
+                                else if(newStatus.toLowerCase().includes("under")) {
                                     color = "#FFA500"; // Orange
                                     msg = currentLang === 'en' ? "Your Order is Under Review" : "طلبك قيد المراجعة";
-                                    shouldNotify = true;
+                                }
+                                else {
+                                    msg = currentLang === 'en' ? `Order Status: ${newStatus}` : `حالة الطلب: ${newStatus}`;
                                 }
                                 
-                                if(shouldNotify) {
-                                    notify(msg, color);
-                                }
+                                notify(msg, color);
                             }
                         });
 
@@ -472,22 +559,23 @@
             });
         }
 
-        // Poll for updates every 10 seconds AND refresh history UI
-        setInterval(async () => {
-            await fetchStatusSheet();
-            if(currentUser && currentHistory.length > 0) {
-                renderHistory(currentHistory);
+        // Poll for updates every 10 seconds
+        setInterval(() => {
+            if(currentUser) {
+                fetchStatusSheet();
+                fetchInbox();
             }
         }, 10000);
 
         window.applyCoupon = () => {
             if(document.getElementById('couponInput').value.trim().toLowerCase() === '3mk') {
-                discount = 0.80; 
+                discount = 0.85; 
                 justAppliedCoupon = true;
                 triggerParticles();
-                notify(currentLang === 'en' ? "COUPON ACTIVATED! 20% OFF" : "تم تفعيل الخصم! 20%", "#00FF00");
+                notify(currentLang === 'en' ? "COUPON ACTIVATED! 15% OFF" : "تم تفعيل الخصم! 15%", "#00FF00");
                 updateCartUI();
                 
+                // Animation reset after 3 seconds
                 setTimeout(() => {
                     justAppliedCoupon = false;
                     updateCartUI();
@@ -499,7 +587,7 @@
             const area = document.getElementById('notification-area');
             const t = document.createElement('div'); t.className = 'notify-toast';
             t.style.borderLeftColor = color;
-            t.style.boxShadow = `0 5px 20px ${color}40`; 
+            t.style.boxShadow = `0 5px 20px ${color}40`; // Add transparency to hex
             t.innerHTML = `<strong>RIYADUINO SYSTEM:</strong><br>${msg}`;
             area.appendChild(t);
             setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 5000);
@@ -513,19 +601,16 @@
             if (user) {
                 avatar.src = user.photoURL; avatar.style.display = 'block'; authBtn.style.display = 'none';
                 await syncUserData();
-            } else { 
-                avatar.style.display = 'none'; authBtn.style.display = 'flex'; 
-                cart = []; currentHistory = []; updateCartUI(); 
-            }
+            } else { avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); }
         });
 
         async function syncUserData() {
             const ref = doc(db, "users", currentUser.uid), snap = await getDoc(ref);
             if (snap.exists()) { 
-                cart = snap.data().cart || [];
-                currentHistory = snap.data().history || []; 
+                cart = snap.data().cart || []; 
                 await fetchStatusSheet();
-                renderHistory(currentHistory); 
+                await fetchInbox(); // Load inbox
+                renderHistory(snap.data().history || []); 
             }
             else await setDoc(ref, { cart: [], history: [] });
             updateCartUI();
@@ -540,16 +625,15 @@
                 const animDelay = (i % 10) * 0.05;
                 const isOutOfStock = p.instock && p.instock.toLowerCase() !== 'true';
                 
+                // Add gray styling class if out of stock
                 const cardClass = isOutOfStock ? "product-card out-of-stock-card" : "product-card";
                 const badgeHTML = isOutOfStock ? `<div class="out-of-stock-badge">${currentLang==='en'?'OUT OF STOCK':'نفذت الكمية'}</div>` : '';
-                
-                const priceNum = p.price.replace(/[^0-9.]/g, '');
                 
                 grid.innerHTML += `
                 <div class="${cardClass}" style="animation-delay:${animDelay}s" onclick="openProduct(${allProducts.indexOf(p)})">
                     ${badgeHTML}
                     <div class="img-box"><img src="${p.image}"></div>
-                    <div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">SAR ${priceNum}</div></div>
+                    <div class="p-info"><div class="p-title">${p.name}</div><div class="p-price">${p.price}</div></div>
                 </div>`;
             });
         }
@@ -558,11 +642,7 @@
             const p = allProducts[idx];
             if(p.instock?.toLowerCase() !== 'true') return notify(currentLang==='en'?"Out of Stock!":"نفذت الكمية!", "#FF0000");
             document.getElementById('modalImg').src = p.image; document.getElementById('modalTitle').innerText = p.name;
-            
-            const priceNum = p.price.replace(/[^0-9.]/g, '');
-            document.getElementById('modalPrice').innerText = "SAR " + priceNum; 
-            
-            document.getElementById('modalDesc').innerText = p.description || "...";
+            document.getElementById('modalPrice').innerText = p.price; document.getElementById('modalDesc').innerText = p.description || "...";
             selectQuality('Mid'); document.getElementById('productModal').classList.add('open');
             document.getElementById('modalAddBtn').onclick = () => addToCart(idx);
         };
@@ -582,14 +662,15 @@
             list.innerHTML = cart.length ? "" : `<div style="text-align:center; padding:50px; color:#444;">${currentLang==='en'?'Cart is Empty':'السلة فارغة'}</div>`;
             cart.forEach((item, i) => {
                 total += item.price * item.qty;
-                list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">SAR ${(item.price * item.qty).toFixed(2)}</div></div>`;
+                list.innerHTML += `<div class="cart-item"><img src="${item.img}"><div style="flex:1"><div style="font-size:0.9rem; font-weight:600;">${item.name}</div><div style="font-size:0.7rem; color:#666;">${item.quality}</div><div class="qty-ctrl"><button class="qty-btn" onclick="changeQty(${i},-1)">-</button><span style="font-size:0.8rem">${item.qty}</span><button class="qty-btn" onclick="changeQty(${i},1)">+</button></div></div><div style="color:var(--gold-primary); font-weight:700;">$${(item.price * item.qty).toFixed(2)}</div></div>`;
             });
 
+            // Logic for price display animation
             const displayEl = document.getElementById('cartTotalDisplay');
             if (justAppliedCoupon && discount < 1.0) {
-                displayEl.innerHTML = `<span class="old-price">SAR ${total.toFixed(2)}</span> <span class="new-price">SAR ${(total * discount).toFixed(2)}</span>`;
+                displayEl.innerHTML = `<span class="old-price">$${total.toFixed(2)}</span> <span class="new-price">$${(total * discount).toFixed(2)}</span>`;
             } else {
-                displayEl.innerText = "SAR " + (total * discount).toFixed(2);
+                displayEl.innerText = "$" + (total * discount).toFixed(2);
             }
             
             document.getElementById('cartCount').innerText = cart.reduce((a, b) => a + b.qty, 0);
@@ -608,7 +689,7 @@
             if(!phoneRegex.test(ph.value.replace(/\s/g, ''))) { ph.style.borderColor = "red"; return; }
 
             const btn = document.getElementById('checkoutBtn'); btn.disabled = true; btn.innerText = "...";
-            const orderStr = cart.map(i => `${i.name} (${i.quality}) x${i.qty}`).join(' | ') + (discount < 1 ? " [20% OFF]" : "");
+            const orderStr = cart.map(i => `${i.name} (${i.quality}) x${i.qty}`).join(' | ') + (discount < 1 ? " [15% OFF]" : "");
             
             const orderId = "ORD-" + Math.floor(100000 + Math.random() * 900000);
             document.getElementById('hiddenOrderData').value = `[ID: ${orderId}] \nDetails: ${orderStr}`;
@@ -621,8 +702,7 @@
                     const newOrder = { id: orderId, date: new Date().toLocaleString(), details: orderStr };
                     await updateDoc(doc(db, "users", currentUser.uid), { history: arrayUnion(newOrder), cart: [] });
                     notify(currentLang==='en' ? "Success! Order Logged." : "تم بنجاح! تم تسجيل طلبك.", "#00FF00");
-                    cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; 
-                    syncUserData(); // Refresh history
+                    cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; syncUserData();
                 }
             } catch (err) { notify("Error!", "#FF0000"); } finally { btn.disabled = false; btn.innerText = currentLang==='en'?"CHECKOUT NOW":"إتمام الشراء"; }
         };
@@ -651,6 +731,7 @@
                 else if(status.toLowerCase().includes("under")) color = "#FFA500";
                 else if(status.toLowerCase().includes("cancel")) color = "#FF4444";
 
+                // Hiding the ID from the display title, showing only Date
                 c.innerHTML += `
                     <div class="history-card" style="border-left: 4px solid ${color}">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -667,6 +748,7 @@
             closeModals(); 
             document.getElementById(id).classList.add('open');
             if(id === 'historyModal') fetchStatusSheet().then(() => syncUserData());
+            if(id === 'inboxModal') fetchInbox();
         };
         window.closeModals = () => { document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open')); };
         window.toggleLang = () => {
