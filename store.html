@@ -604,15 +604,27 @@
             } else { avatar.style.display = 'none'; authBtn.style.display = 'flex'; cart = []; updateCartUI(); }
         });
 
+        // --- UPDATED SYNC USER DATA (SAVES EMAIL) ---
         async function syncUserData() {
             const ref = doc(db, "users", currentUser.uid), snap = await getDoc(ref);
+            
             if (snap.exists()) { 
                 cart = snap.data().cart || []; 
                 await fetchStatusSheet();
-                await fetchInbox(); // Load inbox
+                await fetchInbox(); // Preserved existing logic
                 renderHistory(snap.data().history || []); 
+                
+                // NEW: Update email for returning users
+                await updateDoc(ref, { email: currentUser.email });
             }
-            else await setDoc(ref, { cart: [], history: [] });
+            else {
+                // NEW: Create user with email
+                await setDoc(ref, { 
+                    cart: [], 
+                    history: [], 
+                    email: currentUser.email 
+                });
+            }
             updateCartUI();
         }
 
