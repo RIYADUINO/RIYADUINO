@@ -140,12 +140,6 @@
         }
         .lang-btn:hover { border-color: var(--gold-primary); color: var(--gold-primary); }
 
-        /* AUTH STYLES */
-        .auth-container { display: flex; align-items: center; margin-left: 15px; gap: 10px; }
-        .user-avatar { width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--gold-primary); object-fit: cover; display: none; }
-        #logout-btn { border-color: #555; color: #aaa; display: none; }
-        #logout-btn:hover { border-color: #ff4444; color: #ff4444; }
-
         /* Mobile Menu Toggle */
         .menu-toggle {
             display: none;
@@ -284,7 +278,6 @@
 
             .nav-links a { margin: 0; font-size: 1.1rem; }
             .lang-btn { margin: 10px 0 0 0; width: 120px; text-align: center; }
-            .auth-container { margin: 10px 0 0 0; }
 
             .hero { padding: 40px 20px; min-height: 50vh; }
             .gallery-wrap, .section-container, .about-section { padding: 50px 20px; }
@@ -316,18 +309,6 @@
             <a href="#about" data-en="ABOUT" data-ar="عنّا">ABOUT</a>
             <a href="#gallery" data-en="GALLERY" data-ar="المعرض">GALLERY</a>
             <a href="#projects" data-en="KITS" data-ar="الحقائب">KITS</a>
-            
-            <div class="auth-container">
-                <button id="login-btn" class="lang-btn" style="border-color: var(--gold-primary); color: var(--gold-primary);">
-                    <span data-en="LOGIN" data-ar="دخول">LOGIN</span>
-                </button>
-                
-                <img id="user-avatar" class="user-avatar" src="" alt="User">
-                <button id="logout-btn" class="lang-btn">
-                    <span data-en="LOGOUT" data-ar="خروج">LOGOUT</span>
-                </button>
-            </div>
-
             <button class="lang-btn" onclick="toggleLang()">EN/AR</button>
         </div>
     </nav>
@@ -452,6 +433,11 @@
             if(navList.classList.contains('active')) {
                 navList.classList.remove('active');
             }
+
+            const citySelect = document.getElementById('city-select');
+            if(citySelect && citySelect.options[0]) {
+                citySelect.options[0].innerText = citySelect.options[0].getAttribute(`data-${currentLang}`);
+            }
             
             charIndex = 0; isDeleting = false;
         }
@@ -537,72 +523,6 @@
                 modal.style.display = "none";
             }
         }
-    </script>
-
-    <script type="module">
-        // Import Firebase SDKs from CDN
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-analytics.js";
-        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAbAFWhzn9VPihn-P6NlJfTUJw37AhdU-4",
-            authDomain: "riyaduino1.firebaseapp.com",
-            projectId: "riyaduino1",
-            storageBucket: "riyaduino1.firebasestorage.app",
-            messagingSenderId: "600860626103",
-            appId: "1:600860626103:web:d7e1f2457321abbc789132",
-            measurementId: "G-5WTKN1Y1LX"
-        };
-
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
-
-        // DOM Elements
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
-        const userAvatar = document.getElementById('user-avatar');
-
-        // Handle Login
-        loginBtn.addEventListener('click', () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    // console.log("User logged in:", result.user);
-                }).catch((error) => {
-                    console.error("Login Error:", error);
-                    alert("Login failed. Please try again.");
-                });
-        });
-
-        // Handle Logout
-        logoutBtn.addEventListener('click', () => {
-            signOut(auth).then(() => {
-                // console.log("User signed out");
-            }).catch((error) => {
-                console.error("Logout Error:", error);
-            });
-        });
-
-        // Listen for Auth State Changes (Updates UI)
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in
-                loginBtn.style.display = 'none';
-                logoutBtn.style.display = 'inline-block';
-                userAvatar.style.display = 'block';
-                userAvatar.src = user.photoURL;
-            } else {
-                // User is signed out
-                loginBtn.style.display = 'inline-block';
-                logoutBtn.style.display = 'none';
-                userAvatar.style.display = 'none';
-                userAvatar.src = '';
-            }
-        });
     </script>
 </body>
 </html>
