@@ -255,11 +255,11 @@
         .contact-info { margin-top: 10px; padding-top: 10px; border-top: 1px dashed #333; font-size: 0.8rem; line-height: 1.5; color: #ccc; }
         .contact-info a { color: var(--gold-primary); text-decoration: none; border-bottom: 1px dotted var(--gold-primary); }
 
-        #userPhone {
+        #userPhone, .custom-input {
             width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; 
             border-radius: 6px; outline: none; transition: 0.3s; font-size: 1rem;
         }
-        #userPhone:focus { border-color: var(--gold-primary); }
+        #userPhone:focus, .custom-input:focus { border-color: var(--gold-primary); }
 
         .btn-gold { 
             width: 100%; padding: 15px; background: var(--gold-primary); color: #000; border: none; 
@@ -271,6 +271,21 @@
         /* Price Animation Classes */
         .old-price { color: #ff4444; text-decoration: line-through; font-size: 0.9em; margin-right: 10px; opacity: 0.8; }
         .new-price { color: #00ff00; font-weight: 900; animation: glowPulse 1s infinite; font-size: 1.2em; }
+
+        /* Custom Project Form Styles */
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; font-size: 0.75rem; color: #888; margin-bottom: 6px; font-weight: bold; }
+        .custom-textarea { min-height: 100px; resize: vertical; font-family: var(--font-main); }
+        .radio-group { display: flex; gap: 10px; }
+        .radio-label {
+            flex: 1; background: #111; border: 1px solid #333; padding: 10px; text-align: center;
+            border-radius: 6px; cursor: pointer; transition: 0.2s; font-size: 0.8rem; color: #888;
+        }
+        .radio-label:hover { border-color: #555; }
+        input[type="radio"] { display: none; }
+        input[type="radio"]:checked + .radio-label {
+            border-color: var(--gold-primary); background: rgba(255,215,0,0.1); color: var(--gold-primary);
+        }
 
         /* --- MOBILE & RESPONSIVE TWEAKS --- */
         @media (max-width: 900px) {
@@ -359,6 +374,7 @@
         <div class="filter-tabs">
             <button class="filter-btn active" onclick="setCategory('pieces')" data-en="PIECES" data-ar="القطع">PIECES</button>
             <button class="filter-btn" onclick="setCategory('projects')" data-en="PROJECTS" data-ar="المشاريع">PROJECTS</button>
+            <button class="filter-btn" onclick="openCustomRequest()" data-en="CUSTOM PROJECT" data-ar="مشروع خاص" style="border-color: var(--gold-primary); color: var(--gold-primary);">CUSTOM PROJECT</button>
         </div>
         <div id="loader" style="text-align:center; color:var(--gold-primary); font-family:var(--font-tech); animation: glowPulse 2s infinite;">INITIALIZING RIYADUINO...</div>
         <div class="products-grid" id="productsGrid"></div>
@@ -431,6 +447,60 @@
                 <span style="cursor:pointer; font-size:1.5rem; padding:10px;" onclick="closeModals()">✕</span>
             </div>
             <div id="historyContent" class="panel-content"></div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="customProjectModal" onclick="closeModals()">
+        <div class="sidebar-panel" onclick="event.stopPropagation()">
+            <div class="panel-header">
+                <h2 data-en="CUSTOM REQUEST" data-ar="مشروع خاص">CUSTOM REQUEST</h2>
+                <span style="cursor:pointer; font-size:1.5rem; padding:10px;" onclick="closeModals()">✕</span>
+            </div>
+            <div class="panel-content">
+                <p style="color:#888; font-size:0.8rem; margin-bottom:20px;" data-en="Describe your idea and we will bring it to life." data-ar="اشرح فكرتك وسنقوم بتنفيذها على أرض الواقع."></p>
+                <form id="customProjectForm" action="https://formspree.io/f/xnjvkzop" method="POST" onsubmit="handleCustomSubmit(event)">
+                    
+                    <div class="form-group">
+                        <label class="form-label" data-en="PROJECT DETAILS" data-ar="تفاصيل المشروع">PROJECT DETAILS</label>
+                        <textarea name="Project_Details" class="custom-input custom-textarea" required placeholder="..." data-en-p="Describe your project here..." data-ar-p="اشرح مشروعك هنا..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-en="PHONE NUMBER" data-ar="رقم الهاتف">PHONE NUMBER</label>
+                        <input type="tel" name="Phone" class="custom-input" required placeholder="05xxxxxxxx">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-en="QUALITY LEVEL" data-ar="مستوى الجودة">QUALITY LEVEL</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="Quality" value="Mid" checked>
+                                <div class="radio-label" data-en="Mid Quality" data-ar="جودة متوسطة">Mid Quality</div>
+                            </label>
+                            <label>
+                                <input type="radio" name="Quality" value="High">
+                                <div class="radio-label" data-en="High Quality" data-ar="جودة عالية">High Quality</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-en="TIMELINE" data-ar="الجدول الزمني">TIMELINE</label>
+                        <div class="radio-group">
+                            <label>
+                                <input type="radio" name="Timeline" value="Soon" checked>
+                                <div class="radio-label" data-en="Soon" data-ar="قريباً">Soon</div>
+                            </label>
+                            <label>
+                                <input type="radio" name="Timeline" value="ASAP">
+                                <div class="radio-label" data-en="ASAP (Urgent)" data-ar="عاجل جداً">ASAP (Urgent)</div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-gold" style="margin-top:20px;" data-en="SUBMIT REQUEST" data-ar="إرسال الطلب">SUBMIT REQUEST</button>
+                </form>
+            </div>
         </div>
     </div>
 
@@ -754,6 +824,67 @@
                     cart = []; updateCartUI(); closeModals(); ph.value = ''; sec.style.display = 'none'; syncUserData();
                 }
             } catch (err) { notify("Error!", "#FF0000"); } finally { btn.disabled = false; btn.innerText = currentLang==='en'?"CHECKOUT NOW":"إتمام الشراء"; }
+        };
+
+        // --- NEW CUSTOM PROJECT HANDLERS ---
+        
+        window.openCustomRequest = () => {
+            if(!currentUser) {
+                notify(currentLang === 'en' ? "Please Sign In to make a request" : "يرجى تسجيل الدخول لتقديم طلب", "#FFA500");
+                handleAuth();
+                return;
+            }
+            togglePanel('customProjectModal');
+        };
+
+        window.handleCustomSubmit = async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            
+            // Phone Validation Logic
+            const ph = e.target.querySelector('input[name="Phone"]');
+            const phoneRegex = /^(05|5|\+966|00966)[0-9]{8,11}$/;
+            if(!phoneRegex.test(ph.value.replace(/\s/g, ''))) {
+                notify(currentLang === 'en' ? "Please enter a valid Saudi mobile number" : "يرجى إدخال رقم جوال سعودي صحيح", "#FF0000");
+                ph.style.borderColor = "red";
+                ph.focus();
+                return;
+            } else {
+                ph.style.borderColor = "#333";
+            }
+
+            const originalText = btn.innerText;
+            btn.disabled = true; btn.innerText = "...";
+
+            if (currentUser) {
+                const hiddenEmail = document.createElement('input');
+                hiddenEmail.type = 'hidden'; hiddenEmail.name = 'User_Email'; hiddenEmail.value = currentUser.email;
+                e.target.appendChild(hiddenEmail);
+            }
+
+            try {
+                const res = await fetch(e.target.action, {
+                    method: 'POST',
+                    body: new FormData(e.target),
+                    headers: {'Accept': 'application/json'}
+                });
+
+                if (res.ok) {
+                    closeModals();
+                    e.target.reset();
+                    // Professional Success Message
+                    const msgEn = "Thank you for your request. Our engineering team will review the requirements and contact you shortly.";
+                    const msgAr = "شكراً لطلبك. سيقوم فريقنا الهندسي بمراجعة المتطلبات والتواصل معك قريباً.";
+                    notify(currentLang === 'en' ? msgEn : msgAr, "#00FF00");
+                } else {
+                    notify(currentLang === 'en' ? "Submission Failed" : "فشل الإرسال", "#FF0000");
+                }
+            } catch (error) {
+                notify("Network Error", "#FF0000");
+            } finally {
+                btn.disabled = false;
+                btn.innerText = originalText;
+            }
         };
 
         function renderHistory(h) {
