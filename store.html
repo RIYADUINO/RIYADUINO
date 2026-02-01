@@ -535,6 +535,7 @@
         let statusMap = {};
         let oldStatusMap = {}; // To track changes
         let justAppliedCoupon = false; // For animation
+        let lastInboxState = ""; // Prevents flickering
 
         // --- PARTICLES ---
         const canvas = document.getElementById('particle-canvas');
@@ -596,6 +597,11 @@
         }
 
         function renderInbox(messages) {
+            // Check if data actually changed to prevent flickering
+            const currentDataStr = JSON.stringify(messages);
+            if (currentDataStr === lastInboxState) return; 
+            lastInboxState = currentDataStr;
+
             const container = document.getElementById('inboxContent');
             const badge = document.getElementById('inboxCount');
             
@@ -703,7 +709,8 @@
             t.style.boxShadow = `0 5px 20px ${color}40`; 
             t.innerHTML = `<strong>RIYADUINO SYSTEM:</strong><br>${msg}`;
             area.appendChild(t);
-            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 5000);
+            // Increased duration to 8 seconds to ensure user sees it
+            setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 8000);
         };
 
         window.handleAuth = async () => { if (currentUser) await signOut(auth); else await signInWithPopup(auth, provider); };
