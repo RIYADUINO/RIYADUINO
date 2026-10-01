@@ -174,12 +174,7 @@
         .stat-item h4 { font-family: 'Orbitron', sans-serif; color: #fff; font-size: 1.5rem; }
         .stat-item p { font-size: 0.85rem; color: var(--gold-primary); }
 
-        /* --- GALLERY --- */
-        .gallery-wrap { padding: 80px 5%; max-width: 1300px; margin: 0 auto; }
-        .gallery-header { text-align: center; margin-bottom: 50px; }
-        /* Explicit columns to keep images side-by-side on desktop */
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; }
-        
+        /* --- RETAINED GALLERY ITEM STYLES FOR ABOUT SECTION --- */
         .gallery-item { border-radius: 15px; height: 350px; overflow: hidden; border: var(--border-tech); position: relative; transition: 0.4s; }
         
         .gallery-item img { 
@@ -306,9 +301,8 @@
             .lang-btn { margin: 10px 0 0 0; width: 120px; text-align: center; }
 
             .hero { padding: 40px 20px; min-height: 50vh; }
-            .gallery-wrap, .section-container, .about-section { padding: 50px 20px; }
-            /* Mobile stack for gallery */
-            .gallery-grid { grid-template-columns: 1fr; }
+            .section-container, .about-section { padding: 50px 20px; }
+            
             .form-box { padding: 30px 20px; }
             .card { padding: 25px; }
             
@@ -340,7 +334,6 @@
         <div class="nav-links" id="nav-list">
             <a href="store.html" data-en="STORE" data-ar="المتجر" style="color: var(--gold-primary); font-weight: 900;">STORE</a>
             <a href="#about" data-en="ABOUT" data-ar="عنّا">ABOUT</a>
-            <a href="#gallery" data-en="GALLERY" data-ar="المعرض">GALLERY</a>
             <a href="#projects" data-en="KITS" data-ar="الحقائب">KITS</a>
             <button class="lang-btn" onclick="toggleLang()">EN/AR</button>
         </div>
@@ -366,17 +359,6 @@
             <div class="gallery-item" style="height: 450px;">
                 <img src="image 04.jpg" alt="Innovation">
             </div>
-        </div>
-    </section>
-
-    <section class="gallery-wrap" id="gallery">
-        <div class="gallery-header">
-            <h2 data-en="GALLERY" data-ar="المعرض" style="font-size: 2rem; color: var(--gold-primary);">GALLERY</h2>
-        </div>
-        <div class="gallery-grid">
-            <div class="gallery-item"><img src="unnamed (1).jpg" alt="Gallery Item 1"></div>
-            <div class="gallery-item"><img src="image 04.jpg" alt="Gallery Item 2"></div>
-            <div class="gallery-item"><img src="unnamed.jpg" alt="Gallery Item 3"></div>
         </div>
     </section>
 
