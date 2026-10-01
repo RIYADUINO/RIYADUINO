@@ -55,60 +55,12 @@
         }
         body.ar .sidebar-panel { margin-left: 0; margin-right: auto; border-left: none; border-right: 1px solid var(--hairline); }
 
-        /* Coupon strap */
-        .coupon-strap {
-            background: rgba(255, 215, 0, 0.07);
-            color: var(--gold);
-            padding: 10px 0;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            letter-spacing: 0.06em;
-            overflow: hidden;
-            white-space: nowrap;
-            border-bottom: 1px solid rgba(255, 215, 0, 0.14);
-            position: relative;
-            z-index: 1001;
-        }
-        .ticker-text {
-            display: inline-block;
-            animation: ticker 45s linear infinite;
-            padding-left: 100%;
-        }
-        @keyframes ticker {
-            0% { transform: translate3d(0, 0, 0); }
-            100% { transform: translate3d(-100%, 0, 0); }
-        }
-        .code-fix {
-            direction: ltr;
-            display: inline-block;
-            unicode-bidi: isolate;
-            background: rgba(255, 215, 0, 0.18);
-            padding: 1px 6px;
-            border-radius: 3px;
-            font-weight: 500;
-        }
-
         #particle-canvas {
             position: fixed;
             inset: 0;
             pointer-events: none;
             z-index: 9999;
         }
-        .cursor-glow {
-            position: fixed;
-            width: 260px;
-            height: 260px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,215,0,0.08) 0%, transparent 70%);
-            pointer-events: none;
-            z-index: 40;
-            transform: translate(-50%, -50%);
-            opacity: 0;
-            transition: opacity 0.35s;
-        }
-        body:hover .cursor-glow { opacity: 1; }
-        @media (max-width: 768px) { .cursor-glow { display: none; } }
-
         #notification-area {
             position: fixed;
             top: 90px;
@@ -363,6 +315,91 @@
             color: var(--gold);
             border-color: rgba(255, 215, 0, 0.45);
         }
+
+
+        .lang-flag-btn {
+            background: transparent;
+            border: 1px solid var(--hairline);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.35s var(--ease);
+            padding: 0;
+            font-size: 1.15rem;
+            line-height: 1;
+        }
+        .lang-flag-btn:hover {
+            border-color: rgba(255,215,0,0.4);
+            box-shadow: 0 0 16px rgba(255,215,0,0.15);
+            transform: scale(1.06);
+        }
+        .flag-emoji { display: block; pointer-events: none; }
+
+        .auth-btn-wrapper { position: relative; }
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            min-width: 200px;
+            background: rgba(12,12,12,0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--hairline);
+            border-radius: 14px;
+            padding: 8px;
+            z-index: 1200;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.55);
+        }
+        body.ar .user-menu { right: auto; left: 0; }
+        .user-menu.open { display: block; animation: zoomIn 0.25s var(--ease); }
+        .user-menu-header {
+            padding: 10px 12px 12px;
+            border-bottom: 1px solid var(--hairline);
+            margin-bottom: 6px;
+        }
+        .user-menu-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-menu-email {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 10px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-align: left;
+            font-family: var(--font-body);
+        }
+        body.ar .user-menu-item { text-align: right; }
+        .user-menu-item:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+        .user-menu-item.danger:hover { color: var(--danger); }
+        .user-menu-item svg { flex-shrink: 0; opacity: 0.8; }
 
         .products-grid {
             display: grid;
@@ -715,7 +752,92 @@
             .nav-links { gap: 8px; }
             .logo { font-size: 1rem; letter-spacing: 0.1em; }
             .filter-btn { padding: 6px 12px; font-size: 0.65rem; }
-            .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    
+        .lang-flag-btn {
+            background: transparent;
+            border: 1px solid var(--hairline);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.35s var(--ease);
+            padding: 0;
+            font-size: 1.15rem;
+            line-height: 1;
+        }
+        .lang-flag-btn:hover {
+            border-color: rgba(255,215,0,0.4);
+            box-shadow: 0 0 16px rgba(255,215,0,0.15);
+            transform: scale(1.06);
+        }
+        .flag-emoji { display: block; pointer-events: none; }
+
+        .auth-btn-wrapper { position: relative; }
+        .user-menu {
+            display: none;
+            position: absolute;
+            top: calc(100% + 10px);
+            right: 0;
+            min-width: 200px;
+            background: rgba(12,12,12,0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--hairline);
+            border-radius: 14px;
+            padding: 8px;
+            z-index: 1200;
+            box-shadow: 0 16px 48px rgba(0,0,0,0.55);
+        }
+        body.ar .user-menu { right: auto; left: 0; }
+        .user-menu.open { display: block; animation: zoomIn 0.25s var(--ease); }
+        .user-menu-header {
+            padding: 10px 12px 12px;
+            border-bottom: 1px solid var(--hairline);
+            margin-bottom: 6px;
+        }
+        .user-menu-name {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-menu-email {
+            font-size: 0.7rem;
+            color: var(--text-tertiary);
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .user-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 10px 12px;
+            background: transparent;
+            border: none;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            text-align: left;
+            font-family: var(--font-body);
+        }
+        body.ar .user-menu-item { text-align: right; }
+        .user-menu-item:hover {
+            background: var(--surface-hover);
+            color: var(--text);
+        }
+        .user-menu-item.danger:hover { color: var(--danger); }
+        .user-menu-item svg { flex-shrink: 0; opacity: 0.8; }
+
+        .products-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .img-box { height: 140px; }
             .p-info { padding: 12px; }
             .p-title { font-size: 0.82rem; }
@@ -745,14 +867,6 @@
     </style>
 </head>
 <body class="en">
-    <div class="cursor-glow" id="cursorGlow"></div>
-    <div class="coupon-strap">
-        <div class="ticker-text">
-            USE CODE <bdi class="code-fix">3mk</bdi> FOR 15% OFF — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% —
-            USE CODE <bdi class="code-fix">3mk</bdi> FOR 15% OFF — استخدم الكود <bdi class="code-fix">3mk</bdi> للحصول على خصم 15% —
-        </div>
-    </div>
-
     <canvas id="particle-canvas"></canvas>
     <div id="notification-area"></div>
 
@@ -760,7 +874,9 @@
         <a href="index.html" class="logo">RIYAD<span>UINO</span></a>
         <div class="nav-links">
             <a href="index.html" class="filter-btn home-btn" data-en="HOME" data-ar="الرئيسية">HOME</a>
-            <button class="filter-btn" onclick="toggleLang()" data-en="EN/AR" data-ar="EN/AR">EN/AR</button>
+            <button class="lang-flag-btn" id="langFlagBtn" onclick="toggleLang()" title="Language" aria-label="Switch language">
+                <span class="flag-emoji" id="langFlagEmoji">🇸🇦</span>
+            </button>
             <div class="icon-btn" onclick="togglePanel('historyModal')" title="Orders">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </div>
@@ -777,7 +893,25 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12.545,10.239v3.821h5.445c-0.712,2.315-2.647,3.972-5.445,3.972c-3.332,0-6.033-2.701-6.033-6.032s2.701-6.032,6.033-6.032c1.498,0,2.866,0.549,3.921,1.453l2.814-2.814C17.503,2.988,15.139,2,12.545,2C7.021,2,2.543,6.477,2.543,12s4.478,10,10.002,10c8.396,0,10.249-7.85,9.426-11.748L12.545,10.239z"/></svg>
                     <span id="authText" data-en="Sign In" data-ar="دخول">Sign In</span>
                 </button>
-                <img id="userAvatar" class="user-avatar" onclick="handleAuth()">
+                <img id="userAvatar" class="user-avatar" onclick="toggleUserMenu(event)">
+                <div class="user-menu" id="userMenu">
+                    <div class="user-menu-header">
+                        <div class="user-menu-name" id="userMenuName"></div>
+                        <div class="user-menu-email" id="userMenuEmail"></div>
+                    </div>
+                    <button class="user-menu-item" onclick="togglePanel('historyModal'); closeUserMenu();">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        <span data-en="My Orders" data-ar="طلباتي">My Orders</span>
+                    </button>
+                    <button class="user-menu-item" onclick="togglePanel('inboxModal'); closeUserMenu();">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <span data-en="Inbox" data-ar="الوارد">Inbox</span>
+                    </button>
+                    <button class="user-menu-item danger" onclick="signOutUser()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                        <span data-en="Sign Out" data-ar="تسجيل الخروج">Sign Out</span>
+                    </button>
+                </div>
             </div>
         </div>
     </nav>
@@ -890,19 +1024,6 @@
                     <div class="form-group">
                         <label class="form-label" data-en="Phone" data-ar="رقم الهاتف">Phone</label>
                         <input type="tel" name="Phone" class="custom-input" required placeholder="05xxxxxxxx">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" data-en="Quality" data-ar="الجودة">Quality</label>
-                        <div class="radio-group">
-                            <label>
-                                <input type="radio" name="Quality" value="Mid" checked>
-                                <div class="radio-label" data-en="Mid" data-ar="متوسطة">Mid</div>
-                            </label>
-                            <label>
-                                <input type="radio" name="Quality" value="High">
-                                <div class="radio-label" data-en="High" data-ar="عالية">High</div>
-                            </label>
-                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label" data-en="Timeline" data-ar="الجدول">Timeline</label>
@@ -1109,22 +1230,46 @@
         };
 
         window.handleAuth = async () => {
-            if (currentUser) await signOut(auth);
-            else await signInWithPopup(auth, provider);
+            if (!currentUser) await signInWithPopup(auth, provider);
         };
+
+        window.signOutUser = async () => {
+            closeUserMenu();
+            await signOut(auth);
+            notify(currentLang === 'en' ? 'Signed out' : 'تم تسجيل الخروج', '#FFD700');
+        };
+
+        window.toggleUserMenu = (e) => {
+            if (e) e.stopPropagation();
+            const menu = document.getElementById('userMenu');
+            if (!menu) return;
+            menu.classList.toggle('open');
+        };
+        window.closeUserMenu = () => {
+            document.getElementById('userMenu')?.classList.remove('open');
+        };
+        document.addEventListener('click', (e) => {
+            const wrap = document.querySelector('.auth-btn-wrapper');
+            if (wrap && !wrap.contains(e.target)) closeUserMenu();
+        });
 
         onAuthStateChanged(auth, async (user) => {
             currentUser = user;
             const avatar = document.getElementById('userAvatar');
             const authBtn = document.getElementById('googleAuthBtn');
             if (user) {
-                avatar.src = user.photoURL;
+                avatar.src = user.photoURL || '';
                 avatar.style.display = 'block';
                 authBtn.style.display = 'none';
+                const nm = document.getElementById('userMenuName');
+                const em = document.getElementById('userMenuEmail');
+                if (nm) nm.textContent = user.displayName || 'User';
+                if (em) em.textContent = user.email || '';
                 await syncUserData();
             } else {
                 avatar.style.display = 'none';
                 authBtn.style.display = 'flex';
+                closeUserMenu();
                 cart = [];
                 updateCartUI();
             }
@@ -1166,6 +1311,19 @@
 
         function getProductPrice(p) {
             return parseFloat(String(p.price || '0').replace(/[^0-9.]/g, '')) || 0;
+        }
+
+        function productName(p) {
+            if (currentLang === 'ar') {
+                return (p.name_ar || p.nameAr || p['name_ar'] || p.name || '').trim() || (p.name || '');
+            }
+            return (p.name || '').trim();
+        }
+        function productDesc(p) {
+            if (currentLang === 'ar') {
+                return (p.description_ar || p.descriptionAr || p['description_ar'] || p.description || '').trim() || (p.description || '—');
+            }
+            return (p.description || '—').trim() || '—';
         }
 
         function categoryLabel(cat) {
@@ -1262,7 +1420,7 @@
                     if (f !== currentFilter) return false;
                 }
                 if (currentSearch) {
-                    const hay = `${p.name || ''} ${p.description || ''} ${p.category || ''} ${p.filter || ''}`.toLowerCase();
+                    const hay = `${p.name || ''} ${p.name_ar || ''} ${p.description || ''} ${p.description_ar || ''} ${p.category || ''} ${p.filter || ''}`.toLowerCase();
                     if (!hay.includes(currentSearch)) return false;
                 }
                 return true;
@@ -1286,7 +1444,7 @@
                         ${badge}
                         <div class="img-box"><img src="${p.image}" alt="" loading="lazy"></div>
                         <div class="p-info">
-                            <div class="p-title">${p.name || ''}</div>
+                            <div class="p-title">${productName(p)}</div>
                             <div class="p-price">${p.price || ''}</div>
                         </div>
                     </div>`;
@@ -1309,9 +1467,9 @@
             const p = allProducts[idx];
             if (p.instock?.toLowerCase() !== 'true') return notify(currentLang === 'en' ? 'Out of stock' : 'نفذت الكمية', '#ff453a');
             document.getElementById('modalImg').src = p.image;
-            document.getElementById('modalTitle').innerText = p.name;
+            document.getElementById('modalTitle').innerText = productName(p);
             document.getElementById('modalPrice').innerText = p.price;
-            document.getElementById('modalDesc').innerText = p.description || '—';
+            document.getElementById('modalDesc').innerText = productDesc(p);
             document.getElementById('productModal').classList.add('open');
             document.getElementById('modalAddBtn').onclick = () => addToCart(idx);
         };
@@ -1497,6 +1655,21 @@
         };
         window.closeModals = () => document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('open'));
 
+        function updateLangFlag() {
+            const emoji = document.getElementById('langFlagEmoji');
+            const btn = document.getElementById('langFlagBtn');
+            if (!emoji) return;
+            // When UI is English, show KSA flag (click to switch to Arabic)
+            // When UI is Arabic, show UK flag (click to switch to English)
+            if (currentLang === 'en') {
+                emoji.textContent = '🇸🇦';
+                if (btn) btn.title = 'العربية';
+            } else {
+                emoji.textContent = '🇬🇧';
+                if (btn) btn.title = 'English';
+            }
+        }
+
         window.toggleLang = () => {
             currentLang = currentLang === 'en' ? 'ar' : 'en';
             document.body.className = currentLang;
@@ -1505,22 +1678,14 @@
                 else el.innerText = el.getAttribute('data-' + currentLang);
             });
             document.querySelectorAll('[data-en-p]').forEach(el => el.placeholder = el.getAttribute('data-' + currentLang + '-p'));
+            updateLangFlag();
             buildCategoryTabs();
             buildFilterChips();
             renderProducts();
             updateCartUI();
         };
+        updateLangFlag();
 
-        // Cursor glow
-        const glow = document.getElementById('cursorGlow');
-        let gx = 0, gy = 0, tx = 0, ty = 0;
-        document.addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
-        (function animateGlow() {
-            gx += (tx - gx) * 0.12;
-            gy += (ty - gy) * 0.12;
-            if (glow) { glow.style.left = gx + 'px'; glow.style.top = gy + 'px'; }
-            requestAnimationFrame(animateGlow);
-        })();
     </script>
 </body>
 </html>
